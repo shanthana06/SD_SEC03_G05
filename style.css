@@ -1,0 +1,208 @@
+/* Typography & Variables */
+body {
+  --heading-font: "Marcellus", serif;
+  --body-font: "Jost", sans-serif;
+
+  --primary-color: #8C907E;
+  --primary-dark: #5e624e;
+  --text-color: #111;
+  --muted-color: #8f8f8f;
+  --light-color: #f8f9fa;
+  --dark-bg: #111;
+
+  font-family: var(--body-font);
+  font-size: 18px;
+  color: var(--muted-color);
+  line-height: 1.6;
+  margin: 0;
+  padding: 0;
+  background-color: #fff;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--heading-font);
+  color: var(--text-color);
+  margin-bottom: 1rem;
+  font-weight: 400;
+}
+
+.section-title {
+  font-size: 2.5rem;
+  text-align: center;
+  margin-bottom: 2.5rem;
+  color: var(--text-color);
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+a:hover {
+  color: var(--primary-dark);
+}
+
+/* Navbar */
+.navbar {
+  background-color: var(--dark-bg) !important;
+}
+
+.navbar-brand {
+  font-family: var(--heading-font);
+  font-size: 1.8rem;
+  color: #fff !important;
+}
+
+.nav-link {
+  color: #fff !important;
+  margin-left: 1rem;
+}
+
+.nav-link:hover {
+  color: var(--primary-color) !important;
+}
+
+/* Hero Section */
+.hero {
+  background-color: var(--light-color);
+  padding: 100px 20px;
+  text-align: center;
+}
+
+.hero h1 {
+  font-size: 3.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.hero p {
+  font-size: 1.25rem;
+  margin-bottom: 1.5rem;
+  color: var(--text-color);
+}
+
+.btn-primary {
+  background-color: var(--primary-color);
+  border: none;
+}
+
+.btn-primary:hover {
+  background-color: var(--primary-dark);
+}
+
+.btn-outline-primary {
+  border: 2px solid var(--primary-color);
+  color: var(--primary-color);
+}
+
+.btn-outline-primary:hover {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+/* Menu Cards */
+.menu-card {
+  transition: transform 0.3s ease-in-out;
+}
+
+.menu-card:hover {
+  transform: scale(1.03);
+}
+
+.menu-card img {
+  height: 220px;
+  object-fit: cover;
+}
+
+/* How It Works */
+.how-it-works {
+  text-align: center;
+}
+
+.how-it-works h4 {
+  font-weight: 500;
+  color: var(--text-color);
+  margin-bottom: 0.5rem;
+}
+
+.how-it-works p {
+  color: var(--muted-color);
+}
+
+/* Footer */
+footer {
+  background-color: var(--dark-bg);
+  color: var(--light-color);
+  text-align: center;
+  padding: 20px;
+  font-size: 0.95rem;
+}
+
+.animated-brand span {
+  font-size: 1.75rem;
+  color: #fff;
+  font-family: 'Arial', sans-serif;
+  text-transform: uppercase;
+  display: inline-block;
+  transition: 0.5s;
+  animation: bounce 0.6s ease infinite alternate;
+  position: relative;
+}
+
+.animated-brand span:nth-child(3) { animation-delay: 0.1s; }
+.animated-brand span:nth-child(4) { animation-delay: 0.2s; }
+.animated-brand span:nth-child(5) { animation-delay: 0.3s; }
+.animated-brand span:nth-child(6) { animation-delay: 0.4s; }
+.animated-brand span:nth-child(7) { animation-delay: 0.5s; }
+.animated-brand span:nth-child(8) { animation-delay: 0.6s; }
+.animated-brand span:nth-child(9) { animation-delay: 0.7s; }
+.animated-brand span:nth-child(10) { animation-delay: 0.8s; }
+
+@keyframes bounce {
+  100% {
+    top: -5px;
+    text-shadow: 0 1px 0 #444,
+                 0 2px 0 #444,
+                 0 3px 0 #444;
+  }
+}
+.card-pop {
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+  will-change: transform;
+}
+
+.card-pop:hover {
+  transform: translateY(-10px) scale(1.05);
+  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
+}
+.card-pop {
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+  will-change: transform;
+}
+
+.card-pop:hover {
+  transform: translateY(-10px) scale(1.03);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+}
+.menu-bg-blur {
+  position: relative;
+  background-image: url('images/coffee1.jpg'); /* Replace with your image */
+  background-size: cover;
+  background-position: center;
+  padding: 0;
+  overflow: hidden;
+}
+
+.menu-bg-blur::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0;
+  right: 0; bottom: 0;
+  backdrop-filter: blur(8px);
+  background-color: rgba(255, 255, 255, 0.5); /* optional white overlay */
+  z-index: 0;
+}
+
+.menu-bg-blur section {
+  position: relative;
+  z-index: 1;
+}

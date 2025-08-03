@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Arjuna n Co-ffee Ordering System</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" />
+ <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">"
+  <style>
+    body {
+      background-color: #fdfaf6;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    .navbar {
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .hero-section {
+      background-image: url('images/beige.jpg');
+      background-size: cover;
+      background-position: center;
+      padding: 100px 0;
+      color: #fff;
+      text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.6);
+    }
+
+    .hero-section h1 {
+      font-weight: 700;
+      font-size: 3.2rem;
+    }
+
+    .btn-primary {
+      background-color: #6f4e37;
+      border-color: #6f4e37;
+    }
+
+    .btn-primary:hover {
+      background-color: #5a3e2b;
+    }
+
+    .btn-outline-primary {
+      border-color: #6f4e37;
+      color: #6f4e37;
+    }
+
+    .btn-outline-primary:hover {
+      background-color: #6f4e37;
+      color: #fff;
+    }
+
+    .section-title {
+      font-size: 2rem;
+      font-weight: 600;
+      color: #4e3e2c;
+    }
+
+    .card {
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+    }
+
+    #about img {
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+    }
+
+    .offcanvas-custom {
+      background: linear-gradient(to bottom right, #3c2f26, #6f4e37);
+      color: #fff;
+      width: 250px;
+      padding: 20px;
+      transition: all 0.4s ease;
+    }
+
+    .offcanvas-custom .nav-link {
+      color: #fff;
+      font-weight: 500;
+      padding: 10px 0;
+      transition: 0.3s;
+    }
+
+    .offcanvas-custom .nav-link:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+      border-radius: 6px;
+      padding-left: 10px;
+    }
+
+    .offcanvas-header h5 {
+      font-size: 1.4rem;
+    }
+
+    footer {
+      background-color: #3c2f26;
+      font-size: 0.95rem;
+    }
+
+    .social-icons a {
+      font-size: 1.5rem;
+      margin: 0 10px;
+      color: #fff;
+      transition: color 0.3s ease;
+    }
+
+    .social-icons a:hover {
+      color: #d2b48c;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Navbar with Sidebar Toggle -->
+  <nav class="navbar navbar-dark bg-dark">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">Arjuna n Co-ffee</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebarNav" aria-controls="sidebarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Sidebar Offcanvas -->
+  <div class="offcanvas offcanvas-start offcanvas-custom" tabindex="-1" id="sidebarNav" aria-labelledby="sidebarNavLabel">
+    <div class="offcanvas-header">
+      <h5 class="offcanvas-title" id="sidebarNavLabel">☕ Menu</h5>
+      <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body">
+      <ul class="navbar-nav">
+        <li class="nav-item"><a class="nav-link" href="index.html">🏠 Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="menu.html">📋 Menu</a></li>
+        <li class="nav-item"><a class="nav-link" href="login.html">🔐 Login</a></li>
+        <li class="nav-item"><a class="nav-link" href="signup.html">📝 Sign Up</a></li>
+        <li class="nav-item"><a class="nav-link" href="viewprofile.html">👤 Profile</a></li>
+        <li class="nav-item"><a class="nav-link" href="contact.html">📞 Contact</a></li>
+        <li class="nav-item"><a class="nav-link" href="orderstatus.html">📦 Order Status</a></li>
+        <li class="nav-item"><a class="nav-link" href="orderhistory.html">📜 Order History</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Hero Section -->
+  <section class="hero-section text-center text-white">
+    <div class="container">
+      <h1 class="display-4">Welcome to Arjuna n Co-ffee</h1>
+      <p class="lead text-dark">Order your favorite drinks and food—fast and easy.</p>
+      <a href="order.html?type=dine-in" class="btn btn-primary me-2">Order Dine-In</a>
+      <a href="order.html?type=pickup" class="btn btn-outline-primary">Order Pickup</a>
+    </div>
+  </section>
+
+  <!-- About Section -->
+  <section id="about" class="py-5">
+    <div class="container">
+      <h2 class="text-center mb-4 section-title">About Us</h2>
+
+      <!-- 1 -->
+      <div class="row align-items-center">
+        <div class="col-md-6">
+          <img src="images/arjuna.jpg" class="img-fluid" alt="About Arjuna n Co-ffee">
+        </div>
+        <div class="col-md-6">
+          <h4 class="mb-3">At Arjuna n Co-ffee</h4>
+          <p class="mb-3">We believe coffee is more than a drink. It's an experience. Founded with a passion for crafting artisanal coffee and serving our community, we blend traditional brewing techniques with modern convenience.</p>
+          <p class="mb-3">Whether you're stopping by for a rich espresso, working remotely over a matcha latte, or ordering online for a quick pickup, we're here to make every sip meaningful.</p>
+          <p>Join us at our café or order from your table with our contactless ordering system. It's coffee, reimagined.</p>
+        </div>
+      </div>
+
+      <!-- 2 -->
+      <div class="row align-items-center mt-5">
+        <div class="col-md-6 order-md-2">
+          <img src="images/coffeegirl.jpg" class="img-fluid" alt="Coffee Brewing Process">
+        </div>
+        <div class="col-md-6 order-md-1">
+          <h4 class="mb-3">From Bean to Cup</h4>
+          <p>Every cup we serve starts with carefully selected beans sourced from ethical farms. Our roasting process brings out the unique flavors of each origin, while our baristas ensure every drink is brewed to perfection.</p>
+          <p>We’re committed to sustainability and transparency, because great coffee begins with great values.</p>
+        </div>
+      </div>
+
+      <!-- 3 -->
+      <div class="row align-items-center mt-5">
+        <div class="col-md-6">
+          <img src="images/people.jpg" class="img-fluid" alt="Cafe Ambience">
+        </div>
+        <div class="col-md-6">
+          <h4 class="mb-3">More Than Just Coffee</h4>
+          <p>At Arjuna n Co-ffee, we understand that our customers don’t just come for the caffeine—they come for the calm. Every corner of our café is thoughtfully designed to offer comfort, warmth, and a sense of belonging.</p>
+          <p>Whether you're catching up with friends, reading a book, or working remotely, our cozy ambiance and gentle playlists create a space where moments linger longer and coffee tastes even better.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- How It Works -->
+  <section class="bg-light py-5">
+    <div class="container">
+      <h2 class="text-center mb-4 section-title">How It Works</h2>
+      <div class="row text-center">
+        <div class="col-md-4 mb-4">
+          <div class="card p-3 h-100">
+            <h4>1. Scan QR or Access Site</h4>
+            <p>Use QR code at the table or go to our website.</p>
+          </div>
+        </div>
+        <div class="col-md-4 mb-4">
+          <div class="card p-3 h-100">
+            <h4>2. Place Your Order</h4>
+            <p>Select items, customize, and add to cart.</p>
+          </div>
+        </div>
+        <div class="col-md-4 mb-4">
+          <div class="card p-3 h-100">
+            <h4>3. Enjoy Your Coffee</h4>
+            <p>Wait for your name to be called or pick up your order.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section id="contact" class="py-5 text-center">
+    <div class="container">
+      <h2 class="section-title mb-3">Contact Us</h2>
+      <p>Email: contact@arjunacoffee.com | Phone: +6012-3456789</p>
+      <div class="social-icons mt-3">
+        <a href="https://instagram.com" target="_blank" aria-label="Instagram"><i class="bi bi-instagram"></i></a>
+        <a href="https://x.com" target="_blank" aria-label="Twitter/X"><i class="bi bi-twitter-x"></i></a>
+        <a href="https://facebook.com" target="_blank" aria-label="Facebook"><i class="bi bi-facebook"></i></a>
+        <a href="https://wa.me/60123456789" target="_blank" aria-label="WhatsApp"><i class="bi bi-whatsapp"></i></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="text-white text-center py-3">
+    &copy; 2025 Arjuna n Co-ffee. All rights reserved.
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
