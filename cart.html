@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Bootstrap CSS -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<!-- Your custom CSS file -->
+<link href="style.css" rel="stylesheet"> <!-- Make sure this exists and includes navbar styles -->
+
+  <meta charset="UTF-8" />
+  <title>Your Cart | Arjuna n Co-ffee</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" />
+  <style>
+    body, html {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+
+    .cart-bg-blur {
+      background-image: url('images/coffee1.jpg');
+      background-size: cover;
+      background-position: center;
+      filter: blur(6px);
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+    }
+
+    .cart-container {
+      background-color: rgba(255, 255, 255, 0.95);
+      padding: 40px 30px;
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .section-title {
+      font-size: 2.2rem;
+      text-align: center;
+      color: #333;
+      margin-bottom: 2rem;
+    }
+
+    .table th, .table td {
+      vertical-align: middle;
+    }
+
+    .input-group input {
+      max-width: 60px;
+    }
+
+    .return-home {
+      text-align: center;
+      margin-top: 2rem;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Background Blur -->
+  <div class="cart-bg-blur"></div>
+
+
+<div id="navbar-placeholder"></div>
+
+<!-- Script to load the navbar.html file -->
+<script>
+  fetch('navbar.html')
+    .then(res => res.text())
+    .then(data => {
+      document.getElementById('navbar-placeholder').innerHTML = data;
+    });
+</script>
+
+
+  <!-- Cart Section -->
+  <section class="py-5">
+    <div class="container cart-container">
+      <h2 class="section-title">Your Cart</h2>
+
+      <div class="table-responsive">
+        <table class="table table-bordered text-center align-middle">
+          <thead class="table-dark">
+            <tr>
+              <th>Item</th>
+              <th>Quantity</th>
+              <th>Price (RM)</th>
+              <th>Total (RM)</th>
+              <th>Remove</th>
+            </tr>
+          </thead>
+          <tbody id="cart-table-body">
+            <!-- Items will be injected here -->
+          </tbody>
+        </table>
+      </div>
+
+      <div class="d-flex justify-content-between align-items-center mt-4">
+        <button class="btn btn-outline-danger" onclick="clearCart()">Clear Cart</button>
+        <div class="text-end">
+          <h5 id="cart-total">Total: RM 0.00</h5>
+          <a href="order.html" class="btn btn-success mt-2">Proceed to Checkout</a>
+        </div>
+      </div>
+
+      <!-- Add More Items & Return Home -->
+      <div class="text-center mt-5">
+        <a href="menu.html" class="btn btn-primary me-2"> Add More Items</a>
+        <a href="index.html" class="btn btn-outline-dark"> Return to Home</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- JavaScript -->
+  <script>
+    function loadCart() {
+      const cart = JSON.parse(localStorage.getItem("cart")) || [];
+      const table = document.getElementById("cart-table-body");
+      let total = 0;
+      table.innerHTML = "";
+
+      cart.forEach((item, index) => {
+        const itemTotal = item.quantity * item.price;
+        total += itemTotal;
+
+        const row = document.createElement("tr");
+        row.innerHTML = `
+          <td>${item.name}</td>
+          <td>
+            <div class="input-group input-group-sm justify-content-center">
+              <button class="btn btn-outline-secondary" onclick="updateQuantity(${index}, -1)">-</button>
+              <input type="number" class="form-control text-center mx-1 quantity-input"
+                     value="${item.quantity}" min="1" data-index="${index}">
+              <button class="btn btn-outline-secondary" onclick="updateQuantity(${index}, 1)">+</button>
+            </div>
+          </td>
+          <td>${item.price.toFixed(2)}</td>
+          <td>${itemTotal.toFixed(2)}</td>
+          <td><button class="btn btn-sm btn-danger" onclick="removeItem(${index})">X</button></td>
+        `;
+        table.appendChild(row);
+      });
+
+      document.getElementById("cart-total").innerText = `Total: RM ${total.toFixed(2)}`;
+      attachInputListeners();
+    }
+
+    function attachInputListeners() {
+      document.querySelectorAll(".quantity-input").forEach(input => {
+        input.addEventListener("change", function () {
+          const index = this.dataset.index;
+          const newQty = parseInt(this.value);
+          if (!isNaN(newQty) && newQty > 0) {
+            let cart = JSON.parse(localStorage.getItem("cart")) || [];
+            cart[index].quantity = newQty;
+            localStorage.setItem("cart", JSON.stringify(cart));
+            loadCart();
+          }
+        });
+      });
+    }
+
+    function updateQuantity(index, change) {
+      let cart = JSON.parse(localStorage.getItem("cart")) || [];
+      const newQty = cart[index].quantity + change;
+      if (newQty >= 1) {
+        cart[index].quantity = newQty;
+        localStorage.setItem("cart", JSON.stringify(cart));
+        loadCart();
+      }
+    }
+
+    function removeItem(index) {
+      let cart = JSON.parse(localStorage.getItem("cart")) || [];
+      cart.splice(index, 1);
+      localStorage.setItem("cart", JSON.stringify(cart));
+      loadCart();
+    }
+
+    function clearCart() {
+      localStorage.removeItem("cart");
+      loadCart();
+    }
+
+    window.onload = loadCart;
+  </script>
+</body>
+</html>

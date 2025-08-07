@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Bootstrap CSS -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<!-- Your custom CSS file -->
+<link href="style.css" rel="stylesheet"> <!-- Make sure this exists and includes navbar styles -->
+
+  <meta charset="UTF-8" />
+  <title>View Profile | Arjuna n Co-ffee</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" />
+  <style>
+    body, html {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+
+    .login-bg-blur {
+      background-image: url('images/coffee1.jpg');
+      background-size: cover;
+      background-position: center;
+      filter: blur(6px);
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+    }
+
+    .form-container {
+      background-color: rgba(255, 255, 255, 0.9);
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.2);
+      max-width: 500px;
+      margin: auto;
+    }
+
+    .section-title {
+      color: #333;
+      font-size: 2.2rem;
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .form-label {
+      font-weight: 500;
+    }
+  </style>
+</head>
+<body>
+<!-- Placeholder for the navbar -->
+<div id="navbar-placeholder"></div>
+
+<!-- Script to load the navbar.html file -->
+<script>
+  fetch('navbar.html')
+    .then(res => res.text())
+    .then(data => {
+      document.getElementById('navbar-placeholder').innerHTML = data;
+    });
+</script>
+
+  <!-- Background -->
+  <div class="login-bg-blur"></div>
+    
+    
+
+  <div class="form-container text-center">
+    <h2 class="mb-4">Your Profile</h2>
+    <!-- Profile Picture Upload -->
+<div class="mb-4">
+  <label for="profileImage" class="form-label">Profile Picture</label>
+  <div class="mb-3">
+    <img id="previewImage" src="images/default-profile.png" alt="Profile Picture" class="rounded-circle" width="150" height="150" style="object-fit: cover;">
+  </div>
+  <input class="form-control" type="file" id="profileImage" accept="image/*">
+</div>
+
+    <p><strong>Name:</strong> John Doe</p>
+    <p><strong>Email:</strong> johndoe@example.com</p>
+    <p><strong>Member Since:</strong> January 2024</p>
+    <a href="editprofile.html" class="btn btn-secondary w-100 mt-3">Edit Profile</a>
+<div class="text-center mt-4">
+      <a href="index.html" class="btn btn-outline-dark">Return to Home</a>
+    
+
+  </div>
+  <script>
+  const imageInput = document.getElementById("profileImage");
+  const previewImage = document.getElementById("previewImage");
+
+  // Load stored image on page load
+  window.addEventListener("DOMContentLoaded", () => {
+    const storedImage = localStorage.getItem("profilePicture");
+    if (storedImage) {
+      previewImage.src = storedImage;
+    }
+  });
+
+  // Save image to localStorage when uploaded
+  imageInput.addEventListener("change", function(event) {
+    const file = event.target.files[0];
+    if (file && file.type.startsWith("image/")) {
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        previewImage.src = e.target.result;
+        localStorage.setItem("profilePicture", e.target.result); // Save to localStorage
+      };
+      reader.readAsDataURL(file);
+    }
+  });
+</script>
+
+
+</body>
+</html>

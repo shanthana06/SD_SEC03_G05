@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+  <!-- Bootstrap CSS -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<!-- Your custom CSS file -->
+<link href="style.css" rel="stylesheet"> <!-- Make sure this exists and includes navbar styles -->
+
+  <meta charset="UTF-8" />
+  <title>Login | Arjuna n Co-ffee</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" />
+  <style>
+    body, html {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+
+    .login-bg-blur {
+      background-image: url('images/coffee1.jpg');
+      background-size: cover;
+      background-position: center;
+      filter: blur(6px);
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+    }
+
+    .form-container {
+      background-color: rgba(255, 255, 255, 0.9);
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.2);
+      max-width: 500px;
+      margin: auto;
+    }
+
+    .section-title {
+      color: #333;
+      font-size: 2.2rem;
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .form-label {
+      font-weight: 500;
+    }
+  </style>
+</head>
+<body>
+<!-- Placeholder for the navbar -->
+<div id="navbar-placeholder"></div>
+
+<!-- Script to load the navbar.html file -->
+<script>
+  fetch('navbar.html')
+    .then(res => res.text())
+    .then(data => {
+      document.getElementById('navbar-placeholder').innerHTML = data;
+    });
+</script>
+
+  <!-- Background -->
+  <div class="login-bg-blur"></div>
+
+  <!-- Navbar -->
+  
+
+  <!-- Login Form -->
+<section class="py-5">
+  <div class="container">
+    <div class="form-container">
+      <h2 class="section-title">Login</h2>
+      <form onsubmit="return redirectUser(event)">
+        <!-- Email/Username -->
+        <div class="mb-3">
+          <label class="form-label">Email or Username</label>
+          <input type="email" class="form-control" placeholder="Enter email or username" required />
+        </div>
+
+        <!-- Password -->
+        <div class="mb-3">
+          <label class="form-label">Password</label>
+          <input type="password" class="form-control" placeholder="Enter password" required />
+        </div>
+
+        <!-- Forgot Password link -->
+        <div class="mb-3 text-end">
+          <a href="forgot_password.html" class="text-decoration-none">Forgot Password?</a>
+        </div>
+
+        <!-- Checkboxes for staff and admin -->
+        <div class="form-check mb-2">
+          <input class="form-check-input" type="checkbox" id="isStaff">
+          <label class="form-check-label" for="isStaff">Are you a staff?</label>
+        </div>
+
+        <div class="form-check mb-3">
+          <input class="form-check-input" type="checkbox" id="isAdmin">
+          <label class="form-check-label" for="isAdmin">Are you an admin?</label>
+        </div>
+
+        <!-- Login button -->
+        <button type="button" class="btn btn-secondary w-100" onclick="handleLogin()">Login</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- JavaScript to handle redirection -->
+<script>
+  function handleLogin() {
+    const isStaff = document.getElementById('isStaff').checked;
+    const isAdmin = document.getElementById('isAdmin').checked;
+
+    if (isStaff && isAdmin) {
+      alert("Please select only one role.");
+    } else if (isStaff) {
+      window.location.href = "staff_dashboard.html";
+    } else if (isAdmin) {
+      window.location.href = "admin_dashboard.html";
+    } else {
+      alert("Please select a role.");
+    }
+  }
+</script>
