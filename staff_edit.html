@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Bootstrap CSS -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<!-- Your custom CSS file -->
+<link href="style.css" rel="stylesheet"> <!-- Make sure this exists and includes navbar styles -->
+
+  <meta charset="UTF-8" />
+  <title>Edit Staff | Arjuna n Co-ffee</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" />
+  <style>
+    body, html { height: 100%; margin: 0; padding: 0; }
+    .login-bg-blur {
+      background-image: url('images/coffee1.jpg');
+      background-size: cover;
+      background-position: center;
+      filter: blur(6px);
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      z-index: -1;
+    }
+    .form-container {
+      background-color: rgba(255, 255, 255, 0.95);
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.2);
+      max-width: 600px;
+      margin: auto;
+    }
+    .section-title {
+      color: #333;
+      font-size: 2rem;
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
+  </style>
+</head>
+<body>
+<!-- Placeholder for the navbar -->
+<div id="navbar-placeholder"></div>
+
+<!-- Script to load the navbar.html file -->
+<script>
+  fetch('navbar.html')
+    .then(res => res.text())
+    .then(data => {
+      document.getElementById('navbar-placeholder').innerHTML = data;
+    });
+</script>
+
+  <div class="login-bg-blur"></div>
+
+  
+
+  <section class="py-5">
+    <div class="container">
+      <div class="form-container">
+        <h2 class="section-title">Edit Staff</h2>
+
+        <form>
+          <div class="mb-3">
+            <label class="form-label">Full Name</label>
+            <input type="text" class="form-control" value="Noraini B." required />
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Email</label>
+            <input type="email" class="form-control" value="noraini@co-ffee.com" required />
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Role</label>
+            <select class="form-select" required>
+              <option>Staff</option>
+              <option selected>Admin</option>
+            </select>
+          </div>
+          <button type="submit" class="btn btn-primary w-100">Update Staff</button>
+        </form>
+
+        <div class="text-center mt-4">
+          <a href="staff_list.html" class="btn btn-outline-dark">Back to Staff List</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</body>
+</html>

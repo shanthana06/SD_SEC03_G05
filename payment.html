@@ -1,0 +1,389 @@
+<<<<<<< HEAD
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Bootstrap CSS -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<!-- Your custom CSS file -->
+<link href="style.css" rel="stylesheet"> <!-- Make sure this exists and includes navbar styles -->
+
+  <meta charset="UTF-8" />
+  <title>Payment | Arjuna n Co-ffee</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" />
+  <style>
+    body, html {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+
+    .payment-bg-blur {
+      background-image: url('images/coffee1.jpg');
+      background-size: cover;
+      background-position: center;
+      filter: blur(6px);
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      z-index: -1;
+    }
+
+    .payment-container {
+      background-color: rgba(255, 255, 255, 0.95);
+      padding: 40px;
+      border-radius: 12px;
+      max-width: 600px;
+      margin: 60px auto;
+      box-shadow: 0 0 20px rgba(0,0,0,0.2);
+    }
+
+    .section-title {
+      text-align: center;
+      margin-bottom: 1.5rem;
+      font-size: 2rem;
+      color: #333;
+    }
+
+    .payment-methods label {
+      margin-bottom: 10px;
+    }
+
+    .d-none {
+      display: none !important;
+    }
+  </style>
+</head>
+<body>
+<!-- Placeholder for the navbar -->
+<div id="navbar-placeholder"></div>
+
+<!-- Script to load the navbar.html file -->
+<script>
+  fetch('navbar.html')
+    .then(res => res.text())
+    .then(data => {
+      document.getElementById('navbar-placeholder').innerHTML = data;
+    });
+</script>
+
+  <!-- Blurred Background -->
+  <div class="payment-bg-blur"></div>
+
+  
+  <!-- Payment Container -->
+  <div class="payment-container">
+    <h2 class="section-title">Choose Payment Method</h2>
+
+    <form id="payment-form">
+      <div class="mb-3 payment-methods">
+        <label class="form-label">Select a method:</label>
+        <select class="form-select" id="payment-type" required>
+          <option value="">-- Choose Payment Method --</option>
+          <option value="card">Credit / Debit Card</option>
+          <option value="online">Online Banking</option>
+          <option value="ewallet">E-Wallet</option>
+          <option value="cash">Cash</option>
+        </select>
+      </div>
+
+      <!-- Card Payment Fields -->
+      <div id="card-section" class="d-none">
+        <div class="mb-3">
+          <label class="form-label">Cardholder Name</label>
+          <input type="text" class="form-control" placeholder="Full Name">
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Card Number</label>
+          <input type="text" class="form-control" placeholder="XXXX-XXXX-XXXX-XXXX" maxlength="19">
+        </div>
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <label class="form-label">Expiry Date</label>
+            <input type="text" class="form-control" placeholder="MM/YY" maxlength="5">
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">CVV</label>
+            <input type="password" class="form-control" placeholder="123" maxlength="3">
+          </div>
+        </div>
+      </div>
+
+      <!-- Online Banking Fields -->
+      <div id="online-section" class="d-none">
+        <div class="mb-3">
+          <label class="form-label">Select Your Bank</label>
+          <select class="form-select">
+            <option>Maybank</option>
+            <option>CIMB</option>
+            <option>RHB</option>
+            <option>Public Bank</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- E-Wallet Fields -->
+      <div id="ewallet-section" class="d-none">
+        <div class="mb-3">
+          <label class="form-label">E-Wallet</label>
+          <select class="form-select">
+            <option>Touch 'n Go</option>
+            <option>Boost</option>
+            <option>GrabPay</option>
+          </select>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Phone Number Linked</label>
+          <input type="tel" class="form-control" placeholder="e.g. 0123456789">
+        </div>
+      </div>
+
+      <!-- Cash Info -->
+      <div id="cash-section" class="d-none">
+        <div class="alert alert-info">
+          Please prepare exact change. Payment will be made upon pickup/delivery.
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn-primary w-100 mt-3">Pay Now</button>
+    </form>
+    <div class="text-center mt-4">
+      <a href="index.html" class="btn btn-outline-dark">Return to Home</a>
+
+    <!-- Success Message -->
+    <div id="payment-success" class="alert alert-success mt-4 d-none text-center">
+      ✅ Payment Successful! Thank you for your purchase.
+      <br>
+      
+    </div>
+  </div>
+
+  <!-- JS -->
+  <script>
+    const paymentType = document.getElementById('payment-type');
+    const form = document.getElementById('payment-form');
+    const success = document.getElementById('payment-success');
+
+    paymentType.addEventListener('change', function () {
+      const value = this.value;
+      document.getElementById('card-section').classList.add('d-none');
+      document.getElementById('online-section').classList.add('d-none');
+      document.getElementById('ewallet-section').classList.add('d-none');
+      document.getElementById('cash-section').classList.add('d-none');
+
+      if (value === 'card') {
+        document.getElementById('card-section').classList.remove('d-none');
+      } else if (value === 'online') {
+        document.getElementById('online-section').classList.remove('d-none');
+      } else if (value === 'ewallet') {
+        document.getElementById('ewallet-section').classList.remove('d-none');
+      } else if (value === 'cash') {
+        document.getElementById('cash-section').classList.remove('d-none');
+      }
+    });
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      form.classList.add('d-none');
+      success.classList.remove('d-none');
+      localStorage.removeItem("cart");
+    });
+  </script>
+</body>
+</html>
+=======
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Bootstrap CSS -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<!-- Your custom CSS file -->
+<link href="style.css" rel="stylesheet"> <!-- Make sure this exists and includes navbar styles -->
+
+  <meta charset="UTF-8" />
+  <title>Payment | Arjuna n Co-ffee</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" />
+  <style>
+    body, html {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+
+    .payment-bg-blur {
+      background-image: url('images/coffee1.jpg');
+      background-size: cover;
+      background-position: center;
+      filter: blur(6px);
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      z-index: -1;
+    }
+
+    .payment-container {
+      background-color: rgba(255, 255, 255, 0.95);
+      padding: 40px;
+      border-radius: 12px;
+      max-width: 600px;
+      margin: 60px auto;
+      box-shadow: 0 0 20px rgba(0,0,0,0.2);
+    }
+
+    .section-title {
+      text-align: center;
+      margin-bottom: 1.5rem;
+      font-size: 2rem;
+      color: #333;
+    }
+
+    .payment-methods label {
+      margin-bottom: 10px;
+    }
+
+    .d-none {
+      display: none !important;
+    }
+  </style>
+</head>
+<body>
+<!-- Placeholder for the navbar -->
+<div id="navbar-placeholder"></div>
+
+<!-- Script to load the navbar.html file -->
+<script>
+  fetch('navbar.html')
+    .then(res => res.text())
+    .then(data => {
+      document.getElementById('navbar-placeholder').innerHTML = data;
+    });
+</script>
+
+  <!-- Blurred Background -->
+  <div class="payment-bg-blur"></div>
+
+  
+  <!-- Payment Container -->
+  <div class="payment-container">
+    <h2 class="section-title">Choose Payment Method</h2>
+
+    <form id="payment-form">
+      <div class="mb-3 payment-methods">
+        <label class="form-label">Select a method:</label>
+        <select class="form-select" id="payment-type" required>
+          <option value="">-- Choose Payment Method --</option>
+          <option value="card">Credit / Debit Card</option>
+          <option value="online">Online Banking</option>
+          <option value="ewallet">E-Wallet</option>
+          <option value="cash">Cash</option>
+        </select>
+      </div>
+
+      <!-- Card Payment Fields -->
+      <div id="card-section" class="d-none">
+        <div class="mb-3">
+          <label class="form-label">Cardholder Name</label>
+          <input type="text" class="form-control" placeholder="Full Name">
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Card Number</label>
+          <input type="text" class="form-control" placeholder="XXXX-XXXX-XXXX-XXXX" maxlength="19">
+        </div>
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <label class="form-label">Expiry Date</label>
+            <input type="text" class="form-control" placeholder="MM/YY" maxlength="5">
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">CVV</label>
+            <input type="password" class="form-control" placeholder="123" maxlength="3">
+          </div>
+        </div>
+      </div>
+
+      <!-- Online Banking Fields -->
+      <div id="online-section" class="d-none">
+        <div class="mb-3">
+          <label class="form-label">Select Your Bank</label>
+          <select class="form-select">
+            <option>Maybank</option>
+            <option>CIMB</option>
+            <option>RHB</option>
+            <option>Public Bank</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- E-Wallet Fields -->
+      <div id="ewallet-section" class="d-none">
+        <div class="mb-3">
+          <label class="form-label">E-Wallet</label>
+          <select class="form-select">
+            <option>Touch 'n Go</option>
+            <option>Boost</option>
+            <option>GrabPay</option>
+          </select>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Phone Number Linked</label>
+          <input type="tel" class="form-control" placeholder="e.g. 0123456789">
+        </div>
+      </div>
+
+      <!-- Cash Info -->
+      <div id="cash-section" class="d-none">
+        <div class="alert alert-info">
+          Please prepare exact change. Payment will be made upon pickup/delivery.
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn-primary w-100 mt-3">Pay Now</button>
+    </form>
+    <div class="text-center mt-4">
+      <a href="index.html" class="btn btn-outline-dark">Return to Home</a>
+
+    <!-- Success Message -->
+    <div id="payment-success" class="alert alert-success mt-4 d-none text-center">
+      ✅ Payment Successful! Thank you for your purchase.
+      <br>
+      
+    </div>
+  </div>
+
+  <!-- JS -->
+  <script>
+    const paymentType = document.getElementById('payment-type');
+    const form = document.getElementById('payment-form');
+    const success = document.getElementById('payment-success');
+
+    paymentType.addEventListener('change', function () {
+      const value = this.value;
+      document.getElementById('card-section').classList.add('d-none');
+      document.getElementById('online-section').classList.add('d-none');
+      document.getElementById('ewallet-section').classList.add('d-none');
+      document.getElementById('cash-section').classList.add('d-none');
+
+      if (value === 'card') {
+        document.getElementById('card-section').classList.remove('d-none');
+      } else if (value === 'online') {
+        document.getElementById('online-section').classList.remove('d-none');
+      } else if (value === 'ewallet') {
+        document.getElementById('ewallet-section').classList.remove('d-none');
+      } else if (value === 'cash') {
+        document.getElementById('cash-section').classList.remove('d-none');
+      }
+    });
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      form.classList.add('d-none');
+      success.classList.remove('d-none');
+      localStorage.removeItem("cart");
+    });
+  </script>
+</body>
+</html>
+>>>>>>> 9c3cfdedaaf306ac261286e46793cbcf989f68c9
