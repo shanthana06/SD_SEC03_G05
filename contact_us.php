@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 <?php
 session_start();
 include 'db.php';
@@ -128,7 +127,6 @@ body, html { height: 100%; margin:0; padding:0; }
 
 </body>
 </html>
-=======
 <?php
 session_start();
 include 'db.php';
@@ -258,4 +256,3 @@ body, html { height: 100%; margin:0; padding:0; }
 
 </body>
 </html>
->>>>>>> 9c3cfdedaaf306ac261286e46793cbcf989f68c9

@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 <?php
 // Start session and destroy it
 if (session_status() === PHP_SESSION_NONE) {
@@ -61,7 +60,6 @@ session_destroy();
 
 </body>
 </html>
-=======
 <?php
 // Start session and destroy it
 if (session_status() === PHP_SESSION_NONE) {
@@ -124,4 +122,3 @@ session_destroy();
 
 </body>
 </html>
->>>>>>> 9c3cfdedaaf306ac261286e46793cbcf989f68c9

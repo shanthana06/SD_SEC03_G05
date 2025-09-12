@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 <?php
 session_start();
 include 'db.php';
@@ -190,7 +189,6 @@ $profilePicPath = !empty($user['profile_pic']) ? 'uploads/'.$user['profile_pic']
   </div>
 </body>
 </html>
-=======
 <?php
 session_start();
 include 'db.php';
@@ -344,4 +342,3 @@ imageInput.addEventListener("change", function(event){
 
 </body>
 </html>
->>>>>>> 9c3cfdedaaf306ac261286e46793cbcf989f68c9

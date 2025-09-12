@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 <?php
 session_start();
 
@@ -28,7 +27,6 @@ if (isset($users[$username]) && $users[$username]['password'] === $password) {
   echo "<script>alert('Invalid login'); window.location.href='login.php';</script>";
 }
 ?>
-=======
 <?php
 session_start();
 
@@ -58,4 +56,3 @@ if (isset($users[$username]) && $users[$username]['password'] === $password) {
   echo "<script>alert('Invalid login'); window.location.href='login.php';</script>";
 }
 ?>
->>>>>>> 9c3cfdedaaf306ac261286e46793cbcf989f68c9

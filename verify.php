@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 <?php
 session_start();
 include 'db.php'; // database connection
@@ -35,7 +34,6 @@ if ($user['is_verified']) {
     }
 }
 ?>
-=======
 <?php
 session_start();
 include 'db.php'; // Make sure this points to your database connection
@@ -72,4 +70,3 @@ if ($user['is_verified']) {
     }
 }
 ?>
->>>>>>> 9c3cfdedaaf306ac261286e46793cbcf989f68c9

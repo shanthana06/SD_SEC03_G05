@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 <?php
 session_start();
 include 'db.php';
@@ -153,7 +152,6 @@ body, html {
 
 </body>
 </html>
-=======
 <?php
 session_start();
 include 'db.php';
@@ -261,4 +259,3 @@ imageInput.addEventListener("change", function(event) {
 
 </body>
 </html>
->>>>>>> 9c3cfdedaaf306ac261286e46793cbcf989f68c9
