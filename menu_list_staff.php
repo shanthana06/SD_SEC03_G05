@@ -1,6 +1,7 @@
 <?php
 include 'db.php';
-$result = mysqli_query($conn, "SELECT * FROM menu");
+$result = mysqli_query($conn, "SELECT * FROM menu_items");
+
 session_start();
 if (isset($_SESSION['role']) && $_SESSION['role'] === 'staff') {
     echo '<a href="index.php" class="btn btn-warning" style="margin:10px;">⬅ Back to Home</a>';

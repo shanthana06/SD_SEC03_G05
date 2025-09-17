@@ -63,7 +63,7 @@
     <div class="row g-4">
       <?php
       $sql = "SELECT * FROM menu WHERE availability='Available'";
-      $result = mysqli_query($conn, $sql);
+      $result = mysqli_query($conn, "SELECT * FROM menu_items");
       if (mysqli_num_rows($result) > 0) {
         $delay = 0;
         while ($row = mysqli_fetch_assoc($result)) {

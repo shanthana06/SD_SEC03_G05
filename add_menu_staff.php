@@ -26,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         move_uploaded_file($_FILES['image']['tmp_name'], $target);
     }
 
-    // SQL insert query
+    // ✅ SQL insert query (fixed)
     $sql = "INSERT INTO menu_items (name, price, description, image) 
             VALUES ('$name', '$price', '$description', " . 
             ($imageName ? "'$imageName'" : "NULL") . ")";
