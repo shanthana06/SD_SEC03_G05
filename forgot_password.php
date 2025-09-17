@@ -95,6 +95,22 @@ body, html { height:100%; margin:0; padding:0; }
   box-shadow: 0 0 20px rgba(0,0,0,0.2);
 }
 .section-title { text-align:center; margin-bottom:1.5rem; font-size:2rem; color:#333; }
+
+.reset-btn {
+  color: #fff !important;                /* white text */
+  background-color: #3e2723;             /* dark coffee brown */
+  border: 2px solid #3e2723;             /* same border */
+  border-radius: 30px;                   /* match login buttons */
+  padding: 10px 20px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.reset-btn:hover {
+  background-color: #6d4c41;             /* lighter coffee brown on hover */
+  color: #fff;                            /* keep text white */
+}
+
 </style>
 </head>
 <body>
@@ -113,7 +129,11 @@ body, html { height:100%; margin:0; padding:0; }
     <label for="email" class="form-label">Enter your registered email</label>
     <input type="email" class="form-control" id="email" name="email" placeholder="you@example.com" required>
   </div>
-  <button type="submit" class="btn btn-primary w-100">Send Reset Link</button>
+ <div class="text-center mt-4">
+  <button type="submit" class="btn btn-coffee reset-btn">Send Reset Link</button>
+</div>
+
+
 </form>
 
 <div class="text-center mt-3">

@@ -3,6 +3,8 @@ session_start();
 include 'db.php'; // your database connection
 
 $errors = [];
+$email_error = '';
+$password_error = '';
 $selected_role = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -10,15 +12,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $password = trim($_POST['password']);
     $selected_role = isset($_POST['role']) ? $_POST['role'] : '';
 
-    if (empty($email) && !empty($password)) {
-        $errors[] = "Email is required.";
-    } elseif (!empty($email) && empty($password)) {
-        $errors[] = "Please fill out this field (Password).";
-    } elseif (empty($email) && empty($password)) {
-        $errors[] = "Please fill out both Email and Password.";
-    } elseif (empty($selected_role)) {
+    // Field-level validation
+    if (empty($email)) {
+        $email_error = "Email is required.";
+    }
+    if (empty($password)) {
+        $password_error = "Please fill out this field.";
+    }
+    if (empty($selected_role)) {
         $errors[] = "Please choose a role (Customer, Staff, or Admin).";
-    } else {
+    }
+
+    // Only proceed if all fields are filled
+    if (empty($email_error) && empty($password_error) && empty($errors)) {
         $stmt = $conn->prepare("SELECT user_id, name, email, password, role, is_verified 
                                 FROM users WHERE email=? LIMIT 1");
         if (!$stmt) {
@@ -30,30 +36,33 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $user = $result->fetch_assoc();
 
         if (!$user) {
-            $errors[] = "Email not found. Please sign up.";
-        } elseif (!password_verify($password, $user['password'])) {
-            $errors[] = "Incorrect password.";
-        } elseif ($user['is_verified'] == 0) {
-            $errors[] = "Account not verified. Please check your email.";
-        } elseif ($user['role'] !== $selected_role) {
-            $errors[] = "Selected role does not match this account.";
+            $email_error = "Email not found. Please sign up.";
         } else {
-            $_SESSION['user_id'] = $user['user_id'];
-            $_SESSION['name']    = $user['name'];
-            $_SESSION['role']    = $user['role'];
+            // Only check password if email exists
+            if (!password_verify($password, $user['password'])) {
+                $password_error = "Incorrect password.";
+            } elseif ($user['is_verified'] == 0) {
+                $errors[] = "Account not verified. Please check your email.";
+            } elseif ($user['role'] !== $selected_role) {
+                $errors[] = "Selected role does not match this account.";
+            } else {
+                $_SESSION['user_id'] = $user['user_id'];
+                $_SESSION['name']    = $user['name'];
+                $_SESSION['role']    = $user['role'];
 
-            switch ($user['role']) {
-                case 'admin': header("Location: admin_dashboard.php"); break;
-                case 'staff': header("Location: staff_dashboard.php"); break;
-                default:      header("Location: index.php"); break;
+                switch ($user['role']) {
+                    case 'admin': header("Location: admin_dashboard.php"); break;
+                    case 'staff': header("Location: staff_dashboard.php"); break;
+                    default:      header("Location: index.php"); break;
+                }
+                exit;
             }
-            exit;
         }
-
         $stmt->close();
     }
 }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -132,33 +141,47 @@ body, html {
         </div>
       <?php endif; ?>
 
-      <form method="POST" id="loginForm">
-        <div class="mb-3">
-          <label class="form-label">Email</label>
-          <input type="email" name="email" class="form-control" 
-                 placeholder="Enter email" required 
-                 value="<?php echo isset($_POST['email']) ? htmlspecialchars($_POST['email']) : ''; ?>" />
-        </div>
+     <form method="POST" id="loginForm" autocomplete="off">
+  <div class="mb-3">
+    <label class="form-label">Email</label>
+    <input type="email" name="email" 
+           class="form-control <?php echo $email_error ? 'is-invalid' : ''; ?>" 
+           placeholder="Enter email"
+           autocomplete="username"
+           value="<?php echo isset($_POST['email']) ? htmlspecialchars($_POST['email']) : ''; ?>" />
+    <?php if ($email_error): ?>
+      <div class="invalid-feedback"><?php echo htmlspecialchars($email_error); ?></div>
+    <?php endif; ?>
+  </div>
 
-        <div class="mb-3">
-          <label class="form-label">Password</label>
-          <input type="password" name="password" class="form-control" placeholder="Enter password" required />
-        </div>
+  <div class="mb-3">
+  <label class="form-label">Password</label>
+  <input type="password" name="password" 
+         class="form-control <?php echo $password_error ? 'is-invalid' : ''; ?>" 
+         placeholder="Enter password"
+         autocomplete="new-password" />
+  <?php if ($password_error): ?>
+    <div class="invalid-feedback"><?php echo htmlspecialchars($password_error); ?></div>
+  <?php endif; ?>
+  <div class="mt-1">
+    <a href="forgot_password.php" class="link-custom">Forgot Password?</a>
+    
+  </div>
+</div>
 
-        <div class="mb-3 text-end">
-          <a href="forgot_password.php" class="link-custom">Forgot Password?</a>
-        </div>
 
-        <input type="hidden" name="role" id="roleField" value="">
+  <input type="hidden" name="role" id="roleField" value="">
 
-        <div class="d-grid gap-2">
-          <button type="submit" class="btn btn-coffee" onclick="setRole('customer')">Login as Customer</button>
-          <button type="submit" class="btn btn-coffee" onclick="setRole('staff')">Login as Staff</button>
-          <button type="submit" class="btn btn-coffee" onclick="setRole('admin')">Login as Admin</button>
-        </div>
-      </form>
+  <div class="d-grid gap-2">
+    <button type="submit" class="btn btn-coffee" onclick="setRole('customer')">Login as Customer</button>
+    <button type="submit" class="btn btn-coffee" onclick="setRole('staff')">Login as Staff</button>
+    <button type="submit" class="btn btn-coffee" onclick="setRole('admin')">Login as Admin</button>
+  </div>
+</form>
 
-      <p class="text-center mt-3">Don't have an account? <a href="signup.php" class="link-custom">Sign up here</a></p>
+      <p class="text-center mt-3">Don't have an account? 
+        <a href="signup.php" class="link-custom">Sign up here</a>
+      </p>
     </div>
   </div>
 </section>

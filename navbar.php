@@ -1,36 +1,110 @@
-
 <?php
-
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 ?>
-<nav class="navbar navbar-expand-lg navbar-dark bg-transparent">
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Arjuna n Co-ffee</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <style>
+    .custom-navbar {
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .custom-navbar .navbar-brand {
+      font-size: 1.6rem;
+      color: #ffffff;
+      text-shadow: 0 0 10px #fff;
+      font-family: 'Georgia', serif;
+    }
+
+    .custom-navbar .nav-link {
+      color: #ffffff !important;
+      margin: 0 0.5rem;
+      transition: all 0.3s ease;
+      font-weight: 500;
+    }
+
+    .custom-navbar .nav-link:hover {
+      color: #00d4ff !important;
+      transform: scale(1.05);
+      text-shadow: 0 0 5px rgba(0, 212, 255, 0.5);
+    }
+
+    .navbar-toggler {
+      border-color: rgba(255, 255, 255, 0.5);
+    }
+
+    .dropdown-menu {
+      background-color: #f8f9fa;
+      border: none;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+
+    .dropdown-item:hover {
+      background-color: #e9ecef;
+    }
+  </style>
+</head>
+<body style="background-color:#0094ff; min-height: 100vh;">
+
+<nav class="navbar navbar-expand-lg navbar-dark custom-navbar shadow-sm">
   <div class="container-fluid px-4">
-    <a class="navbar-brand fw-bold" href="#" style="font-family: 'Georgia', serif;">Arjuna n Co-ffee</a>
-    <button class="navbar-toggler me-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebarNav" aria-controls="sidebarNav">
+    <a class="navbar-brand fw-bold" href="#">Arjuna n Co-ffee</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar" aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
 
     <div class="collapse navbar-collapse justify-content-end" id="mainNavbar">
-      <ul class="navbar-nav">
-        <li class="nav-item"><a class="nav-link text-white" href="index.php">Home</a></li>
-        <li class="nav-item"><a class="nav-link text-white" href="menu.php">Menu</a></li>
+      <ul class="navbar-nav mb-2 mb-lg-0 align-items-center">
+
+        <li class="nav-item"><a class="nav-link" href="index.php">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="menu.php">Menu</a></li>
+
+        <!-- Optional Dropdown for Gallery -->
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="galleryDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Gallery
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="galleryDropdown">
+            <li><a class="dropdown-item" href="#">2019</a></li>
+            <li><a class="dropdown-item" href="#">2018</a></li>
+            <li><a class="dropdown-item" href="#">2017</a></li>
+          </ul>
+        </li>
 
         <?php if(isset($_SESSION['user_id'])): ?>
-          <li class="nav-item"><a class="nav-link text-white" href="profile.php">Profile</a></li>
-          <li class="nav-item"><a class="nav-link text-white" href="logout.php">Logout</a></li>
+          <li class="nav-item"><a class="nav-link" href="profile.php">Profile</a></li>
+
+          <?php if(isset($_SESSION['role']) && $_SESSION['role'] === 'staff'): ?>
+            <li class="nav-item">
+              <a class="nav-link text-warning fw-bold" href="staff_dashboard.php">🛠 Staff Dashboard</a>
+            </li>
+          <?php endif; ?>
+
+          <li class="nav-item"><a class="nav-link" href="logout.php">Logout</a></li>
         <?php else: ?>
-          <li class="nav-item"><a class="nav-link text-white" href="login.php">Login</a></li>
-          <li class="nav-item"><a class="nav-link text-white" href="signup.php">Sign Up</a></li>
+          <li class="nav-item"><a class="nav-link" href="login.php">Login</a></li>
+          <li class="nav-item"><a class="nav-link" href="signup.php">Sign Up</a></li>
         <?php endif; ?>
 
-        <li class="nav-item"><a class="nav-link text-white" href="contact_us.php">Contact</a></li>
-        <li class="nav-item"><a class="nav-link text-white" href="orderstatus.html">Order Status</a></li>
-        <li class="nav-item"><a class="nav-link text-white" href="orderhistory.html">Order History</a></li>
-      <li class="nav-item"><a class="nav-link text-white" href="change_password.php">Change Password</a></li>
-      </ul>
+        <li class="nav-item"><a class="nav-link" href="contact_us.php">Contact</a></li>
+        <li class="nav-item"><a class="nav-link" href="orderstatus.html">Order Status</a></li>
+        <li class="nav-item"><a class="nav-link" href="orderhistory.html">Order History</a></li>
+        <li class="nav-item"><a class="nav-link" href="change_password.php">Change Password</a></li>
+
       </ul>
     </div>
   </div>
 </nav>
 
-<?php
-
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
