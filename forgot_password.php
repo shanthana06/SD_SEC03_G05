@@ -105,6 +105,20 @@ body, html { height:100%; margin:0; padding:0; }
   font-weight: 500;
   transition: all 0.3s ease;
 }
+.btn.reset-btn {
+  color: #fff !important;                /* white text */
+  background-color: #3e2723 !important;  /* dark coffee brown */
+  border: 2px solid #3e2723 !important;  /* match border */
+  border-radius: 30px;
+  padding: 10px 20px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.btn.reset-btn:hover {
+  background-color: #6d4c41 !important;  /* lighter brown on hover */
+  color: #fff !important;
+}
 
 .reset-btn:hover {
   background-color: #6d4c41;             /* lighter coffee brown on hover */

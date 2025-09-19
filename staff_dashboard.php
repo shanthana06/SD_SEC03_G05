@@ -143,8 +143,8 @@
 <!-- Sidebar -->
 <div class="sidebar" id="sidebar">
   <a href="add_menu_staff.php">ADD MENU (STAFF)</a>
-  <a href="edit_menu_staff.php">EDIT MENU (STAFF)</a>
-  <a href="delete_menu_staff.php">DELETE MENU (STAFF)</a>
+  <a href="menu_list_staff.php">EDIT MENU (STAFF)</a>
+  <a href="menu_list_staff.php">DELETE MENU (STAFF)</a>
   <a href="edit_customer_staff.php">EDIT CUSTOMER (STAFF)</a>
   <a href="delete_customer_staff.php">DELETE CUSTOMER (STAFF)</a>
 </div>

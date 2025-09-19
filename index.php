@@ -81,30 +81,29 @@
   text-decoration: none;
   box-shadow: 0 4px 20px rgba(0,0,0,0.1);
 }
+.offcanvas-custom {
+  background: url('images/navbar.jpg') no-repeat center center/cover;
 
 
-   .offcanvas-custom {
-  background: rgba(107, 81, 80, 0.85); /* semi-transparent white */
-  backdrop-filter: blur(15px); /* glass effect */
-  -webkit-backdrop-filter: blur(15px);
-  color: #333;
-  border-right: 1px solid rgba(0, 0, 0, 0.1);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  color: #fff;
+  width: 250px;
+  font-family: 'Georgia', serif;
+  padding: 0;
+  position: relative;
 }
 
-.offcanvas-custom .offcanvas-title {
-  font-family: 'Playfair Display', serif;
-  font-weight: bold;
-  color: #ffffff;
+
+
+.offcanvas-body {
+  position: relative;
+  z-index: 1;
+  padding: 20px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
-.offcanvas-custom .nav-link {
-  color: #333;
-  font-weight: 500;
-  padding: 10px 0;
-  font-family: 'Roboto', sans-serif;
-  transition: all 0.3s ease;
-}
 
 .offcanvas-custom .nav-link:hover {
   background-color: rgba(0, 0, 0, 0.05);
@@ -165,6 +164,28 @@
       left: 20px;
       z-index: 10;
     }
+
+    .offcanvas-body {
+  background: url('../images/navbar.jpg') no-repeat center center/cover;
+  position: relative;
+  padding: 20px;
+}
+
+/* optional overlay for readability */
+.offcanvas-body::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4); /* dark transparent layer */
+  z-index: 0;
+}
+
+.offcanvas-body nav,
+.offcanvas-body .nav-link {
+  position: relative; /* make links above overlay */
+  z-index: 1;
+}
+
   </style>
   <!-- Example of Google Elegant Fonts -->
 <link href="https://fonts.gstatic.com/s/roboto/v48/KFOMCnqEu92Fr1ME7kSn66aGLdTylUAMQXC89YmC2DPNWubEbVmaiArmlw.woff2" rel="stylesheet">
@@ -181,26 +202,6 @@
   p, a, button {
     font-family: 'Roboto', sans-serif;
   }
-  .offcanvas-custom {
-    background-image: url('images/navbar.jpg'); /* Your background */
-    background-size: cover;
-    background-position: center;
-    color: black; /* Default text color black */
-    font-family: 'Segoe UI', 'Poppins', sans-serif;
-    font-weight: bold; /* Makes all text bold */
-}
-
-/* Make all nav links black and bold */
-.offcanvas-custom .nav-link {
-    color: black !important; /* Overrides Bootstrap's text-white */
-    font-weight: bold;
-}
-
-/* Make sidebar heading black and bold */
-.offcanvas-custom .offcanvas-title {
-    color: black;
-    font-weight: bold;
-}
 
 
 

@@ -68,17 +68,7 @@ if (session_status() === PHP_SESSION_NONE) {
         <li class="nav-item"><a class="nav-link" href="index.php">Home</a></li>
         <li class="nav-item"><a class="nav-link" href="menu.php">Menu</a></li>
 
-        <!-- Optional Dropdown for Gallery -->
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="galleryDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            Gallery
-          </a>
-          <ul class="dropdown-menu" aria-labelledby="galleryDropdown">
-            <li><a class="dropdown-item" href="#">2019</a></li>
-            <li><a class="dropdown-item" href="#">2018</a></li>
-            <li><a class="dropdown-item" href="#">2017</a></li>
-          </ul>
-        </li>
+        
 
         <?php if(isset($_SESSION['user_id'])): ?>
           <li class="nav-item"><a class="nav-link" href="profile.php">Profile</a></li>
