@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -115,6 +116,124 @@
   </script>
 </body>
 </html>
+=======
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Place Order | Arjuna n Co-ffee</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" />
+  <style>
+    body, html {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+
+    .order-bg-blur {
+      background-image: url('images/coffee1.jpg'); /* Replace with your image */
+      background-size: cover;
+      background-position: center;
+      filter: blur(6px);
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+    }
+
+    .form-container {
+      background-color: rgba(255, 255, 255, 0.9);
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.2);
+    }
+
+    .section-title {
+      color: #333;
+      font-size: 2.2rem;
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Blurred Background -->
+  <div class="order-bg-blur"></div>
+
+  <div id="navbar-placeholder"></div>
+
+<!-- Script to load the navbar.html file -->
+<script>
+  fetch('navbar.html')
+    .then(res => res.text())
+    .then(data => {
+      document.getElementById('navbar-placeholder').innerHTML = data;
+    });
+</script>
+
+  <!-- Order Form -->
+  <section class="py-5">
+    <div class="container">
+      <h2 class="section-title">Place Your Order</h2>
+
+      <div id="order-form-section" class="form-container">
+        <form id="order-form">
+          <div class="mb-3">
+            <label class="form-label">Order Type</label>
+            <select class="form-select" id="order-type">
+              <option selected>Dine-In</option>
+              <option>Pickup</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Table Number / Pickup Name</label>
+            <input type="text" class="form-control" id="order-name" placeholder="Enter info" required />
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Order Details</label>
+            <textarea class="form-control" id="order-details" rows="4" placeholder="Optional note..."></textarea>
+          </div>
+          <a href="orderstatus.html" class="btn btn-secondary">Submit Order</a>
+          
+      <a href="index.html" class="btn btn-outline-dark">Return to Home</a>
+
+        </form>
+      </div>
+
+      <div id="order-confirmation" class="text-center d-none mt-5 text-white">
+        <h4 class="text-success">✅ Your order has been placed!</h4>
+        <p>Thank you for ordering with <strong>Arjuna n Co-ffee</strong>.</p>
+        
+      </div>
+    </div>
+  </section>
+
+  <!-- Script -->
+  <script>
+    document.getElementById("order-form").addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      const type = document.getElementById("order-type").value;
+      const name = document.getElementById("order-name").value;
+      const note = document.getElementById("order-details").value;
+
+      console.log("Order Type:", type);
+      console.log("Name/Table:", name);
+      console.log("Note:", note);
+
+      localStorage.removeItem("cart");
+
+      document.getElementById("order-form-section").classList.add("d-none");
+      document.getElementById("order-confirmation").classList.remove("d-none");
+    });
+  </script>
+</body>
+</html>
+>>>>>>> 9c3cfdedaaf306ac261286e46793cbcf989f68c9
 =======
 <!DOCTYPE html>
 <html lang="en">
