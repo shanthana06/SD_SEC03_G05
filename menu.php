@@ -93,7 +93,7 @@
 
     <!-- Return to Home Button -->
     <div class="return-home">
-      <a href="index.html" class="btn btn-outline-dark mt-4">Return to Home</a>
+      <a href="index.php" class="btn btn-outline-dark mt-4">Return to Home</a>
     </div>
   </div>
 </section>

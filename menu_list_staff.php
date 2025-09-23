@@ -2,82 +2,84 @@
 include 'db.php';
 session_start();
 
-if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'staff') {
+// Restrict access to staff and admin
+if (!isset($_SESSION['role']) || !in_array($_SESSION['role'], ['staff', 'admin'])) {
     header("Location: login.php");
     exit;
 }
 
-// Handle inline update
-if (isset($_POST['update'])) {
-    $id = intval($_POST['id']);
-    $name = $_POST['name'];
-    $price = $_POST['price'];
-    $description = $_POST['description'];
-
-    mysqli_query($conn, "UPDATE menu_items SET name='$name', price='$price', description='$description' WHERE id=$id");
-}
-
-// Handle delete directly on this page
+// Handle delete request
 if (isset($_GET['delete'])) {
     $delete_id = intval($_GET['delete']);
-
-    // Optional: delete image file
-    $res = mysqli_query($conn, "SELECT image FROM menu_items WHERE id=$delete_id");
-    $row = mysqli_fetch_assoc($res);
-    if ($row && $row['image']) {
-        @unlink("uploads/" . $row['image']);
-    }
-
-    mysqli_query($conn, "DELETE FROM menu_items WHERE id=$delete_id");
+    mysqli_query($conn, "DELETE FROM menu_items WHERE id = $delete_id");
+    header("Location: menu_list_staff.php?msg=deleted");
+    exit;
 }
 
-// Fetch updated menu items
-$result = mysqli_query($conn, "SELECT * FROM menu_items");
-
-// Check edit mode
+// Handle edit/update request
 $edit_id = isset($_GET['edit']) ? intval($_GET['edit']) : 0;
+
+if (isset($_POST['update'])) {
+    $id = intval($_POST['id']);
+    $name = mysqli_real_escape_string($conn, $_POST['name']);
+    $price = floatval($_POST['price']);
+    $description = mysqli_real_escape_string($conn, $_POST['description']);
+
+    mysqli_query($conn, "UPDATE menu_items SET name='$name', price='$price', description='$description' WHERE id=$id");
+    header("Location: menu_list_staff.php?msg=updated");
+    exit;
+}
+
+// Fetch menu items
+$result = mysqli_query($conn, "SELECT * FROM menu_items ORDER BY id ASC");
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Staff Menu Management | Arjuna n Co-ffee</title>
-  <link rel="stylesheet" href="style.css" />
+  <title>Menu Management | Arjuna n Co-ffee</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <style>
+    body {
+      background: #f8f9fa;
+      font-family: 'Segoe UI', sans-serif;
+    }
     .menu-container {
-      background-color: rgba(255, 255, 255, 0.95);
+      background-color: #fff;
       border-radius: 12px;
       padding: 30px;
-      margin: 40px auto;
-      box-shadow: 0 0 15px rgba(0,0,0,0.2);
+      margin: 50px auto;
+      box-shadow: 0 0 15px rgba(0,0,0,0.1);
     }
     .menu-img {
       width: 80px;
       height: 80px;
       object-fit: cover;
-      border-radius: 10px;
+      border-radius: 8px;
     }
-    .black-btn {
-      background-color: rgba(0, 0, 0, 0.4);
-      border: 1px solid rgba(255, 255, 255, 0.2); 
-      color: #fff;
-      backdrop-filter: blur(6px);
-      padding: 8px 20px;
-      border-radius: 12px;
-      transition: all 0.3s ease;
+    .btn-custom {
+      padding: 6px 14px;
+      border-radius: 8px;
       font-weight: 500;
-      letter-spacing: 0.5px;
     }
-    .black-btn:hover {
-      background-color: rgba(0, 0, 0, 0.7);
-      border-color: rgba(255, 255, 255, 0.4);
-      color: #f1f1f1;
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    .btn-edit {
+      background-color: #ffc107;
+      color: #000;
     }
-    .cart-bg-blur {
+    .btn-delete {
+      background-color: #dc3545;
+      color: #fff;
+    }
+    .btn-save {
+      background-color: #198754;
+      color: #fff;
+    }
+    .btn-cancel {
+      background-color: #6c757d;
+      color: #fff;
+    }
+    .bg-blur {
       background-image: url('images/coffee1.jpg');
       background-size: cover;
       background-position: center;
@@ -92,30 +94,35 @@ $edit_id = isset($_GET['edit']) ? intval($_GET['edit']) : 0;
 <body>
 
 <?php include 'navbar.php'; ?>
-
-<!-- Blurred coffee background -->
-<div class="cart-bg-blur"></div>
+<div class="bg-blur"></div>
 
 <div class="container">
   <div class="menu-container">
-    <h2 class="mb-4 text-center">Staff Menu Management</h2>
+    <h2 class="text-center mb-4">Menu Management</h2>
 
-    <div class="mb-3 d-flex flex-wrap gap-2 justify-content-center">
-      <a href="add_menu_staff.php" class="btn black-btn">Add Menu</a>
-      <a href="menu.php" class="btn black-btn">Next to Menu</a>
-      <a href="staff_dashboard.php" class="btn black-btn">Back to Staff Dashboard</a>
+    <!-- Success Messages -->
+    <?php if (isset($_GET['msg']) && $_GET['msg'] === 'updated'): ?>
+      <div class="alert alert-success text-center">✅ Menu updated successfully</div>
+    <?php endif; ?>
+    <?php if (isset($_GET['msg']) && $_GET['msg'] === 'deleted'): ?>
+      <div class="alert alert-danger text-center">🗑 Menu deleted successfully</div>
+    <?php endif; ?>
+
+    <div class="mb-3 text-center">
+      <a href="add_menu_staff.php" class="btn btn-dark btn-custom me-2">➕ Add Menu</a>
+      <a href="menu.php" class="btn btn-secondary btn-custom">📋 View Menu</a>
     </div>
 
     <div class="table-responsive">
-      <table class="table table-bordered table-striped align-middle">
-        <thead class="table-dark text-center">
+      <table class="table table-bordered table-hover align-middle text-center">
+        <thead class="table-dark">
           <tr>
             <th>ID</th>
             <th>Image</th>
             <th>Name</th>
             <th>Price (RM)</th>
             <th>Description</th>
-            <th>Action</th>
+            <th>Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -131,30 +138,29 @@ $edit_id = isset($_GET['edit']) ? intval($_GET['edit']) : 0;
             </td>
 
             <?php if ($row['id'] == $edit_id) { ?>
-              <!-- EDIT MODE -->
+              <!-- Edit Mode -->
               <form method="POST">
-                <td><input type="text" name="name" value="<?= $row['name']; ?>" class="form-control"></td>
-                <td><input type="number" step="0.01" name="price" value="<?= $row['price']; ?>" class="form-control"></td>
-                <td><input type="text" name="description" value="<?= $row['description']; ?>" class="form-control"></td>
+                <td><input type="text" name="name" value="<?= $row['name']; ?>" class="form-control" required></td>
+                <td><input type="number" step="0.01" name="price" value="<?= $row['price']; ?>" class="form-control" required></td>
+                <td><input type="text" name="description" value="<?= $row['description']; ?>" class="form-control" required></td>
                 <td>
-                  <button type="submit" name="update" class="btn btn-success btn-sm">Save</button>
-                  <a href="staff_menu_management.php" class="btn btn-secondary btn-sm">Cancel</a>
+                  <button type="submit" name="update" class="btn btn-save btn-sm btn-custom">💾 Save</button>
+                  <a href="menu_list_staff.php" class="btn btn-cancel btn-sm btn-custom">❌ Cancel</a>
                 </td>
                 <input type="hidden" name="id" value="<?= $row['id']; ?>">
               </form>
             <?php } else { ?>
-              <!-- NORMAL VIEW MODE -->
-              <td><?= $row['name']; ?></td>
-              <td><?= $row['price']; ?></td>
-              <td><?= $row['description']; ?></td>
-              <td class="text-center">
-                <a href="?edit=<?= $row['id']; ?>" class="btn btn-warning btn-sm">Edit</a>
+              <!-- View Mode -->
+              <td><?= htmlspecialchars($row['name']); ?></td>
+              <td><?= number_format($row['price'], 2); ?></td>
+              <td><?= htmlspecialchars($row['description']); ?></td>
+              <td>
+                <a href="?edit=<?= $row['id']; ?>" class="btn btn-edit btn-sm btn-custom me-1">✏ Edit</a>
                 <a href="?delete=<?= $row['id']; ?>" 
-                   class="btn btn-danger btn-sm"
-                   onclick="return confirm('Are you sure to delete this item?');">Delete</a>
+                   class="btn btn-delete btn-sm btn-custom"
+                   onclick="return confirm('Are you sure you want to delete this item?');">🗑 Delete</a>
               </td>
             <?php } ?>
-
           </tr>
         <?php } ?>
         </tbody>
@@ -165,4 +171,3 @@ $edit_id = isset($_GET['edit']) ? intval($_GET['edit']) : 0;
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
-</html>

@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 <?php
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
@@ -18,40 +17,12 @@ if (session_status() === PHP_SESSION_NONE) {
       backdrop-filter: blur(10px);
       border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     }
-
-    .custom-navbar .navbar-brand {
-      font-size: 1.6rem;
-      color: #ffffff;
-      text-shadow: 0 0 10px #fff;
-      font-family: 'Georgia', serif;
-    }
-
-    .custom-navbar .nav-link {
-      color: #ffffff !important;
-      margin: 0 0.5rem;
-      transition: all 0.3s ease;
-      font-weight: 500;
-    }
-
-    .custom-navbar .nav-link:hover {
-      color: #00d4ff !important;
-      transform: scale(1.05);
-      text-shadow: 0 0 5px rgba(0, 212, 255, 0.5);
-    }
-
-    .navbar-toggler {
-      border-color: rgba(255, 255, 255, 0.5);
-    }
-
-    .dropdown-menu {
-      background-color: #f8f9fa;
-      border: none;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-    }
-
-    .dropdown-item:hover {
-      background-color: #e9ecef;
-    }
+    .custom-navbar .navbar-brand { font-size: 1.6rem; color: #ffffff; text-shadow: 0 0 10px #fff; font-family: 'Georgia', serif; }
+    .custom-navbar .nav-link { color: #ffffff !important; margin: 0 0.5rem; transition: all 0.3s ease; font-weight: 500; }
+    .custom-navbar .nav-link:hover { color: #00d4ff !important; transform: scale(1.05); text-shadow: 0 0 5px rgba(0, 212, 255, 0.5); }
+    .navbar-toggler { border-color: rgba(255, 255, 255, 0.5); }
+    .dropdown-menu { background-color: #f8f9fa; border: none; box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+    .dropdown-item:hover { background-color: #e9ecef; }
   </style>
 </head>
 <body style="background-color:#0094ff; min-height: 100vh;">
@@ -69,15 +40,19 @@ if (session_status() === PHP_SESSION_NONE) {
         <li class="nav-item"><a class="nav-link" href="index.php">Home</a></li>
         <li class="nav-item"><a class="nav-link" href="menu.php">Menu</a></li>
 
-        
-
         <?php if(isset($_SESSION['user_id'])): ?>
           <li class="nav-item"><a class="nav-link" href="profile.php">Profile</a></li>
 
-          <?php if(isset($_SESSION['role']) && $_SESSION['role'] === 'staff'): ?>
-            <li class="nav-item">
-              <a class="nav-link text-warning fw-bold" href="staff_dashboard.php">🛠 Staff Dashboard</a>
-            </li>
+          <?php if(isset($_SESSION['role'])): ?>
+            <?php if($_SESSION['role'] === 'staff'): ?>
+              <li class="nav-item">
+                <a class="nav-link text-warning fw-bold" href="staff_dashboard.php">Staff Dashboard</a>
+              </li>
+            <?php elseif($_SESSION['role'] === 'admin'): ?>
+              <li class="nav-item">
+                <a class="nav-link text-danger fw-bold" href="admin_dashboard.php">Admin Dashboard</a>
+              </li>
+            <?php endif; ?>
           <?php endif; ?>
 
           <li class="nav-item"><a class="nav-link" href="logout.php">Logout</a></li>
@@ -87,8 +62,8 @@ if (session_status() === PHP_SESSION_NONE) {
         <?php endif; ?>
 
         <li class="nav-item"><a class="nav-link" href="contact_us.php">Contact</a></li>
-        <li class="nav-item"><a class="nav-link" href="orderstatus.html">Order Status</a></li>
-        <li class="nav-item"><a class="nav-link" href="orderhistory.html">Order History</a></li>
+        <li class="nav-item"><a class="nav-link" href="orderstatus.php">Order Status</a></li>
+        <li class="nav-item"><a class="nav-link" href="orderhistory.php">Order History</a></li>
         <li class="nav-item"><a class="nav-link" href="change_password.php">Change Password</a></li>
 
       </ul>

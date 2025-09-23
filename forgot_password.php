@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 
 <?php
 session_start();
