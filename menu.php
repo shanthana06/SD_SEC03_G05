@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- Bootstrap CSS -->
+
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="style.css" rel="stylesheet">
 
@@ -68,7 +68,7 @@
         $delay = 0;
         while ($row = mysqli_fetch_assoc($result)) {
           $delay += 100;
-          $category = strtolower($row['category']); // assumes you have category column
+          $category = strtolower($row['category']); 
           ?>
           <div class="col-md-4 menu-item <?= $category ?>" data-aos="fade-up" data-aos-delay="<?= $delay ?>">
             <div class="card menu-card">
@@ -91,16 +91,16 @@
       ?>
     </div>
 
-    <!-- Return to Home Button -->
+   
     <div class="return-home">
       <a href="index.php" class="btn btn-outline-dark mt-4">Return to Home</a>
     </div>
   </div>
 </section>
 
-<!-- Scripts -->
+
 <script>
-  // Filter logic
+  
   const filterBtns = document.querySelectorAll('.filter-btn');
   const menuItems = document.querySelectorAll('.menu-item');
 
@@ -117,7 +117,7 @@
     });
   });
 
-  // Cart script
+ 
   document.querySelectorAll(".add-to-cart").forEach(button => {
     button.addEventListener("click", function () {
       const item = {

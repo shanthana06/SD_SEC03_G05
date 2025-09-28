@@ -116,10 +116,10 @@ body, html {
 <?php include 'navbar.php'; ?>
 
 
-<!-- Background -->
+
 <div class="login-bg-blur"></div>
 
-<!-- Profile card -->
+
 <div class="profile-card">
   <img src="<?php echo htmlspecialchars($profilePic); ?>" alt="Profile Picture" class="profile-pic">
 

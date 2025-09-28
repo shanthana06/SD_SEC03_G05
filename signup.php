@@ -2,9 +2,9 @@
 
 <?php
 session_start();
-include 'db.php'; // database connection
+include 'db.php'; 
 
-// PHPMailer includes
+
 require __DIR__ . '/PHPMailer/src/PHPMailer.php';
 require __DIR__ . '/PHPMailer/src/SMTP.php';
 require __DIR__ . '/PHPMailer/src/Exception.php';
@@ -21,9 +21,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email            = trim($_POST['email']);
     $password         = $_POST['password'];
     $confirm_password = $_POST['confirm_password'];
-    $role             = "customer"; // 👈 default role for signup
+    $role             = "customer"; 
 
-    // Basic validations
+    
     if (empty($name) || empty($email) || empty($password) || empty($confirm_password)) {
         $errors[] = "All fields are required.";
     } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
@@ -33,7 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } elseif (strlen($password) < 8) {
         $errors[] = "Password must be at least 8 characters long.";
     } else {
-        // Check if email already exists
+        
         $stmt = $conn->prepare("SELECT user_id FROM users WHERE email=? LIMIT 1");
         $stmt->bind_param("s", $email);
         $stmt->execute();
@@ -42,7 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($stmt->num_rows > 0) {
             $errors[] = "Email is already registered.";
         } else {
-            // ✅ Hash the password before saving
+            
             $hashed_password = password_hash($password, PASSWORD_BCRYPT);
 
             // Generate verification token
