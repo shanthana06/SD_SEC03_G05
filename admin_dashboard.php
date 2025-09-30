@@ -69,10 +69,11 @@ $report_count = 0;
 
 <!-- Sidebar -->
 <div class="sidebar" id="sidebar">
-  <a href="add_menu_staff.php">ADD MENU </a>
-  <a href="menu_list_staff.php">EDIT MENU </a>
-  <a href="menu_list_staff.php">DELETE MENU </a>
-  <a href="customer_list.php">EDIT CUSTOMER </a>
+  <a href="add_menu_staff.php">Add Menu</a>
+  <a href="menu_list_staff.php">Edit Menu</a>
+  <a href="menu_list_staff.php">Delete Menu</a>
+  <a href="customer_list.php">Edit Customer</a>\
+   <a href="view_feedback.php">View Feedback</a>
  
 </div>
 

@@ -22,7 +22,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $errors[] = "Invalid email format.";
     } else {
         // Insert into DB
-        $stmt = $conn->prepare("INSERT INTO contacts (fullname, email, message) VALUES (?, ?, ?)");
+       $stmt = $conn->prepare("INSERT INTO contacts (fullname, email, message) VALUES (?, ?, ?)");
+
         $stmt->bind_param("sss", $fullname, $email, $message_text);
         if($stmt->execute()){
             $success = "✅ Your message has been sent successfully!";

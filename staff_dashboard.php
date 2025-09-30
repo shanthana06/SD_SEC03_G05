@@ -143,9 +143,10 @@
 
 <!-- Sidebar -->
 <div class="sidebar" id="sidebar">
-  <a href="add_menu_staff.php">ADD MENU (STAFF)</a>
-  <a href="menu_list_staff.php">EDIT MENU (STAFF)</a>
-  <a href="customer_list.php">EDIT CUSTOMER (STAFF)</a>
+  <a href="add_menu_staff.php">Add Menu</a>
+  <a href="menu_list_staff.php">Edit Menu</a>
+  <a href="customer_list.php">Edit Customer</a>
+   <a href="view_feedback.php">View Feedback</a>
   
 </div>
 
