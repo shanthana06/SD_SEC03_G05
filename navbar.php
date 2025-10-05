@@ -65,7 +65,7 @@ if (session_status() === PHP_SESSION_NONE) {
         <li class="nav-item"><a class="nav-link" href="orderstatus.php">Order Status</a></li>
         <li class="nav-item"><a class="nav-link" href="orderhistory.php">Order History</a></li>
         <li class="nav-item"><a class="nav-link" href="change_password.php">Change Password</a></li>
-// Minor update for push
+
 
       </ul>
     </div>

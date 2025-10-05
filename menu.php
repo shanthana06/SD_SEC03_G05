@@ -1,15 +1,50 @@
-<?php include 'db.php'; ?>
+<?php
+session_start();
+include 'db.php'; // DB connection
+
+// Ensure cart session exists
+if (!isset($_SESSION['cart'])) {
+    $_SESSION['cart'] = [];
+}
+
+// Handle Add to Cart
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_to_cart'])) {
+    $name  = $_POST['name'];
+    $price = (float) $_POST['price'];
+
+    // Check if item already exists
+    $found = false;
+    foreach ($_SESSION['cart'] as &$item) {
+        if ($item['name'] === $name) {
+            $item['quantity'] += 1;
+            $found = true;
+            break;
+        }
+    }
+    unset($item);
+
+    // If not found, add new
+    if (!$found) {
+        $_SESSION['cart'][] = [
+            'name'     => $name,
+            'price'    => $price,
+            'quantity' => 1
+        ];
+    }
+
+    // Redirect straight to cart
+    header("Location: cart.php");
+    exit();
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link href="style.css" rel="stylesheet">
-
   <meta charset="UTF-8" />
   <title>Menu | Arjuna n Co-ffee</title>
-  <link rel="stylesheet" href="style.css" />
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" />
+  <link href="style.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
 
   <style>
@@ -62,8 +97,7 @@
 
     <div class="row g-4">
       <?php
-      $sql = "SELECT * FROM menu WHERE availability='Available'";
-      $result = mysqli_query($conn, "SELECT * FROM menu_items");
+      $result = mysqli_query($conn, "SELECT * FROM menu_items WHERE availability='Available'");
       if (mysqli_num_rows($result) > 0) {
         $delay = 0;
         while ($row = mysqli_fetch_assoc($result)) {
@@ -77,9 +111,11 @@
                 <h5 class="card-title"><?= htmlspecialchars($row['name']) ?></h5>
                 <p class="text-muted"><strong>RM <?= number_format($row['price'], 2) ?></strong></p>
                 <p class="card-text"><?= htmlspecialchars($row['description']) ?></p>
-                <button class="btn btn-secondary add-to-cart"
-                        data-name="<?= htmlspecialchars($row['name']) ?>"
-                        data-price="<?= htmlspecialchars($row['price']) ?>">Add to Cart</button>
+                <form method="post" action="menu.php">
+                  <input type="hidden" name="name" value="<?= htmlspecialchars($row['name']) ?>">
+                  <input type="hidden" name="price" value="<?= $row['price'] ?>">
+                  <button type="submit" name="add_to_cart" class="btn btn-secondary add-to-cart">Add to Cart</button>
+                </form>
               </div>
             </div>
           </div>
@@ -91,16 +127,13 @@
       ?>
     </div>
 
-   
     <div class="return-home">
       <a href="index.php" class="btn btn-outline-dark mt-4">Return to Home</a>
     </div>
   </div>
 </section>
 
-
 <script>
-  
   const filterBtns = document.querySelectorAll('.filter-btn');
   const menuItems = document.querySelectorAll('.menu-item');
 
@@ -114,28 +147,6 @@
           item.classList.toggle('hidden', !item.classList.contains(filter));
         }
       });
-    });
-  });
-
- 
-  document.querySelectorAll(".add-to-cart").forEach(button => {
-    button.addEventListener("click", function () {
-      const item = {
-        name: this.dataset.name,
-        price: parseFloat(this.dataset.price),
-        quantity: 1
-      };
-
-      let cart = JSON.parse(localStorage.getItem("cart")) || [];
-      const existing = cart.find(i => i.name === item.name);
-      if (existing) {
-        existing.quantity += 1;
-      } else {
-        cart.push(item);
-      }
-
-      localStorage.setItem("cart", JSON.stringify(cart));
-      window.location.href = "cart.html";
     });
   });
 </script>
