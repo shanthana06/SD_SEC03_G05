@@ -192,6 +192,7 @@ if ($row = $result->fetch_assoc()) {
     <a href="customer_list.php">Edit Customer</a>
     <a href="view_feedback.php">View Feedback</a>
     <a href="vieworders.php">View Orders</a>
+       <a href="manage_staff.php">Manage Staff</a>
   </div>
 
   <div class="container mt-5">
