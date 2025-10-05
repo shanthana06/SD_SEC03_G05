@@ -47,7 +47,7 @@ $result = $conn->query($sql);
     .form-box {
       max-width: 800px;
       margin: 80px auto;
-      background: rgba(255, 245, 245, 1);
+      background: rgba(255, 255, 255, 1);
       backdrop-filter: blur(6px);
       padding: 30px;
       border-radius: 16px;

@@ -1,15 +1,18 @@
-
 <?php
-// payment.php
 session_start();
-include 'db.php'; // make sure this has $conn = new mysqli(...);
+include 'db.php';
+include 'navbar.php';
 
-// Handle payment form submission
+// --- Check login ---
+if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'customer') {
+    echo '<div class="text-center mt-5">⚠ Please log in as a customer to place an order.</div>';
+    exit;
+}
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $method = $_POST['payment_type'];
     $details = "";
 
-    // Collect details depending on method
     switch ($method) {
         case 'card':
             $name = $_POST['card_name'];
@@ -32,16 +35,44 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             break;
     }
 
-    // Insert into DB
-    $stmt = $conn->prepare("INSERT INTO payments (user_id, method, details, created_at) VALUES (?, ?, ?, NOW())");
-    $user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : NULL;
-    $stmt->bind_param("iss", $user_id, $method, $details);
-    $stmt->execute();
-    $stmt->close();
+    $user_id = $_SESSION['user_id'];
+    $order_type = "Food/Drink";
+    $order_note = "Paid via $method";
+
+    // --- Calculate total from cart ---
+    $total_amount = 0;
+    if (isset($_SESSION['cart'])) {
+        foreach ($_SESSION['cart'] as $item) {
+            $total_amount += $item['price'] * $item['quantity'];
+        }
+    }
+
+    // --- Insert into orders ---
+    $stmt_order = $conn->prepare("
+        INSERT INTO orders (user_id, order_type, order_note, status, total_amount, created_at)
+        VALUES (?, ?, ?, 'Pending', ?, NOW())
+    ");
+    $stmt_order->bind_param("issd", $user_id, $order_type, $order_note, $total_amount);
+    $stmt_order->execute();
+    $order_id = $stmt_order->insert_id; // get order ID
+    $stmt_order->close();
+
+    // --- Insert into payments ---
+   $stmt_payment = $conn->prepare("
+    INSERT INTO payments (order_id, user_id, payment_type, payment_details, amount, payment_date)
+    VALUES (?, ?, ?, ?, ?, NOW())
+");
+$stmt_payment->bind_param("isssd", $order_id, $user_id, $method, $details, $total_amount);
+
+
+    $stmt_payment->execute();
+    $stmt_payment->close();
 
     $success = true;
 }
 ?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -71,9 +102,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   </style>
 </head>
 <body>
-  <?php include 'navbar.php'; ?>
 
-<div class="login-bg-blur"></div>
 <div class="payment-bg-blur"></div>
 
 <div class="payment-container">
@@ -122,7 +151,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       <div class="alert alert-info">Please prepare exact change. Payment will be made upon pickup/delivery.</div>
     </div>
 
-    <button type="submit" class="btn btn-primary w-100 mt-3">Pay Now</button>
+    <!-- Buttons -->
+    <div class="d-flex gap-3 mt-4">
+       <button type="submit" class="btn btn-primary w-50">Pay Now</button>
+       <a href="cart.php" class="btn btn-outline-secondary w-50">← Back to Cart</a>
+    </div>
   </form>
   <?php } else { ?>
     <div class="alert alert-success text-center">
@@ -130,7 +163,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
     <div class="text-center mt-4">
       <a href="index.php" class="btn btn-outline-dark">Return to Home</a>
-       <a href="receipt.php" class="btn btn-outline-dark">View Receipt</a>
+      <a href="receipt.php" class="btn btn-outline-dark">View Receipt</a>
     </div>
   <?php } ?>
 </div>

@@ -132,7 +132,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       </form>
       <div class="text-end">
         <h5>Total: RM <span id="cart-total"><?= number_format(calculateTotal(), 2) ?></span></h5>
-        <a href="order.php" class="btn btn-success mt-2">Proceed to Checkout</a>
+        <a href="payment.php?total=<?php echo calculateTotal(); ?>" class="btn btn-primary">Proceed to Payment</a>
+
       </div>
     </div>
 
@@ -142,6 +143,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
   </div>
 </section>
+<form action="payment.php" method="POST">
+  <label for="order_type">Order Type:</label>
+  <select name="order_type" required>
+    <option value="Dine-In">Dine-In</option>
+    <option value="Pickup">Pickup</option>
+  </select>
+  
+  <button type="submit" name="proceed_payment" class="btn btn-primary">Proceed to Payment</button>
+</form>
 
 <script>
   // Auto update when quantity changes

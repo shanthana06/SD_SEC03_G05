@@ -311,7 +311,7 @@ if (isset($_SESSION['role']) && in_array($_SESSION['role'], ['admin', 'staff', '
       <!-- 1 -->
       <div class="row align-items-center">
         <div class="col-md-6">
-          <img src="images/arjuna.jpg" class="img-fluid" alt="About Arjuna n Co-ffee">
+          <img src="images/arjunashop.jpg" class="img-fluid" alt="About Arjuna n Co-ffee">
         </div>
         <div class="col-md-6">
           <h4 class="mb-3">At Arjuna n Co-ffee</h4>
@@ -336,7 +336,7 @@ if (isset($_SESSION['role']) && in_array($_SESSION['role'], ['admin', 'staff', '
       <!-- 3 -->
       <div class="row align-items-center mt-5">
         <div class="col-md-6">
-          <img src="images/people.jpg" class="img-fluid" alt="Cafe Ambience">
+          <img src="images/table.jpg" class="img-fluid" alt="Cafe Ambience">
         </div>
         <div class="col-md-6">
           <h4 class="mb-3">More Than Just Coffee</h4>

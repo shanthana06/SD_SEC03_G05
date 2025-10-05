@@ -74,7 +74,7 @@ $amount_due = round($subtotal + $tax, 2);
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
     :root{--bg:#f6eaea;--accent:#8b5a53;--muted:#e9d6d4}
-    body{font-family:'Poppins',sans-serif;background:var(--muted);display:flex;flex-direction:column;align-items:center;padding:30px}
+    
     .card{width:720px;background:#fff;border-radius:6px;padding:28px 36px;box-shadow:0 6px 20px rgba(0,0,0,0.06);position:relative;margin-top:20px}
     .border-pattern{position:absolute;inset:0;border-radius:6px;padding:18px;background-image:linear-gradient(45deg, rgba(139,90,83,0.05) 25%, transparent 25%, transparent 75%, rgba(139,90,83,0.05) 75%), linear-gradient(45deg, rgba(139,90,83,0.05) 25%, transparent 25%, transparent 75%, rgba(139,90,83,0.05) 75%);background-size:18px 18px,18px 18px;pointer-events:none}
     .content{position:relative;background:transparent}
@@ -115,6 +115,18 @@ $amount_due = round($subtotal + $tax, 2);
       .card{box-shadow:none}
       .actions{display:none}
     }
+    body {
+  font-family: 'Poppins', sans-serif;
+ background: url('/arjunababy/images/coffee1.jpg') no-repeat center center fixed;
+
+
+  background-size: cover;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 30px;
+}
+
   </style>
 </head>
 <body>
@@ -197,6 +209,8 @@ $amount_due = round($subtotal + $tax, 2);
 
       <div class="actions">
         <button class="btn" onclick="window.print()">Print Receipt</button>
+         <a href="index.php" class="btn">Back to home</a>
+
       </div>
 
     </div>
