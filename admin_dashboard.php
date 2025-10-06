@@ -269,6 +269,7 @@ if ($row = $result->fetch_assoc()) {
       </div>
     </div>
   </div>
+  <!-- test -->
 
   <script>
     function toggleSidebar() {
