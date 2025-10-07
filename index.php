@@ -161,6 +161,18 @@ session_start();
   text-decoration: none;
 }
 
+/* Sidebar styling */
+#sidebarNav,
+#sidebarNav .nav-link,
+#sidebarNav .offcanvas-title {
+  font-family: Garamond, serif;
+  color: black !important;
+}
+
+/* Make sure icons also turn black */
+#sidebarNav i {
+  color: black !important;
+}
 
     .menu-toggle {
       position: fixed;
@@ -201,7 +213,12 @@ session_start();
 </button>
 
 <!-- Sidebar Offcanvas Menu -->
-<div class="offcanvas offcanvas-start offcanvas-custom" tabindex="-1" id="sidebarNav">
+<div class="offcanvas offcanvas-start offcanvas-custom" tabindex="-1" id="sidebarNav"
+     style="background-image: url('images/navbar.jpg'); 
+            background-size: cover; 
+            background-position: center; 
+            background-repeat: no-repeat;">
+
   <div class="offcanvas-header">
     <h5 class="offcanvas-title fw-bold">Arjuna n Co-ffee</h5>
     <button type="button" class="btn-close text-reset bg-light" data-bs-dismiss="offcanvas" aria-label="Close"></button>
@@ -215,8 +232,8 @@ session_start();
       <a href="signup.php" class="nav-link text-white"><i class="bi bi-person-plus-fill me-2"></i>Sign Up</a>
       <a href="profile.php" class="nav-link text-white"><i class="bi bi-person-fill me-2"></i>Profile</a>
       <a href="contact_us.php" class="nav-link text-white"><i class="bi bi-envelope-fill me-2"></i>Contact</a>
-      <a href="orderstatus.html" class="nav-link text-white"><i class="bi bi-info-circle-fill me-2"></i>Order Status</a>
-      <a href="orderhistory.html" class="nav-link text-white"><i class="bi bi-clock-history me-2"></i>Order History</a>
+      <a href="orderstatus.php" class="nav-link text-white"><i class="bi bi-info-circle-fill me-2"></i>Order Status</a>
+      <a href="orderhistory.php" class="nav-link text-white"><i class="bi bi-clock-history me-2"></i>Order History</a>
     </nav>
 
     <!-- Logout Button at Bottom -->
