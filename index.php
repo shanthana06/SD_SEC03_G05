@@ -1,510 +1,1006 @@
 <?php
 session_start();
 ?>
-
-
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="desktop portrait m">
 
 <head>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Parisienne&family=Cormorant+Garamond:wght@300;400;700&display=swap" rel="stylesheet">
 
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Arjuna n Co-ffee Ordering System</title>
 
-  <!-- Bootstrap CSS & Icons -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
-  <link rel="stylesheet" href="https://unpkg.com/aos@2.3.4/dist/aos.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Arjuna n Co-ffee | Home</title>
+
+  <!-- Page Fade Animation -->
+  <style>
+    body {
+      transition: opacity ease-in 0.6s;
+    }
+body {
+  transition: opacity ease-in 0.6s;
+}
+body[unresolved] {
+  opacity: 0;
+}
+
+    body[unresolved] {
+      opacity: 0;
+      display: block;
+      overflow: hidden;
+      position: relative;
+    }
+  </style>
+
+  <!-- Preconnect for speed -->
+  <link rel="preconnect" href="https://static.showit.co">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <!-- Elegant Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,500&family=Cormorant+Garamond:wght@300;400;700&family=Parisienne&family=Lora&display=swap" rel="stylesheet">
 
   <style>
     body {
       margin: 0;
-      background-color: #fdfaf6;
-      font-family: 'Segoe UI', sans-serif;
+      font-family: 'Lora', serif;
+      background-color: #fcfbf9;
+      color: #2d2d2d;
       overflow-x: hidden;
     }
-    
 
-    .hero-section {
-      position: relative;
+h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: 60px;
+  color: #3b2f2f;
+}
+
+h2 {
+  font-family: 'Parisienne', cursive;
+  font-size: 40px;
+  color: #8b6f47;
+}
+
+p {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 18px;
+  color: #4a3c2f;
+}
+
+    header {
+      position: fixed;
+      width: 100%;
+      top: 0;
+      left: 0;
+      background: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(8px);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 18px 60px;
+      z-index: 1000;
+    }
+
+    header h4 {
+      font-family: 'Parisienne', cursive;
+      font-size: 1.8rem;
+      color: #3d2b1f;
+    }
+
+    header nav a {
+      text-decoration: none;
+      color: #3d2b1f;
+      margin: 0 15px;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.05rem;
+      letter-spacing: 0.5px;
+      transition: color 0.3s ease;
+    }
+
+    header nav a:hover {
+      color: #caa472;
+    }
+
+    .hero {
       height: 100vh;
+      background: url('images/AB1.jpg') center/cover no-repeat;
       display: flex;
       align-items: center;
       justify-content: center;
       flex-direction: column;
       text-align: center;
-      color: white;
-      overflow: hidden;
+      color: #fff;
+      position: relative;
     }
 
-    .hero-blur-bg {
+    .hero::after {
+      content: "";
       position: absolute;
-      top: 0;
-      left: 0;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.4);
+      backdrop-filter: blur(3px);
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      animation: fadeUp 1.5s ease-in-out;
+    }
+
+    .hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 3.2rem;
+      letter-spacing: 1px;
+      margin-bottom: 15px;
+    }
+
+    .hero p {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.2rem;
+      margin-bottom: 30px;
+      color: #f4e6d0;
+    }
+
+    .btn-coffee {
+      padding: 12px 40px;
+      border: 2px solid #fff;
+      border-radius: 40px;
+      background: transparent;
+      color: #fff;
+      font-family: 'Cormorant Garamond', serif;
+      letter-spacing: 1px;
+      transition: all 0.4s ease;
+      text-decoration: none;
+    }
+
+    .btn-coffee:hover {
+      background-color: #fff;
+      color: #2e2e2e;
+    }
+
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    section {
+      padding: 100px 10%;
+    }
+
+    .about {
+      display: flex;
+      align-items: center;
+      gap: 60px;
+      flex-wrap: wrap;
+    }
+
+    .about img {
       width: 100%;
-      height: 100%;
-      background-image: url('images/AB1.jpg');
-      background-size: cover;
-      background-position: center;
-      filter: blur(6px) brightness(0.6);
-      z-index: 0;
+      max-width: 500px;
+      border-radius: 20px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+      transition: transform 0.5s ease;
     }
 
-    .hero-section h1,
-    .hero-section p {
-      z-index: 1;
-      text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.6);
+    .about img:hover {
+      transform: scale(1.03);
     }
 
-    .btn-primary {
-      background-color: #6f4e37;
-      border-color: #6f4e37;
+    .about-text h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.3rem;
+      color: #3b2b1f;
+      margin-bottom: 20px;
     }
 
-    .btn-primary:hover {
-      background-color: #5a3e2b;
+    .about-text p {
+      font-size: 1rem;
+      line-height: 1.8;
+      color: #5a4c43;
     }
-    .custom-btn {
-  background-color: transparent;
-  border: 2px solid #c49a6c; /* coffee gold */
-  color: #c49a6c;
-  font-family: 'Poppins', sans-serif; /* elegant font */
-  font-size: 1rem;
-  padding: 10px 20px;
-  border-radius: 30px;
-  transition: all 0.3s ease;
-  box-shadow: 0 0 10px rgba(0,0,0,0.05);
+
+    footer {
+      background: #f2ece6;
+      text-align: center;
+      padding: 40px;
+      font-size: 0.9rem;
+      color: #7b6d5b;
+    }
+    .image-stack {
+  position: relative;
+  height: 100vh;
+  overflow: hidden;
+  background: url('images/coffee1.jpg') center/cover no-repeat;
 }
 
-.custom-btn:hover {
-  background-color: #c49a6c;
-  color: white;
-  text-decoration: none;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-}
-
-
-   .offcanvas-custom {
-  background: rgba(107, 81, 80, 0.85); /* semi-transparent white */
-  backdrop-filter: blur(15px); /* glass effect */
-  -webkit-backdrop-filter: blur(15px);
-  color: #333;
-  border-right: 1px solid rgba(0, 0, 0, 0.1);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
-}
-
-.offcanvas-custom .offcanvas-title {
-  font-family: 'Playfair Display', serif;
-  font-weight: bold;
-  color: #ffffff;
-}
-
-.offcanvas-custom .nav-link {
-  color: #333;
-  font-weight: 500;
-  padding: 10px 0;
-  font-family: 'Roboto', sans-serif;
-  transition: all 0.3s ease;
-}
-
-.offcanvas-custom .nav-link:hover {
-  background-color: rgba(0, 0, 0, 0.05);
-  border-radius: 8px;
-  padding-left: 14px;
-  color: #000;
-}
-
-.logout-btn {
+/* --- Center the text beautifully --- */
+.text-overlay {
   position: absolute;
-  bottom: 20px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  z-index: 10;
+  animation: fadeInText 1.5s ease-in-out;
+}
+
+.text-overlay h2 {
+  font-family: 'Parisienne', cursive;
+  font-size: 3rem;
+  color: #f5f0c9;
+  letter-spacing: 2px;
+  margin: 0;
+}
+
+.text-overlay h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: 6rem;
+  color: #f5f0c9;
+  letter-spacing: 3px;
+  margin: 0;
+}
+
+/* --- Fade animation --- */
+@keyframes fadeInText {
+  from { opacity: 0; transform: translate(-50%, -55%); }
+  to { opacity: 1; transform: translate(-50%, -50%); }
+}
+/* --- SANCTUARY SECTION --- */
+.sanctuary-section {
+  position: relative;
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f8f4ee;
+}
+
+.sanctuary-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
+  height: 100%;
+  background: url('images/sanctuary-bg.jpg') center/cover no-repeat;
+  filter: brightness(85%) contrast(95%);
+  z-index: 1;
+  animation: zoomFade 15s ease-in-out infinite alternate;
 }
 
-
-.see-menu-btn {
-  background-color: transparent;
-  color: white;
-  border: 2px solid white;
-  padding: 10px 30px;
-  font-size: 0.9rem;
-  text-transform: uppercase;
-  font-weight: 600;
-  letter-spacing: 1px;
-  border-radius: 4px;
-  transition: all 0.3s ease;
-  text-decoration: none;
-}
-
-.see-menu-btn:hover {
-  background-color: white;
-  color: #333;
-  text-decoration: none;
-}
-
-.see-menu-btn {
-  background-color: transparent;
-  border: 2px solid #fff;
+.sanctuary-content {
+  position: relative;
+  z-index: 2;
+  text-align: center;
   color: #fff;
-  padding: 10px 20px;
-  font-weight: 500;
-  border-radius: 30px;
-  text-transform: uppercase;
-  transition: all 0.3s ease;
-  backdrop-filter: blur(4px);
+  padding: 0 20px;
 }
 
-.see-menu-btn:hover {
-  background-color: #fff;
-  color: #000;
+.sanctuary-content h2 {
+  font-family: 'Parisienne', cursive;
+  font-size: 2.5rem;
+  color: #f1e6b0;
+  margin-bottom: 10px;
+}
+
+.sanctuary-content h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: 4rem;
+  letter-spacing: 2px;
+  color: #ffffff;
+  margin-bottom: 20px;
+}
+
+.sanctuary-content p {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.2rem;
+  color: #f6f1e8;
+  max-width: 600px;
+  margin: 0 auto 30px;
+  line-height: 1.6;
+}
+
+.sanctuary-btn {
+  display: inline-block;
+  padding: 12px 32px;
+  font-family: 'Playfair Display', serif;
+  font-size: 1.1rem;
+  background: #e8dbc5;
+  color: #3b2f2f;
+  border-radius: 25px;
   text-decoration: none;
+  transition: all 0.3s ease;
 }
 
-/* Sidebar styling */
-#sidebarNav,
-#sidebarNav .nav-link,
-#sidebarNav .offcanvas-title {
-  font-family: Garamond, serif;
-  color: black !important;
+.sanctuary-btn:hover {
+  background: #d7c5a6;
+  transform: scale(1.05);
 }
 
-/* Make sure icons also turn black */
-#sidebarNav i {
-  color: black !important;
+@keyframes zoomFade {
+  0% { transform: scale(1); opacity: 1; }
+  100% { transform: scale(1.05); opacity: 0.95; }
 }
 
-    .menu-toggle {
-      position: fixed;
-      top: 20px;
-      left: 20px;
-      z-index: 10;
-    }
-  </style>
-  <!-- Example of Google Elegant Fonts -->
-<link href="https://fonts.gstatic.com/s/roboto/v48/KFOMCnqEu92Fr1ME7kSn66aGLdTylUAMQXC89YmC2DPNWubEbVmaiArmlw.woff2" rel="stylesheet">
-
-<style>
-  body {
-    font-family: 'Playfair Display', serif;
-  }
-
-  h1, h2, h3, nav {
-    font-family: 'Playfair Display', serif;
-  }
-
-  p, a, button {
-    font-family: 'Roboto', sans-serif;
-  }
-</style>
-
-</head>
-
-<body>
-
-  <!-- Sidebar Toggle Button -->
-  <button class="btn btn-outline-light menu-toggle" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebarNav" aria-controls="sidebarNav">
-    <i class="bi bi-list fs-3"></i>
-  </button>
-
-  <!-- Sidebar Toggle Button -->
-<button class="btn btn-outline-light menu-toggle" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebarNav" aria-controls="sidebarNav">
-  <i class="bi bi-list fs-3"></i>
-</button>
-
-<!-- Sidebar Offcanvas Menu -->
-<div class="offcanvas offcanvas-start offcanvas-custom" tabindex="-1" id="sidebarNav"
-     style="background-image: url('images/navbar.jpg'); 
-            background-size: cover; 
-            background-position: center; 
-            background-repeat: no-repeat;">
-
-  <div class="offcanvas-header">
-    <h5 class="offcanvas-title fw-bold">Arjuna n Co-ffee</h5>
-    <button type="button" class="btn-close text-reset bg-light" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-  </div>
-
-  <div class="offcanvas-body d-flex flex-column justify-content-between">
-    <nav class="nav flex-column">
-      <a href="index.php" class="nav-link text-white"><i class="bi bi-house-door-fill me-2"></i>Home</a>
-      <a href="menu.php" class="nav-link text-white"><i class="bi bi-cup-hot me-2"></i>Menu</a>
-      <a href="login.php" class="nav-link text-white"><i class="bi bi-box-arrow-in-right me-2"></i>Login</a>
-      <a href="signup.php" class="nav-link text-white"><i class="bi bi-person-plus-fill me-2"></i>Sign Up</a>
-      <a href="profile.php" class="nav-link text-white"><i class="bi bi-person-fill me-2"></i>Profile</a>
-      <a href="contact_us.php" class="nav-link text-white"><i class="bi bi-envelope-fill me-2"></i>Contact</a>
-      <a href="orderstatus.php" class="nav-link text-white"><i class="bi bi-info-circle-fill me-2"></i>Order Status</a>
-      <a href="orderhistory.php" class="nav-link text-white"><i class="bi bi-clock-history me-2"></i>Order History</a>
-    </nav>
-
-    <!-- Logout Button at Bottom -->
-    <div class="mt-4">
-      <a href="logout.php" class="nav-link text-white"><i class="bi bi-box-arrow-right me-2"></i>Logout</a>
-    </div>
-  </div>
-</div>
-
-  <!-- Hero Section -->
-  <section class="hero-section text-white position-relative">
-    <div class="hero-blur-bg"></div>
-
-    <p class="mb-2 fs-5" style="letter-spacing: 2px;" data-aos="fade-down">
-      <img src="https://cdn-icons-png.flaticon.com/128/16508/16508920.png" alt="Coffee Icon" width="30" height="30" style="margin-right: 8px;">
-      Crafted with Love.
-    </p>
-
-    <h1 data-aos="fade-down">WELCOME TO ARJUNA N CO-FFEE</h1>
-
-    <p class="lead" data-aos="fade-up">
-      
-    </p>
-<?php
-if (isset($_SESSION['role']) && in_array($_SESSION['role'], ['admin', 'staff', 'customer'])) {
-    echo '<a href="menu.php" class="btn see-menu-btn">ORDERING NOW</a>';
+.image-stack {
+  position: relative;
+  height: 150vh;
+  top: 12%;
+  overflow: hidden;
+  background: url('images/scenery.jpg') center/cover no-repeat;
 }
-?>
+.image-stack h2 {
+  position: absolute;
+  top: 12%;
+  left: 6%;
+  font-family: 'Parisienne', cursive;
+  font-size: 2.5rem;
+  color: #f5f0c9;
+  letter-spacing: 2px;
+}
+
+.image-stack h1 {
+  position: absolute;
+  top: 8%;
+  left: 15%;
+  font-family: 'Playfair Display', serif;
+  font-size: 5rem;
+  color: #f5f0c9;
+  letter-spacing: 3px;
+}
 
 
-<div class="d-flex justify-content-center gap-3 mt-3" data-aos="fade-up" data-aos-delay="200">
+.text-overlay {
+  top: 40%; /* was 50% */
+}
+.image-stack img {
+  position: absolute;
+  opacity: 0;
+  transform: scale(0.95);
+  transition: all 1.2s ease;
+}
 
-  <a href="#about" class="btn see-menu-btn">EXPLORE MORE</a>
-</div>
+.image-stack img.visible {
+  opacity: 1;
+  transform: scale(1);
+}
+.dreamy-section {
+  width: 100%;
+  background-color: #f9f7f3;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 100px 0;
+  margin-top: 80px;
+}
+
+/* remove container limits, make it stretch fully */
+.dreamy-container {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  background-color: #fdfbf8;
+  border-radius: 0;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+
+/* Left image */
+.dreamy-image {
+  flex: 1;
+  min-width: 300px;
+  background-image: url('images/dualipa.jpg');
+  background-size: cover;
+  background-position: center;
+  height: 700px;
+}
+.coffee-showcase {
+  position: relative;
+  text-align: center;
+  background-color: #e8e8ef;
+  padding: 100px 20px;
+  overflow: hidden;
+}
+
+.coffee-title {
+  font-size: 3rem;
+  font-family: 'Playfair Display', serif;
+  color: #1e2235;
+  margin-bottom: 40px;
+  z-index: 2;
+  position: relative;
+}
+
+.coffee-bg-text {
+  font-size: 8rem;
+  color: rgba(30, 34, 53, 0.1);
+  white-space: nowrap;
+  position: absolute;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+  animation: scrollText 30s linear infinite;
+}
+
+@keyframes scrollText {
+  from { transform: translateX(0) translateY(-50%); }
+  to { transform: translateX(-50%) translateY(-50%); }
+}
+
+.coffee-content img {
+  width: 320px;
+  border-radius: 10px;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+  z-index: 2;
+  position: relative;
+}
+
+.coffee-buttons {
+  margin-top: 40px;
+}
+
+.coffee-btn {
+  display: inline-block;
+  margin: 0 10px;
+  padding: 12px 30px;
+  border: 1px solid #1e2235;
+  border-radius: 30px;
+  text-decoration: none;
+  color: #1e2235;
+  font-family: 'Poppins', sans-serif;
+  transition: 0.3s;
+}
+
+.coffee-btn:hover {
+  background-color: #1e2235;
+  color: #fff;
+}
+
+/* Right text content */
+.dreamy-content {
+  flex: 1.2;
+  background-color: #f9f7f3;
+  padding: 80px 60px;
+  text-align: center;
+}
+
+.dreamy-title {
+  font-family: 'Playfair Display', serif;
+  color: #2f3a56;
+  font-size: 3rem;
+  margin-bottom: 10px;
+}
+
+.dreamy-subtitle {
+  font-family: 'Parisienne', cursive;
+  color: #536480;
+  font-size: 2rem;
+  margin-bottom: 40px;
+}
+
+.dreamy-heading {
+  font-family: 'Playfair Display', serif;
+  font-size: 1rem;
+  letter-spacing: 1px;
+  color: #536480;
+  text-transform: uppercase;
+  margin-bottom: 40px;
+  max-width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.dreamy-paragraph {
+  font-family: 'Cormorant Garamond', serif;
+  color: #5a4c43;
+  font-size: 1.1rem;
+  line-height: 1.8;
+  max-width: 550px;
+  margin: 0 auto 20px;
+}
+
+.dreamy-button a {
+  display: inline-block;
+  background-color: #2f3a56;
+  color: #fff;
+  text-decoration: none;
+  padding: 12px 40px;
+  border-radius: 40px;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1rem;
+  margin-top: 30px;
+  transition: all 0.3s ease;
+}
+/* --- Arjuna Coffee Showcase Section --- */
+.coffee-showcase {
+  position: relative;
+  background-color: #e8e8ef;
+  text-align: center;
+  padding: 8rem 2rem;
+  overflow: hidden;
+}
+
+.coffee-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 4rem;
+  color: #1e2235;
+  position: relative;
+  z-index: 10;
+  margin-bottom: 2rem;
+}
+
+/* animated background text */
+.coffee-bg-text {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 200%;
+  transform: translateY(-50%);
+  white-space: nowrap;
+  font-size: 7rem;
+  color: rgba(30, 34, 53, 0.08);
+  font-family: 'Playfair Display', serif;
+  animation: scrollText 30s linear infinite;
+}
+
+@keyframes scrollText {
+  from { transform: translateX(0) translateY(-50%); }
+  to { transform: translateX(-50%) translateY(-50%); }
+}
+
+.coffee-content {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  justify-content: center;
+  margin-top: 4rem;
+}
+
+.coffee-img {
+  width: 350px;
+  height: auto;
+  border-radius: 20px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+  transition: transform 0.4s ease;
+}
+
+.coffee-img:hover {
+  transform: scale(1.05);
+}
+
+.coffee-buttons {
+  position: relative;
+  z-index: 10;
+  margin-top: 3rem;
+}
+
+.coffee-btn {
+  display: inline-block;
+  padding: 0.75rem 2.5rem;
+  margin: 0 0.8rem;
+  border: 1.5px solid #555;
+  border-radius: 9999px;
+  color: #333;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.9rem;
+  letter-spacing: 1px;
+  background: transparent;
+  transition: all 0.3s ease;
+}
+
+.coffee-btn:hover {
+  background-color: rgba(255, 255, 255, 0.6);
+  border-color: #222;
+  transform: translateY(-3px);
+}
+
+.dreamy-button a:hover {
+  background-color: #4b5b77;
+}
+
+.img1 { top: 60%; left: 5%; width: 200px; }
+.img2 { 
+  top: 45%; /* <-- Change this: Moved UP to prevent it from being cut off */
+  left: 30%; /* <-- Adjusted slightly to the left for balance */
+  width: 300px; /* <-- Slightly increased width to make it a focal point */
+} 
+.img3 { top: 50%; right: 5%; width: 250px; }
+/* --- SANCTUARY SECTION STYLING --- */
+.sanctuary-hero {
+  height: 100vh;
+  background: url('images/girl.jpg') center/cover no-repeat;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  text-align: center;
+  margin-top: 0;
+}
+
+.sanctuary-hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.25);
+}
+
+.sanctuary-content {
+  position: relative;
+  z-index: 2;
+  color: #fff;
+}
+
+.sanctuary-content h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: 5rem;
+  color: #f7f1e7;
+  letter-spacing: 2px;
+  margin-bottom: 5px;
+  animation: fadeIn 1.5s ease-out;
+}
+
+.sanctuary-content h2 {
+  font-family: 'Parisienne', cursive;
+  font-size: 4rem;
+  color: #f7f1e7;
+  margin-top: 0;
+  margin-bottom: 30px;
+  animation: fadeIn 2s ease-out;
+}
+
+.sanctuary-content p {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.2rem;
+  color: #fff;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin-bottom: 50px;
+  animation: fadeIn 2.5s ease-out;
+}
+.coffee-title {
+  text-align: center;
+  font-size: 2.5rem;
+  margin-bottom: 10px; /* smaller spacing */
+}
+
+.italic-word {
+  font-style: italic;
+  font-weight: 500;
+}
+
+/* keep layout together */
+.coffee-showcase {
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.scroll-indicator {
+  position: absolute;
+  bottom: 50px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 3;
+  color: #fff;
+  font-size: 2rem;
+  animation: bounce 2s infinite;
+}
+
+.sanctuary-text {
+  position: relative;
+  background: url('images/bg.jpg') center/cover no-repeat;
+  color: white;
+  text-align: center;
+  padding: 120px 20px;
+}
+
+
+
+/* make sure text stays above the overlay */
+.sanctuary-text .overlay {
+  position: relative;
+  z-index: 1;
+}
+
+.sanctuary-text h2 {
+  font-size: 2.5rem;
+  margin-bottom: 20px;
+  font-style: italic;
+}
+
+.sanctuary-text p {
+  max-width: 700px;
+  margin: 0 auto;
+  font-size: 1.1rem;
+  line-height: 1.8;
+}
+        .services-section {
+            padding: 120px 10% 80px; /* Top padding to clear fixed header */
+            text-align: center;
+        }
+
+        .services-title h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3.5rem;
+            color: #3b2f2f;
+            margin-bottom: 5px;
+            height: 50px;
+        }
+
+        .services-title h2 {
+            font-family: 'Parisienne', cursive;
+            font-size: 2.5rem;
+            color: #536480; /* A soft blue/grey for contrast */
+            margin-top: 0px;
+            margin-bottom: 60px;
+        }
+
+        .services-grid {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            gap: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .service-column {
+            flex: 1 1 30%; /* Allows columns to grow/shrink but not too much */
+            display: flex;
+            flex-direction: column;
+            gap: 60px;
+            text-align: left;
+        }
+
+        .service-center-image {
+            flex: 0 0 auto;
+            width: 350px;
+            height: 500px;
+            background: url('images/newcoffee.jpg') center/cover no-repeat; /* Placeholder Image */
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin-top: 40px; /* Align slightly lower than text columns */
+        }
+        
+        .service-item {
+            position: relative;
+            padding: 0 15px;
+        }
+
+        .service-item h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            color: #3b2f2f;
+            margin-top: 0;
+            margin-bottom: 10px;
+        }
+
+        .service-item p {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1rem;
+            line-height: 1.6;
+            color: #5a4c43;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e0d7c4; /* Light separator line */
+        }
+
+        .service-number {
+            font-family: 'Playfair Display', serif;
+            font-size: 5rem;
+            color: #e0d7c4; /* Soft, subtle background number */
+            position: absolute;
+            top: -25px;
+            left: 0;
+            opacity: 0.7;
+            z-index: -1;
+            line-height: 1;
+        }
+
+        /* Footer styling (copied from your index.php) */
+        footer { background: #f2ece6; text-align: center; padding: 40px; font-size: 0.9rem; color: #7b6d5b; margin-top: 50px; }
 
    
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
 
-  </section>
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% { transform: translate(-50%, 0); }
+  40% { transform: translate(-50%, -15px); }
+  60% { transform: translate(-50%, -7px); }
+}
 
-  <!-- Bootstrap + AOS JS -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
-  <script>
-    AOS.init();
-  </script>
-</body>
+</style>
 
-</html>
-
-  <!-- Call to Action Buttons -->
-  
-
-<!-- Order Modal -->
-<div class="modal fade" id="orderModal" tabindex="-1" aria-labelledby="orderModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content custom-order-modal">
-      <div class="modal-header border-0">
-        <h5 class="modal-title" id="orderModalLabel">Choose Order Type</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <!-- Add your order type form/buttons here -->
-        <p>Please select your order method:</p>
-        <div class="d-flex flex-column gap-3">
-          <a href="menu.html" class="btn btn-outline-dark">Dine-In</a>
-          <a href="menu.html" class="btn btn-outline-secondary">Pickup</a>
-        </div>
-      </div>
-    </div>
+<div class="image-stack">
+  <div class="text-overlay">
+    <h2>coffee</h2>
+    <h1>LIFE</h1>
   </div>
+
+  <img src="images/coffee5.jpg" class="img1" alt="Shell">
+  <img src="images/cheesecake.jpg" class="img2" alt="Woman">
+  <img src="images/croissant.jpg" class="img3" alt="Sailboat">
 </div>
 
+<script>
+window.addEventListener('load', () => {
+  const images = document.querySelectorAll('.image-stack img');
+  let index = 0;
 
-  <!-- AOS Script -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
-  <script>
-    AOS.init({
-      duration: 1000,
-      once: true
-    });
-  </script>
-</body>
+  function showNextImage() {
+    images.forEach(img => img.classList.remove('visible')); // hide all
+    images[index].classList.add('visible'); // show one
+    index = (index + 1) % images.length; // next image
+  }
 
-</html>
-
-  <!-- About Section -->
-  <section id="about" class="py-5" data-aos="popup">
-  <div class="container" data-aos="fade-up">
-    <h2 class="text-center mb-4 section-title" data-aos="fade-down">About Us</h2>
-
-      <!-- 1 -->
-      <div class="row align-items-center">
-        <div class="col-md-6">
-          <img src="images/arjunashop.jpg" class="img-fluid" alt="About Arjuna n Co-ffee">
-        </div>
-        <div class="col-md-6">
-          <h4 class="mb-3">At Arjuna n Co-ffee</h4>
-          <p class="mb-3">We believe coffee is more than a drink. It's an experience. Founded with a passion for crafting artisanal coffee and serving our community, we blend traditional brewing techniques with modern convenience.</p>
-          <p class="mb-3">Whether you're stopping by for a rich espresso, working remotely over a matcha latte, or ordering online for a quick pickup, we're here to make every sip meaningful.</p>
-          <p>Join us at our café or order from your table with our contactless ordering system. It's coffee, reimagined.</p>
-        </div>
-      </div>
-
-      <!-- 2 -->
-      <div class="row align-items-center mt-5">
-        <div class="col-md-6 order-md-2">
-          <img src="images/coffeegirl.jpg" class="img-fluid" alt="Coffee Brewing Process">
-        </div>
-        <div class="col-md-6 order-md-1">
-          <h4 class="mb-3">From Bean to Cup</h4>
-          <p>Every cup we serve starts with carefully selected beans sourced from ethical farms. Our roasting process brings out the unique flavors of each origin, while our baristas ensure every drink is brewed to perfection.</p>
-          <p>We’re committed to sustainability and transparency, because great coffee begins with great values.</p>
-        </div>
-      </div>
-
-      <!-- 3 -->
-      <div class="row align-items-center mt-5">
-        <div class="col-md-6">
-          <img src="images/table.jpg" class="img-fluid" alt="Cafe Ambience">
-        </div>
-        <div class="col-md-6">
-          <h4 class="mb-3">More Than Just Coffee</h4>
-          <p>At Arjuna n Co-ffee, we understand that our customers don’t just come for the caffeine—they come for the calm. Every corner of our café is thoughtfully designed to offer comfort, warmth, and a sense of belonging.</p>
-          <p>Whether you're catching up with friends, reading a book, or working remotely, our cozy ambiance and gentle playlists create a space where moments linger longer and coffee tastes even better.</p>
-        </div>
-      </div>
-    </div>
-
-   <!-- Video Section -->
-<div class="row justify-content-center mt-5" data-aos="zoom-in">
-  <div class="col-md-8 text-center"> <!-- Reduced from col-md-10 to col-md-8 -->
-    <h4 class="mb-4">From bean to cup, learn how we craft the perfect latte<br> and showcase our finest coffee beans.</h4>
-    <div class="ratio ratio-16x9" style="max-width: 700px; margin: 0 auto;"> <!-- Limit max width -->
-      <video controls poster="images/2coffee.jpg">
-        <source src="coffee.mp4" type="video/mp4">
-        Your browser does not support the video tag.
-      </video>
-    </div>
-  </div>
-</div>
+  showNextImage(); // show first
+  setInterval(showNextImage, 2500); // repeat every 2.5s
+});
+</script>
 
 
-    
-  </section>
 
-  <section class="py-5" style="background-color: #fff7f0;">
-  <div class="container">
-    <h2 class="text-center mb-4 section-title">How It Works?</h2>
-    <div class="row text-center">
-      <div class="col-md-4 mb-4">
-        <div class="card p-3 h-100">
-          <h4>1. Scan QR or Access Site</h4>
-          <p>Use QR code at the table or go to our website.</p>
-        </div>
-      </div>
-      <div class="col-md-4 mb-4">
-        <div class="card p-3 h-100">
-          <h4>2. Place Your Order</h4>
-          <p>Select items, customize, and add to cart.</p>
-        </div>
-      </div>
-      <div class="col-md-4 mb-4">
-        <div class="card p-3 h-100">
-          <h4>3. Enjoy Your Coffee</h4>
-          <p>Wait for your name to be called or pick up your order.</p>
-        </div>
+  </style>
+</head>
+
+<body unresolved>
+
+
+  <!-- Header -->
+  <header>
+    <h4>Arjuna n Co-ffee</h4>
+    <nav>
+      <a href="index.php">Home</a>
+      <a href="menu.php">Menu</a>
+      <a href="about.php">About</a>
+      <a href="contact_us.php">Contact</a>
+      <?php if (isset($_SESSION['role'])): ?>
+        <a href="logout.php">Logout</a>
+      <?php else: ?>
+        <a href="login.php">Login</a>
+      <?php endif; ?>
+    </nav>
+  </header>
+
+  <section class="dreamy-section">
+  <div class="dreamy-container">
+    <!-- Left side image -->
+    <div class="dreamy-image"></div>
+
+    <!-- Right side text -->
+    <div class="dreamy-content">
+      <h1 class="dreamy-title">Arjuna Days</h1>
+      <p class="dreamy-subtitle">coffee ways</p>
+
+      <h3 class="dreamy-heading">
+        THIS SPACE IS FOR YOU — THE COFFEE LOVER, THE DREAM CHASER, 
+        THE SOUL WHO KNOWS THERE’S MORE TO LIFE THAN RUSH
+      </h3>
+
+      <p class="dreamy-paragraph">
+        At Arjuna n Co-ffee, every cup tells a story of calm mornings and warm smiles. 
+        Inspired by the art of slow living, we blend passion and peace — where 
+        every sip feels like sunshine, and every aroma feels like home.
+      </p>
+
+      <p class="dreamy-paragraph">
+        We invite you to pause, breathe, and savor. Whether you're seeking comfort, 
+        connection, or creativity, this is your space. Your table. Your moment.
+      </p>
+
+      <div class="dreamy-button">
+        <a href="menu.php">Explore Our Brews</a>
       </div>
     </div>
   </div>
 </section>
 
+<!-- Sanctuary Section (Third Section) -->
+<section class="sanctuary-hero">
+  <div class="sanctuary-content">
+    <h1>Discover</h1>
+    <h2>Your Ideal Brew</h2>
+    <p>Espresso Yourself</p>
+  </div>
+  <div class="scroll-indicator">&darr;</div>
+</section>
 
-     <!-- Feedback Section -->
-<section class="py-5" style="background-color: #f8f3ef;" id="feedback">
-  <div class="container">
-    <h2 class="text-center section-title mb-5">💬 What Our Customers Say</h2>
-    <div class="row g-4">
-
-      <!-- Feedback 1 -->
-      <div class="col-md-4">
-        <div class="card p-4 h-100 text-center shadow-sm border-0">
-          <img src="images/user1.jpg" alt="Aina M." class="rounded-circle mx-auto mb-3" width="80" height="80" style="object-fit: cover;">
-          <i class="bi bi-chat-left-heart-fill text-danger" style="font-size: 1.5rem;"></i>
-          <p class="mt-3">“Best coffee in town! The caramel latte is heavenly and the café ambiance is perfect.”</p>
-          <h6 class="mb-0">Aina M.</h6>
-        </div>
-      </div>
-
-      <!-- Feedback 2 -->
-      <div class="col-md-4">
-        <div class="card p-4 h-100 text-center shadow-sm border-0">
-          <img src="images/user2.jpg" alt="Jason L." class="rounded-circle mx-auto mb-3" width="80" height="80" style="object-fit: cover;">
-          <i class="bi bi-chat-left-quote-fill text-warning" style="font-size: 1.5rem;"></i>
-          <p class="mt-3">“I love how I can order online and pick up without waiting. So convenient!”</p>
-          <h6 class="mb-0">Jason L.</h6>
-        </div>
-      </div>
-
-      <!-- Feedback 3 -->
-      <div class="col-md-4">
-        <div class="card p-4 h-100 text-center shadow-sm border-0">
-          <img src="images/user3.jpg" alt="Nurul A." class="rounded-circle mx-auto mb-3" width="80" height="80" style="object-fit: cover;">
-          <i class="bi bi-chat-left-dots-fill text-primary" style="font-size: 1.5rem;"></i>
-          <p class="mt-3">“Super friendly staff and cozy place to chill or work with great coffee.”</p>
-          <h6 class="mb-0">Nurul A.</h6>
-        </div>
-      </div>
-
-    </div>
+<section class="sanctuary-text">
+  <div class="overlay">
+    <h2>A Space to Unwind</h2>
+    <p>
+      Step away from the rush. Our Sanctuary is designed as an extension of the calm you seek in every cup.
+      A moment of clarity, a breath of fresh air, and a gentle reminder that some things are meant to be savored slowly.
+    </p>
   </div>
 </section>
 
+<!-- Section 4: Services -->
 
- <!-- Contact -->
-<section id="contact" class="py-5 text-center text-dark" style="position: relative; overflow: hidden;">
-  <!-- Blurred Background -->
-  <div style="
-    background-image: url('images/arjunabackground.jpg');
-    background-size: cover;
-    background-position: center;
-    filter: blur(6px);
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: -1;
-  "></div>
+    <section class="services-section">
+        <div class="services-title">
+            <h2>My Signature</h2>
+            <h1>Services</h1>
+        </div>
 
-  <!-- Content with overlay -->
-  
-    <div class="container">
-      <h2 class="section-title mb-3">Contact Us</h2>
-      <p>Email: contact@arjunacoffee.com | Phone: +6012-3456789</p>
-      <div class="social-icons mt-3">
-        <a href="https://instagram.com" target="_blank" aria-label="Instagram" style="color: black; font-size: 1.5rem; margin: 0 10px;"><i class="bi bi-instagram"></i></a>
-        <a href="https://x.com" target="_blank" aria-label="Twitter/X" style="color: black; font-size: 1.5rem; margin: 0 10px;"><i class="bi bi-twitter-x"></i></a>
-        <a href="https://facebook.com" target="_blank" aria-label="Facebook" style="color: black; font-size: 1.5rem; margin: 0 10px;"><i class="bi bi-facebook"></i></a>
-        <a href="https://wa.me/60123456789" target="_blank" aria-label="WhatsApp" style="color: black; font-size: 1.5rem; margin: 0 10px;"><i class="bi bi-whatsapp"></i></a>
-      </div>
-    </div>
+        <div class="services-grid">
+            
+            <div class="service-column">
+                <div class="service-item">
+                    <span class="service-number">01</span>
+                    <h3>Scan QR or Access Site</h3>
+                    <p>Use the QR code at your table or visit our website to start your order.</p>
+                </div>
+                
+                <div class="service-item">
+                    <span class="service-number">02</span>
+                    <h3>Place Your Order</h3>
+                    <p>Select your favorite coffee and desserts, customize, and add them to your cart.</p>
+                </div>
+            </div>
+
+            <div class="service-center-image">
+                </div>
+
+            <div class="service-column">
+                <div class="service-item">
+                    <span class="service-number">03</span>
+                    <h3>Enjoy Your Coffee</h3>
+                    <p>Wait for your name to be called or pick up your order — freshly brewed for you.</p>
+                </div>
+
+                <div class="service-item">
+                    <span class="service-number">04</span>
+                    <h3>Share the Joy</h3>
+                    <p>Snap, sip, and share your cozy café moments with #ArjunaNCo.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+<section class="coffee-showcase">
+  <h2 class="coffee-title">Arjuna <span class="italic-word">Moments</span></h2>
+
+  <!-- Animated background text -->
+  <div class="coffee-bg-text">
+    Sip . Relax . Enjoy . Sip . Relax . Enjoy . Sip . Relax . Enjoy . Sip . Relax . Enjoy .
+  </div>
+
+  <!-- Center image -->
+  <div class="coffee-content">
+    <img src="images/coffeemodel.jpg" alt="Coffee Time" class="coffee-img">
+  </div>
+
+  <!-- Buttons -->
+  <div class="coffee-buttons">
+    <a href="#" class="coffee-btn">Order Now</a>
+    <a href="#" class="coffee-btn">View Menu</a>
+    <a href="#" class="coffee-btn">Visit Us</a>
   </div>
 </section>
 
+<footer>
+  &copy; 2025 Arjuna n Co-ffee. All Rights Reserved.
+</footer>
 
+<script>
+  // fade in on load
+  window.addEventListener('DOMContentLoaded', () => {
+    document.body.removeAttribute('unresolved');
+  });
+</script>
 
-  <!-- Footer -->
-  <footer class="text-black text-center py-3">
-    &copy; 2025 Arjuna n Co-ffee. All rights reserved.
-  </footer>
-
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
-  <!-- Order Type Modal -->
-<div class="modal fade" id="orderModal" tabindex="-1" aria-labelledby="orderModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header bg-dark text-white">
-        <h5 class="modal-title" id="orderModalLabel">Choose Order Type</h5>
-        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body text-center">
-        <p class="mb-4">Would you like to dine-in or pick up your order?</p>
-        <a href="menu.html?type=dine-in" class="btn btn-outline-primary me-2">Dine-In</a>
-        <a href="menu.html?type=pickup" class="btn btn-outline-success">Pickup</a>
-      </div>
-    </div>
-  </div>
-</div>
 
 </body>
-
 </html>
