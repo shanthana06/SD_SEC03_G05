@@ -857,21 +857,48 @@ window.addEventListener('load', () => {
 <body unresolved>
 
 
-  <!-- Header -->
-  <header>
-    <h4>Arjuna n Co-ffee</h4>
-    <nav>
-      <a href="index.php">Home</a>
-      <a href="menu.php">Menu</a>
-      <a href="about.php">About</a>
-      <a href="contact_us.php">Contact</a>
-      <?php if (isset($_SESSION['role'])): ?>
-        <a href="logout.php">Logout</a>
-      <?php else: ?>
-        <a href="login.php">Login</a>
-      <?php endif; ?>
-    </nav>
-  </header>
+ <!-- Header -->
+<header style="display: flex; justify-content: space-between; align-items: center; padding: 15px 40px; background-color: #fff; box-shadow: 0 2px 5px rgba(0,0,0,0.1); font-family: Garamond, serif;">
+  <div style="display: flex; align-items: center; gap: 15px;">
+    <h4 style="margin: 0;">Arjuna n Co-ffee</h4>
+
+    <!-- Three-dot Menu -->
+    <div class="menu" style="position: relative;">
+      <button class="menu-btn" onclick="toggleMenu()" style="background: none; border: none; font-size: 22px; cursor: pointer;">⋮</button>
+      <div class="menu-list" id="menuList" style="display: none; position: absolute; right: 0; top: 30px; background: white; box-shadow: 0 4px 10px rgba(0,0,0,0.1); border-radius: 8px; overflow: hidden;">
+        <a href="profile.php" style="display: block; padding: 10px 20px; text-decoration: none; color: #333;">Profile</a>
+        <a href="settings.php" style="display: block; padding: 10px 20px; text-decoration: none; color: #333;">Settings</a>
+        <a href="logout.php" style="display: block; padding: 10px 20px; text-decoration: none; color: #333;">Logout</a>
+      </div>
+    </div>
+  </div>
+
+  <nav style="display: flex; gap: 20px;">
+    <a href="index.php">Home</a>
+    <a href="menu.php">Menu</a>
+    <a href="about.php">About</a>
+    <a href="contact_us.php">Contact</a>
+    <?php if (isset($_SESSION['role'])): ?>
+      <a href="logout.php">Logout</a>
+    <?php else: ?>
+      <a href="login.php">Login</a>
+    <?php endif; ?>
+  </nav>
+</header>
+
+<script>
+function toggleMenu() {
+  const menu = document.getElementById("menuList");
+  menu.style.display = (menu.style.display === "block") ? "none" : "block";
+}
+
+window.onclick = function(e) {
+  if (!e.target.matches('.menu-btn')) {
+    document.getElementById("menuList").style.display = "none";
+  }
+}
+</script>
+
 
   <section class="dreamy-section">
   <div class="dreamy-container">
@@ -984,9 +1011,9 @@ window.addEventListener('load', () => {
 
   <!-- Buttons -->
   <div class="coffee-buttons">
-    <a href="#" class="coffee-btn">Order Now</a>
-    <a href="#" class="coffee-btn">View Menu</a>
-    <a href="#" class="coffee-btn">Visit Us</a>
+    <a href="contact_us.php" class="coffee-btn">Give Feedback</a>
+    <a href="menu.php" class="coffee-btn">View Menu</a>
+    <a href="index.php" class="coffee-btn">About Us</a>
   </div>
 </section>
 

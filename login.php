@@ -1,4 +1,3 @@
-
 <?php
 session_start();
 include 'db.php'; // your database connection
@@ -64,64 +63,319 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 ?>
 
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Login | Arjuna n Co-ffee</title>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Poppins:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Parisienne&family=Cormorant+Garamond:wght@300;400;700&display=swap" rel="stylesheet">
 <style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
 body, html {
-  height: 100%; margin:0;
-  font-family: 'Poppins', sans-serif;
+    height: 100%;
+    font-family: 'Cormorant Garamond', serif;
+    background-color: #fefefe;
+    color: #333;
+    line-height: 1.6;
 }
-.login-bg-blur {
-  background-image: url('images/coffee1.jpg');
-  background-size: cover;
-  background-position: center;
-  filter: blur(6px);
-  position: fixed; top:0; left:0; width:100%; height:100%; z-index:-1;
+
+/* Header styling */
+.login-header {
+    padding: 40px 20px 20px;
+    text-align: center;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
 }
-.form-container {
-  background-color: rgba(255,255,255,0.92);
-  padding: 35px;
-  border-radius: 16px;
-  box-shadow: 0 8px 30px rgba(0,0,0,0.2);
-  max-width: 500px;
-  margin: auto;
+
+.login-header h1 {
+    font-family: 'Playfair Display', serif;
+    font-weight: 400;
+    font-size: 2.5rem;
+    letter-spacing: 1px;
+    color: #333;
 }
-.section-title {
-  font-family: 'Playfair Display', serif;
-  font-size: 2.2rem;
-  text-align: center;
-  font-weight: 700;
-  margin-bottom: 1.8rem;
-  color: #3e2723;
-  letter-spacing: 1px;
+
+/* Main content area */
+.login-content {
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 40px 20px;
 }
-.btn-coffee {
-  border: 2px solid #3e2723;
-  background-color: transparent;
-  color: #3e2723;
-  font-weight: 500;
-  padding: 10px;
-  border-radius: 30px;
-  transition: all 0.3s ease;
-  font-family: 'Poppins', sans-serif;
+
+/* Login card */
+.login-card {
+    background: white;
+    padding: 40px 30px;
+    margin-bottom: 40px;
+    position: relative;
 }
-.btn-coffee:hover {
-  background-color: #3e2723;
-  color: #fff;
+
+/* Section headers */
+.section-header {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem;
+    font-weight: 400;
+    margin-bottom: 15px;
+    color: #333;
+    text-align: center;
 }
-.link-custom {
-  color: #6d4c41;
-  text-decoration: none;
-  font-family: 'Poppins', sans-serif;
+
+.section-description {
+    text-align: center;
+    color: #777;
+    margin-bottom: 30px;
+    font-style: italic;
+    font-size: 1.1rem;
 }
-.link-custom:hover {
-  text-decoration: underline;
+
+/* Form styling */
+.form-group {
+    margin-bottom: 25px;
+    position: relative;
+}
+
+.form-label {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #333;
+    display: block;
+    font-size: 1.1rem;
+}
+
+.password-input-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.form-control {
+    width: 100%;
+    padding: 12px 45px 12px 15px;
+    border: 1px solid rgba(0,0,0,0.1);
+    background: white;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.1rem;
+    color: #333;
+    transition: all 0.3s ease;
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: #333;
+}
+
+.form-control.is-invalid {
+    border-color: #dc3545;
+}
+
+.invalid-feedback {
+    color: #dc3545;
+    font-size: 0.95rem;
+    margin-top: 5px;
+}
+
+/* Password toggle button */
+.password-toggle {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: #777;
+    cursor: pointer;
+    font-size: 1.1rem;
+    transition: color 0.3s ease;
+    padding: 5px;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.password-toggle:hover {
+    color: #333;
+}
+
+/* Role buttons */
+.role-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 30px;
+}
+
+.role-btn {
+    padding: 14px 20px;
+    border: 1px solid #333;
+    background: transparent;
+    color: #333;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.1rem;
+    font-weight: 400;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+    width: 100%;
+}
+
+.role-btn:hover {
+    background: #333;
+    color: white;
+    transform: translateY(-2px);
+}
+
+/* Action buttons */
+.login-actions {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    margin-top: 30px;
+}
+
+.btn {
+    padding: 12px 30px;
+    border-radius: 0;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.1rem;
+    font-weight: 400;
+    letter-spacing: 1px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    border: 1px solid #333;
+    background: transparent;
+    color: #333;
+    cursor: pointer;
+    display: inline-block;
+    text-align: center;
+}
+
+.btn-primary {
+    background: #333;
+    color: white;
+}
+
+.btn-outline {
+    background: transparent;
+    color: #333;
+}
+
+.btn:hover {
+    opacity: 0.8;
+    transform: translateY(-2px);
+}
+
+/* Footer */
+.login-footer {
+    text-align: center;
+    margin-top: 40px;
+    padding-top: 30px;
+    border-top: 1px solid rgba(0,0,0,0.05);
+    color: #777;
+    font-size: 0.9rem;
+}
+
+.login-footer a {
+    color: #777;
+    text-decoration: none;
+}
+
+.login-footer a:hover {
+    text-decoration: underline;
+}
+
+/* Alert styling - MOVED TO BOTTOM */
+.alert {
+    padding: 15px 20px;
+    margin: 30px 0 20px 0;
+    border-radius: 0;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.1rem;
+}
+
+.alert-danger {
+    background-color: rgba(220, 53, 69, 0.1);
+    color: #721c24;
+    border-left: 3px solid #dc3545;
+}
+
+/* Error container at bottom */
+.error-container {
+    margin-top: 30px;
+    margin-bottom: 20px;
+}
+
+/* Links */
+.forgot-password {
+    text-align: right;
+    margin-top: 8px;
+}
+
+.forgot-password a {
+    color: #777;
+    text-decoration: none;
+    font-size: 0.95rem;
+}
+
+.forgot-password a:hover {
+    text-decoration: underline;
+    color: #333;
+}
+
+.signup-link {
+    text-align: center;
+    margin-top: 25px;
+    color: #777;
+}
+
+.signup-link a {
+    color: #333;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.signup-link a:hover {
+    text-decoration: underline;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .login-actions {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .btn {
+        width: 100%;
+        max-width: 250px;
+    }
+    
+    .login-header h1 {
+        font-size: 2rem;
+    }
+    
+    .section-header {
+        font-size: 1.5rem;
+    }
+    
+    .role-buttons {
+        gap: 10px;
+    }
+}
+
+/* Decorative elements */
+.decorative-line {
+    height: 1px;
+    background: linear-gradient(to right, transparent, rgba(0,0,0,0.1), transparent);
+    margin: 25px 0;
 }
 </style>
 </head>
@@ -129,68 +383,119 @@ body, html {
 
 <?php include 'navbar.php'; ?>
 
-<div class="login-bg-blur"></div>
 
-<section class="py-5">
-  <div class="container">
-    <div class="form-container">
-      <h2 class="section-title">Login</h2>
 
-      <?php if(!empty($errors)): ?>
-        <div class="alert alert-danger">
-          <?php foreach($errors as $error) echo htmlspecialchars($error)."<br>"; ?>
+<div class="login-content">
+    <div class="login-card">
+        <h2 class="section-header">Login to Your Account</h2>
+        <p class="section-description">Sign in to access your personalized experience</p>
+
+        <form method="POST" id="loginForm" autocomplete="off">
+            <div class="form-group">
+                <label for="email" class="form-label">Email Address</label>
+                <input type="email" name="email" id="email" 
+                       class="form-control <?php echo $email_error ? 'is-invalid' : ''; ?>" 
+                       placeholder="your.email@example.com"
+                       autocomplete="username"
+                       value="<?php echo isset($_POST['email']) ? htmlspecialchars($_POST['email']) : ''; ?>" />
+                <?php if ($email_error): ?>
+                    <div class="invalid-feedback"><?php echo htmlspecialchars($email_error); ?></div>
+                <?php endif; ?>
+            </div>
+            
+            <div class="form-group">
+                <label for="password" class="form-label">Password</label>
+                <div class="password-input-wrapper">
+                    <input type="password" name="password" id="password" 
+                           class="form-control <?php echo $password_error ? 'is-invalid' : ''; ?>" 
+                           placeholder="Enter your password"
+                           autocomplete="current-password" />
+                    <button type="button" class="password-toggle" onclick="togglePasswordVisibility()">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                </div>
+                <?php if ($password_error): ?>
+                    <div class="invalid-feedback"><?php echo htmlspecialchars($password_error); ?></div>
+                <?php endif; ?>
+                <div class="forgot-password">
+                    <a href="forgot_password.php">Forgot Password?</a>
+                </div>
+            </div>
+
+            <input type="hidden" name="role" id="roleField" value="">
+
+            <div class="decorative-line"></div>
+
+            <div class="role-buttons">
+                <button type="submit" class="role-btn" onclick="setRole('customer')">
+                    <i class="fas fa-user me-2"></i>Login as Customer
+                </button>
+                <button type="submit" class="role-btn" onclick="setRole('staff')">
+                    <i class="fas fa-concierge-bell me-2"></i>Login as Staff
+                </button>
+                <button type="submit" class="role-btn" onclick="setRole('admin')">
+                    <i class="fas fa-crown me-2"></i>Login as Admin
+                </button>
+            </div>
+
+            <!-- Error messages at the bottom -->
+            <?php if(!empty($errors)): ?>
+                <div class="error-container">
+                    <div class="alert alert-danger">
+                        <?php foreach($errors as $error) echo htmlspecialchars($error)."<br>"; ?>
+                    </div>
+                </div>
+            <?php endif; ?>
+        </form>
+
+        <div class="signup-link">
+            <p>Don't have an account? <a href="signup.php">Sign up here</a></p>
         </div>
-      <?php endif; ?>
-
-     <form method="POST" id="loginForm" autocomplete="off">
-  <div class="mb-3">
-    <label class="form-label">Email</label>
-    <input type="email" name="email" 
-           class="form-control <?php echo $email_error ? 'is-invalid' : ''; ?>" 
-           placeholder="Enter email"
-           autocomplete="username"
-           value="<?php echo isset($_POST['email']) ? htmlspecialchars($_POST['email']) : ''; ?>" />
-    <?php if ($email_error): ?>
-      <div class="invalid-feedback"><?php echo htmlspecialchars($email_error); ?></div>
-    <?php endif; ?>
-  </div>
-
-  <div class="mb-3">
-  <label class="form-label">Password</label>
-  <input type="password" name="password" 
-         class="form-control <?php echo $password_error ? 'is-invalid' : ''; ?>" 
-         placeholder="Enter password"
-         autocomplete="new-password" />
-  <?php if ($password_error): ?>
-    <div class="invalid-feedback"><?php echo htmlspecialchars($password_error); ?></div>
-  <?php endif; ?>
-  <div class="mt-1">
-    <a href="forgot_password.php" class="link-custom">Forgot Password?</a>
-    
-  </div>
-</div>
-
-
-  <input type="hidden" name="role" id="roleField" value="">
-
-  <div class="d-grid gap-2">
-    <button type="submit" class="btn btn-coffee" onclick="setRole('customer')">Login as Customer</button>
-    <button type="submit" class="btn btn-coffee" onclick="setRole('staff')">Login as Staff</button>
-    <button type="submit" class="btn btn-coffee" onclick="setRole('admin')">Login as Admin</button>
-  </div>
-</form>
-
-      <p class="text-center mt-3">Don't have an account? 
-        <a href="signup.php" class="link-custom">Sign up here</a>
-      </p>
     </div>
-  </div>
-</section>
+    
+    <div class="login-footer">
+        <p>Arjuna n Co-ffee &copy; <?php echo date("Y"); ?> | Secure Login</p>
+    </div>
+</div>
 
 <script>
 function setRole(role) {
-  document.getElementById("roleField").value = role;
+    document.getElementById("roleField").value = role;
 }
+
+function togglePasswordVisibility() {
+    const passwordInput = document.getElementById('password');
+    const eyeIcon = document.querySelector('.password-toggle i');
+    
+    if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        eyeIcon.classList.remove('fa-eye');
+        eyeIcon.classList.add('fa-eye-slash');
+    } else {
+        passwordInput.type = 'password';
+        eyeIcon.classList.remove('fa-eye-slash');
+        eyeIcon.classList.add('fa-eye');
+    }
+}
+
+// Add some interactive feedback for role selection
+document.addEventListener('DOMContentLoaded', function() {
+    const roleButtons = document.querySelectorAll('.role-btn');
+    
+    roleButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            // Remove active class from all buttons
+            roleButtons.forEach(btn => {
+                btn.style.backgroundColor = '';
+                btn.style.color = '';
+            });
+            
+            // Add active style to clicked button
+            this.style.backgroundColor = '#333';
+            this.style.color = 'white';
+        });
+    });
+});
 </script>
 
 </body>

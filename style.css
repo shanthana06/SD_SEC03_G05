@@ -43,25 +43,9 @@ a:hover {
   color: var(--primary-dark);
 }
 
-/* Navbar */
-.navbar {
-  background-color: var(--dark-bg) !important;
-}
 
-.navbar-brand {
-  font-family: var(--heading-font);
-  font-size: 1.8rem;
-  color: #fff !important;
-}
 
-.nav-link {
-  color: #fff !important;
-  margin-left: 1rem;
-}
 
-.nav-link:hover {
-  color: var(--primary-color) !important;
-}
 
 /* Hero Section */
 .hero {
@@ -309,10 +293,6 @@ footer {
   backdrop-filter: blur(4px);
   border-radius: 12px;
 }
-.navbar {
-  background-color: rgba(0, 0, 0, 0.4) !important;
-  backdrop-filter: blur(6px);
-}
 
 .nav-link {
   color: white !important;
@@ -324,32 +304,11 @@ body {
   background-size: cover;
 }
 
-/* Translucent blurred background for navbar */
-.bg-blur {
-  background: rgba(60, 47, 38, 0.7); /* warm coffee tone */
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-}
 
-/* Navbar brand text styling */
-.navbar-brand {
-  font-family: 'Marcellus', serif;
-  font-size: 1.8rem;
-  color: white !important;
-}
 
-/* Navbar links */
-.nav-link {
-  font-family: 'Jost', sans-serif;
-  color: white !important;
-  font-size: 1.1rem;
-  margin: 0 0.5rem;
-}
 
-.nav-link:hover {
-  color: #cfcfcf !important;
-}
+
+
 #previewImage {
   border: 2px solid #ccc;
   padding: 4px;
@@ -401,10 +360,6 @@ a:hover {
   color: var(--primary-dark);
 }
 
-/* Navbar */
-.navbar {
-  background-color: var(--dark-bg) !important;
-}
 
 .navbar-brand {
   font-family: var(--heading-font);
@@ -688,10 +643,6 @@ footer {
   backdrop-filter: blur(4px);
   border-radius: 12px;
 }
-.navbar {
-  background-color: rgba(0, 0, 0, 0.4) !important;
-  backdrop-filter: blur(6px);
-}
 
 .nav-link {
   color: white !important;
@@ -711,20 +662,7 @@ body {
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-/* Navbar brand text styling */
-.navbar-brand {
-  font-family: 'Marcellus', serif;
-  font-size: 1.8rem;
-  color: white !important;
-}
 
-/* Navbar links */
-.nav-link {
-  font-family: 'Jost', sans-serif;
-  color: white !important;
-  font-size: 1.1rem;
-  margin: 0 0.5rem;
-}
 
 .nav-link:hover {
   color: #cfcfcf !important;

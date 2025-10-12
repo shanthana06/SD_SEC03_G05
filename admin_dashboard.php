@@ -79,23 +79,27 @@ if ($row = $result->fetch_assoc()) {
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
+  <!-- Elegant Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,500&family=Cormorant+Garamond:wght@300;400;700&family=Parisienne&family=Lora&display=swap" rel="stylesheet">
+  
   <style>
+    /* Apply elegant fonts to entire page */
     body {
       background-color: #f8f5f2;
-      font-family: 'Segoe UI', sans-serif;
+      font-family: 'Cormorant Garamond', serif;
       overflow-x: hidden;
+      font-weight: 400;
     }
 
+    /* Remove blur background */
     .cart-bg-blur {
-      background-image: url('images/coffee1.jpg');
-      background-size: cover;
-      background-position: center;
-      filter: blur(6px) brightness(0.85);
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      z-index: -1;
+      display: none;
+    }
+
+    /* Apply fonts to all elements */
+    h1, h2, h3, h4, h5, h6 {
+      font-family: 'Playfair Display', serif;
+      font-weight: 500;
     }
 
     .dashboard-container {
@@ -103,12 +107,14 @@ if ($row = $result->fetch_assoc()) {
       border-radius: 16px;
       padding: 30px;
       box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+      font-family: 'Cormorant Garamond', serif;
     }
 
     .card {
       border-radius: 14px;
       background-color: #FCFAF7;
       transition: all 0.3s ease;
+      font-family: 'Cormorant Garamond', serif;
     }
 
     .card:hover {
@@ -116,25 +122,30 @@ if ($row = $result->fetch_assoc()) {
       box-shadow: 0 12px 25px rgba(0,0,0,0.2);
     }
 
-    /* Sidebar */
     .sidebar {
-      position: fixed;
-      top: 0;
-      left: -260px;
-      width: 240px;
-      height: 100%;
-      background-color: rgba(255,255,255,0.95);
-      backdrop-filter: blur(10px);
-      padding: 20px;
-      display: flex;
-      flex-direction: column;
-      gap: 15px;
-      box-shadow: 2px 0 15px rgba(0,0,0,0.1);
-      border-right: 1px solid rgba(200,180,160,0.3);
-      z-index: 100;
-      transition: all 0.3s ease;
-    }
+    position: fixed;
+    top: 0;
+    left: -260px;
+    width: 240px;
+    height: 100%;
+    background-color: rgba(255,255,255,0.98);
+    backdrop-filter: blur(10px);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    box-shadow: 2px 0 15px rgba(0,0,0,0.1);
+    border-right: 1px solid rgba(200,180,160,0.3);
+    z-index: 1500;
+    transition: all 0.3s ease;
+    font-family: 'Cormorant Garamond', serif;
+}
 
+.sidebar.show { 
+    left: 0; 
+    /* Add margin to not cover the toggle button */
+    padding-top: 80px; /* Push content down below the toggle button */
+}
     .sidebar.show { left: 0; }
 
     .sidebar a {
@@ -147,6 +158,8 @@ if ($row = $result->fetch_assoc()) {
       transition: all 0.3s ease;
       color: #5C4033;
       background-color: #FDFCF9;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.1rem;
     }
 
     .sidebar a:hover {
@@ -154,46 +167,101 @@ if ($row = $result->fetch_assoc()) {
       color: #fff;
       transform: translateY(-2px);
     }
+.toggle-btn {
+    position: fixed;
+    top: 90px;
+    left: 20px;
+    z-index: 2000;
+    background-color: rgba(255,255,255,0.95);
+    border: none;
+    padding: 10px 15px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.2);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: #5C4033;
+    font-weight: bold;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.1rem;
+}
 
-    .toggle-btn {
-      position: fixed;
-      top: 20px;
-      left: 20px;
-      z-index: 200;
-      background-color: rgba(255,255,255,0.95);
-      border: none;
-      padding: 10px 15px;
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.2);
-      cursor: pointer;
-      transition: all 0.3s ease;
-      color: #5C4033;
-      font-weight: bold;
-    }
+/* Completely hide toggle button when sidebar is open */
+.sidebar.show ~ .toggle-btn {
+    display: none;
+}
+.sidebar-close-btn {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: none;
+    border: none;
+    font-size: 18px;
+    cursor: pointer;
+    color: #5C4033;
+    font-family: 'Cormorant Garamond', serif;
+    padding: 8px 12px;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+}
 
+.sidebar-close-btn:hover {
+    background-color: #f0f0f0;
+}
+.toggle-btn:hover {
+    background-color: rgba(255,255,255,1);
+    transform: scale(1.05);
+}
     .toggle-btn:hover {
       background-color: rgba(255,255,255,1);
       transform: scale(1.05);
+    }
+
+    /* Apply fonts to specific elements */
+    .card-title, .card-text, .text-muted, .fw-bold, h6 {
+      font-family: 'Cormorant Garamond', serif;
+    }
+
+    .fw-bold {
+      font-weight: 600 !important;
+    }
+
+    .text-muted {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 300;
+    }
+
+    /* Chart styling */
+    .chart-container {
+      font-family: 'Cormorant Garamond', serif;
+    }
+
+    /* Progress bars and small text */
+    .progress, small {
+      font-family: 'Lora', serif;
+    }
+
+    /* Bootstrap icons container */
+    .rounded-circle {
+      font-family: 'Lora', serif;
     }
   </style>
 </head>
 
 <body>
-  <div class="cart-bg-blur"></div>
 
-  <!-- 🌸 Sidebar Toggle -->
-  <button class="toggle-btn" onclick="toggleSidebar()">☰ Menu</button>
+<button class="toggle-btn" onclick="toggleSidebar()">☰ Menu</button>
 
-  <!-- 🌸 Sidebar -->
-  <div class="sidebar" id="sidebar">
+ <!-- 🌸 Sidebar -->
+<div class="sidebar" id="sidebar">
+    <!-- NO CLOSE BUTTON HERE -->
     <a href="add_menu_staff.php">Add Menu</a>
     <a href="menu_list_staff.php">Edit Menu</a>
     <a href="menu_list_staff.php">Delete Menu</a>
     <a href="customer_list.php">Edit Customer</a>
     <a href="view_feedback.php">View Feedback</a>
     <a href="vieworders.php">View Orders</a>
-       <a href="manage_staff.php">Manage Staff</a>
-  </div>
+    <a href="manage_staff.php">Manage Staff</a>
+</div>
 
   <div class="container mt-5">
     <div class="dashboard-container">
@@ -263,13 +331,12 @@ if ($row = $result->fetch_assoc()) {
       </div>
 
       <!-- Chart -->
-      <div class="card p-4 shadow-sm">
+      <div class="card p-4 shadow-sm chart-container">
         <h5 class="text-center mb-3">Daily Sales Analytics</h5>
         <canvas id="salesChart"></canvas>
       </div>
     </div>
   </div>
-  <!-- test -->
 
   <script>
     function toggleSidebar() {
@@ -301,29 +368,92 @@ if ($row = $result->fetch_assoc()) {
       options: {
         responsive: true,
         plugins: {
-          legend: { display: false },
+          legend: { 
+            display: false,
+            labels: {
+              font: {
+                family: 'Cormorant Garamond',
+                size: 14
+              }
+            }
+          },
           tooltip: {
             backgroundColor: '#fff',
             titleColor: '#000',
             bodyColor: '#000',
             borderColor: '#C49E6C',
             borderWidth: 1,
-            padding: 10
+            padding: 10,
+            titleFont: {
+              family: 'Cormorant Garamond'
+            },
+            bodyFont: {
+              family: 'Cormorant Garamond'
+            }
           }
         },
         scales: {
           y: {
             beginAtZero: true,
             grid: { color: 'rgba(0,0,0,0.05)' },
-            title: { display: true, text: 'RM (Sales Amount)' }
+            title: { 
+              display: true, 
+              text: 'RM (Sales Amount)',
+              font: {
+                family: 'Cormorant Garamond'
+              }
+            },
+            ticks: {
+              font: {
+                family: 'Cormorant Garamond'
+              }
+            }
           },
           x: {
             grid: { display: false },
-            title: { display: true, text: 'Date' }
+            title: { 
+              display: true, 
+              text: 'Date',
+              font: {
+                family: 'Cormorant Garamond'
+              }
+            },
+            ticks: {
+              font: {
+                family: 'Cormorant Garamond'
+              }
+            }
           }
         }
       }
     });
+   function toggleSidebar() {
+  const sidebar = document.getElementById('sidebar');
+const toggleBtn = document.querySelector('.toggle-btn');
+
+  sidebar.classList.toggle('show');
+
+  if (sidebar.classList.contains('show')) {
+    // Sidebar open → show button
+    toggleBtn.style.display = 'block';
+    toggleBtn.style.backgroundColor = '#D2B48C';
+    toggleBtn.style.color = 'white';
+  } else {
+    // Sidebar closed → hide button
+    toggleBtn.style.display = 'none';
+  }
+}
+
+// Close sidebar when clicking outside
+document.addEventListener('click', function(event) {
+  if (sidebar.classList.contains('show') &&
+      !sidebar.contains(event.target) &&
+      event.target !== toggleBtn) {
+    sidebar.classList.remove('show');
+    toggleBtn.style.display = 'none'; // Hide button when closing sidebar
+  }
+});
+
   </script>
 </body>
 </html>
