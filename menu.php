@@ -256,7 +256,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_to_cart'])) {
         </button>
         <ul class="dropdown-menu">
             <li><a class="dropdown-item filter-btn" href="#" data-filter="all">ALL</a></li>
-            <li><a class="dropdown-item filter-btn" href="#" data-filter="coffee">COFFEE</a></li>
+            <li><a class="dropdown-item filter-btn" href="#" data-filter="drinks">DRINKS</a></li>
             <li><a class="dropdown-item filter-btn" href="#" data-filter="food">FOOD</a></li>
             <li><a class="dropdown-item filter-btn" href="#" data-filter="dessert">DESSERT</a></li>
         </ul>
@@ -397,7 +397,25 @@ document.addEventListener('DOMContentLoaded', function() {
     window.dispatchEvent(new CustomEvent('cartUpdated'));
   }
 });
+
 </script>
+<script>
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', function() {
+    const category = this.getAttribute('data-filter');
+    const items = document.querySelectorAll('.menu-item');
+
+    items.forEach(item => {
+      if (category === 'all' || item.classList.contains(category)) {
+        item.style.display = 'block';
+      } else {
+        item.style.display = 'none';
+      }
+    });
+  });
+});
+</script>
+
 
 </body>
 </html>

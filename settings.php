@@ -47,7 +47,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['change_password'])) {
         $stmt->bind_param("si", $hashed_password, $user_id);
         
         if ($stmt->execute()) {
-            $successMessages[] = "✅ Password updated successfully!";
+            $successMessages[] = " Password updated successfully!";
         } else {
             $errors[] = "Failed to update password. Please try again.";
         }

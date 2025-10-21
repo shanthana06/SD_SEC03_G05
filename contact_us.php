@@ -315,9 +315,6 @@ textarea.form-control {
 
 <?php include 'navbar.php'; ?>
 
-<div class="contact-header">
-    <h1>Contact Us</h1>
-</div>
 
 <div class="contact-content">
     <div class="contact-card">

@@ -1,13 +1,8 @@
 <?php
 // receipt.php
-
-include 'navbar.php';
-
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
-
+session_start();
 include 'db.php';
+include 'navbar.php';
 
 if (!isset($_SESSION['user_id'])) {
     echo "User not logged in.";
@@ -16,43 +11,84 @@ if (!isset($_SESSION['user_id'])) {
 
 $user_id = $_SESSION['user_id'];
 
-// Get user info
-$sql = "SELECT name, email FROM users WHERE user_id = ?";
+// Get the order ID either from URL or session
+$order_id = $_GET['order_id'] ?? ($_SESSION['last_order_id'] ?? null);
+
+if (!$order_id) {
+    echo "No receipt found.";
+    exit;
+}
+
+// Fetch specific order data
+$sql = "SELECT p.order_id, p.amount AS total_amount, p.payment_date AS created_at,
+               p.payment_type, p.payment_details
+        FROM payments p
+        WHERE p.user_id = ? AND p.order_id = ?
+        LIMIT 1";
+
 $stmt = $conn->prepare($sql);
-$stmt->bind_param("i", $user_id);
+$stmt->bind_param("ii", $user_id, $order_id);
 $stmt->execute();
 $result = $stmt->get_result();
 
 if ($result->num_rows === 0) {
-    echo "User not found.";
+    echo "No orders found.";
     exit;
 }
 
-$user = $result->fetch_assoc();
+$order_data = $result->fetch_assoc();
 
-// Check if cart exists
-if (!isset($_SESSION['cart']) || empty($_SESSION['cart'])) {
-    echo "Your cart is empty.";
-    exit;
-}
 
-// Map cart to receipt items
+
+
+
+// Get order items
+$sql_items = "SELECT oi.product_name, oi.quantity, oi.price 
+              FROM order_items oi 
+              WHERE oi.order_id = ?";
+$stmt_items = $conn->prepare($sql_items);
+$stmt_items->bind_param("i", $order_data['order_id']);
+$stmt_items->execute();
+$result_items = $stmt_items->get_result();
+
 $items = [];
-foreach ($_SESSION['cart'] as $cartItem) {
+while ($item = $result_items->fetch_assoc()) {
     $items[] = [
-        'description' => $cartItem['name'],        
-        'qty' => $cartItem['quantity'],
-        'price' => $cartItem['price']
+        'description' => $item['product_name'],
+        'qty' => $item['quantity'],
+        'price' => $item['price']
     ];
 }
 
+// If no items found in order_items table, try to get from session as fallback
+if (empty($items) && isset($_SESSION['cart']) && !empty($_SESSION['cart'])) {
+    foreach ($_SESSION['cart'] as $cartItem) {
+        $items[] = [
+            'description' => $cartItem['name'],
+            'qty' => $cartItem['quantity'],
+            'price' => $cartItem['price']
+        ];
+    }
+}
+
+// Get user info
+$sql_user = "SELECT name, email FROM users WHERE user_id = ?";
+$stmt_user = $conn->prepare($sql_user);
+$stmt_user->bind_param("i", $user_id);
+$stmt_user->execute();
+$result_user = $stmt_user->get_result();
+$user = $result_user->fetch_assoc();
+
 // Set up order array
 $order = [
-    'id' => rand(10000, 99999), // generate random order ID
+    'id' => $order_data['order_id'],
     'customer_name' => $user['name'],
     'email' => $user['email'],
     'items' => $items,
-    'tax_percent' => 6
+    'tax_percent' => 6,
+    'payment_method' => $order_data['payment_type'],
+    'payment_details' => $order_data['payment_details'],
+    'order_date' => $order_data['created_at']
 ];
 
 // Calculate totals
@@ -62,6 +98,14 @@ foreach ($order['items'] as $item) {
 }
 $tax = round($subtotal * $order['tax_percent'] / 100, 2);
 $amount_due = round($subtotal + $tax, 2);
+
+// Use the actual total from database if available, otherwise use calculated total
+if ($order_data['total_amount'] > 0) {
+    $amount_due = $order_data['total_amount'];
+    // Recalculate tax and subtotal based on the total amount
+    $subtotal = round($amount_due / (1 + $order['tax_percent'] / 100), 2);
+    $tax = $amount_due - $subtotal;
+}
 ?>
 
 <!doctype html>
@@ -188,6 +232,21 @@ $amount_due = round($subtotal + $tax, 2);
       color: #888;
     }
 
+    /* Payment info */
+    .payment-info {
+      background: #f8f6f3;
+      padding: 15px 20px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      border-left: 4px solid #8B7355;
+    }
+
+    .payment-info h4 {
+      font-family: 'Playfair Display', serif;
+      color: #8B7355;
+      margin-bottom: 5px;
+    }
+
     /* Items table */
     .items-table {
       width: 100%;
@@ -310,7 +369,7 @@ $amount_due = round($subtotal + $tax, 2);
       background: #f8f6f3;
     }
 
-    /* Print styles - FIXED to prevent blank page */
+    /* Print styles */
     @media print {
       body {
         padding: 0;
@@ -333,7 +392,6 @@ $amount_due = round($subtotal + $tax, 2);
         display: none;
       }
       
-      /* Ensure everything fits on one page */
       .receipt-header {
         padding: 30px 30px 20px;
         page-break-after: avoid;
@@ -372,7 +430,6 @@ $amount_due = round($subtotal + $tax, 2);
         page-break-before: avoid;
       }
       
-      /* Force single page */
       html, body {
         height: auto !important;
         overflow: visible !important;
@@ -422,7 +479,6 @@ $amount_due = round($subtotal + $tax, 2);
       }
     }
 
-    /* Extra small screens */
     @media (max-width: 480px) {
       .items-table {
         font-size: 0.9rem;
@@ -456,9 +512,16 @@ $amount_due = round($subtotal + $tax, 2);
       </div>
       <div class="order-info">
         <div class="order-id">Order #<?=htmlspecialchars($order['id'])?></div>
-        <div class="order-date"><?=date('F j, Y')?></div>
+        <div class="order-date"><?=date('F j, Y', strtotime($order['order_date']))?></div>
       </div>
     </div>
+    
+    <?php if (!empty($order['payment_method'])): ?>
+    <div class="payment-info">
+      <h4>Payment Method: <?=htmlspecialchars(ucfirst($order['payment_method']))?></h4>
+      <p><?=htmlspecialchars($order['payment_details'])?></p>
+    </div>
+    <?php endif; ?>
     
     <table class="items-table">
       <thead>
@@ -470,29 +533,35 @@ $amount_due = round($subtotal + $tax, 2);
         </tr>
       </thead>
       <tbody>
-        <?php foreach ($order['items'] as $it): ?>
+        <?php if (!empty($order['items'])): ?>
+          <?php foreach ($order['items'] as $it): ?>
+            <tr>
+              <td class="item-name"><?=htmlspecialchars($it['description'])?></td>
+              <td class="text-right"><?=htmlspecialchars($it['qty'])?></td>
+              <td class="text-right">RM <?=number_format($it['price'],2)?></td>
+              <td class="text-right">RM <?=number_format($it['qty']*$it['price'],2)?></td>
+            </tr>
+          <?php endforeach; ?>
+        <?php else: ?>
           <tr>
-            <td class="item-name"><?=htmlspecialchars($it['description'])?></td>
-            <td class="text-right"><?=htmlspecialchars($it['qty'])?></td>
-            <td class="text-right">$<?=number_format($it['price'],2)?></td>
-            <td class="text-right">$<?=number_format($it['qty']*$it['price'],2)?></td>
+            <td colspan="4" class="text-center">No items found in this order.</td>
           </tr>
-        <?php endforeach; ?>
+        <?php endif; ?>
       </tbody>
     </table>
     
     <div class="summary-section">
       <div class="summary-row">
         <span>Subtotal</span>
-        <span>$<?=number_format($subtotal,2)?></span>
+        <span>RM <?=number_format($subtotal,2)?></span>
       </div>
       <div class="summary-row">
         <span>Tax (<?=$order['tax_percent']?>%)</span>
-        <span>$<?=number_format($tax,2)?></span>
+        <span>RM <?=number_format($tax,2)?></span>
       </div>
       <div class="summary-row summary-total">
         <span>Total Amount</span>
-        <span>$<?=number_format($amount_due,2)?></span>
+        <span>RM <?=number_format($amount_due,2)?></span>
       </div>
     </div>
     

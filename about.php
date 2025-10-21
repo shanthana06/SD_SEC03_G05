@@ -1,9 +1,13 @@
 <?php
-// Ensure session is started at the very beginning
+
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
+
+include 'db.php';
+include 'navbar.php';
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -11,7 +15,9 @@ if (session_status() === PHP_SESSION_NONE) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>About - Arjuna n Co-ffee</title>
-    
+        <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Parisienne&family=Cormorant+Garamond:wght@300;400;700&display=swap" rel="stylesheet">
+<link href="style.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Parisienne&family=Cormorant+Garamond:wght@300;400;700&display=swap" rel="stylesheet">
     <style>
         /* --- General Reset & Variables (From About.php) --- */
@@ -37,39 +43,7 @@ if (session_status() === PHP_SESSION_NONE) {
             min-height: 100vh;
         }
         
-        /* --- Navbar Styles (From navbar.php) --- */
-        header {
-            position: fixed;
-            width: 100%;
-            top: 0;
-            left: 0;
-            background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(8px);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 18px 60px;
-            z-index: 1000;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* Added from inline style */
-        }
-
-        header h4 {
-            font-family: 'Parisienne', cursive !important; /* Use !important to override about.php's general font if necessary */
-            font-size: 1.8rem;
-            color: #3d2b1f;
-            margin: 0; /* From inline style */
-        }
-
-        header nav a {
-            text-decoration: none;
-            color: #3d2b1f;
-            margin: 0 15px;
-            font-family: 'Cormorant Garamond', serif !important; /* Use !important */
-            font-size: 1.05rem;
-            letter-spacing: 0.5px;
-            transition: color 0.3s ease;
-        }
-
+       
         header nav a:hover {
             color: #caa472;
         }
@@ -285,84 +259,12 @@ if (session_status() === PHP_SESSION_NONE) {
                 height: 40vh;
             }
         }
-        /* Inside your <style> block: */
-
-header h4 {
-    /* Use !important to override any general body or container fonts */
-    font-family: 'Parisienne', cursive !important; 
-    font-size: 1.8rem;
-    color: #3d2b1f;
-    margin: 0; 
-}
-
-header nav a {
-    /* Apply !important here too, just in case, for navigation links */
-    font-family: 'Cormorant Garamond', serif !important;
-    text-decoration: none;
-    color: #3d2b1f;
-    margin: 0 15px;
-    font-size: 1.05rem;
-    letter-spacing: 0.5px;
-    transition: color 0.3s ease;
-}
-        /* Navbar Responsiveness */
-        @media (max-width: 768px) {
-            header {
-                flex-direction: column;
-                padding: 15px 30px;
-            }
-            header nav {
-                margin-top: 10px;
-                flex-wrap: wrap;
-                justify-content: center;
-            }
-            header nav a {
-                margin: 5px 8px;
-                font-size: 1rem;
-            }
-            body {
-                padding-top: 120px; /* More padding needed for wrapped header */
-            }
-        }
+  
     </style>
 </head>
 <body>
 
-<header>
-    <div class="header-logo-container">
-        <h4 style="margin: 0;">Arjuna n Co-ffee</h4>
 
-        <?php if (isset($_SESSION['role'])): ?>
-        <div class="menu" style="position: relative;">
-            <button class="menu-btn" onclick="toggleMenu()">⋮</button>
-            <div class="menu-list" id="menuList">
-                <a href="profile.php">Profile</a>
-                <a href="settings.php">Settings</a>
-                <a href="logout.php">Logout</a>
-            </div>
-        </div>
-        <?php endif; ?>
-    </div>
-    
-    <nav>
-        <a href="index.php">Home</a>
-        <a href="menu.php">Menu</a>
-        <a href="about.php">About</a>
-        <a href="contact_us.php">Contact</a>
-
-        <?php if (isset($_SESSION['role'])): ?>
-            <?php if ($_SESSION['role'] === 'Customer'): ?>
-                <a href="customer_orders.php">My Orders</a>
-            <?php elseif ($_SESSION['role'] === 'Staff'): ?>
-                <a href="staff_dashboard.php">Dashboard</a>
-            <?php elseif ($_SESSION['role'] === 'Admin'): ?>
-                <a href="admin_dashboard.php">Admin Panel</a>
-            <?php endif; ?>
-        <?php else: ?>
-            <a href="login.php">Login</a>
-        <?php endif; ?>
-    </nav>
-</header>
 <div class="marketing-hero">
     
     <div class="text-block text-block-left">

@@ -1,11 +1,7 @@
 <?php
-include 'db.php';
-// navbar.php - START OF FILE
-
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
+echo "<!-- Session role: " . ($_SESSION['role'] ?? 'none') . " -->";
 ?>
+
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Parisienne&family=Cormorant+Garamond:wght@300;400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
@@ -19,6 +15,16 @@ if (session_status() === PHP_SESSION_NONE) {
             <div class="menu-list" id="menuList">
                 <a href="profile.php">Profile</a>
                 <a href="settings.php">Settings</a>
+                <a href="orderhistory.php">Order History</a>
+                <a href="orderstatus.php">Order Status</a>
+                
+                <!-- STAFF AND ADMIN DASHBOARD LINKS IN DROPDOWN -->
+                <?php if ($_SESSION['role'] === 'staff'): ?>
+                    <a href="staff_dashboard.php">Staff Dashboard</a>
+                <?php elseif ($_SESSION['role'] === 'admin'): ?>
+                    <a href="admin_dashboard.php">Admin Dashboard</a>
+                <?php endif; ?>
+                
                 <a href="logout.php">Logout</a>
             </div>
         </div>
@@ -125,6 +131,7 @@ header h4 {
     overflow: hidden;
     display: none;
     z-index: 1001; 
+    min-width: 180px;
 }
 
 .menu-list.show {
@@ -138,10 +145,16 @@ header h4 {
     color: #333;
     font-family: 'Cormorant Garamond', serif;
     transition: background 0.3s;
+    border-bottom: 1px solid #f0f0f0;
+    white-space: nowrap;
 }
 
 .menu-list a:hover {
     background: #f9f4ef;
+}
+
+.menu-list a:last-child {
+    border-bottom: none;
 }
 
 /* Responsive */
@@ -192,7 +205,6 @@ header h4 {
     z-index: 1500;
 }
 </style>
-
 
 <div id="cartSidebar" class="cart-sidebar">
     <iframe src="cart.php" id="cartIframe" frameborder="0"></iframe>

@@ -1,6 +1,7 @@
 <?php
 // dashboard.php
 session_start();
+
 include 'db.php';
 include 'navbar.php';
 
@@ -17,19 +18,19 @@ $pendingOrders = 0;
 $completedOrders = 0;
 $newCustomers = 0;
 
-// --- Total Sales & Total Completed Orders ---
+// --- Total Sales & Total Payment Count ---
 $sql = "SELECT 
-            SUM(total_amount) AS totalSales, 
+            SUM(amount) AS totalSales, 
             COUNT(*) AS totalOrders 
-        FROM orders 
-        WHERE status = 'Completed'";
+        FROM payments 
+        WHERE payment_date IS NOT NULL"; // REMOVED STATUS FILTER
 $result = $conn->query($sql);
 if ($row = $result->fetch_assoc()) {
     $totalSales = $row['totalSales'] ?? 0;
     $totalOrders = $row['totalOrders'] ?? 0;
 }
 
-// --- Pending & Completed Order Counts ---
+// --- Pending & Completed Order Counts (from orders table) ---
 $sql = "SELECT 
             SUM(CASE WHEN status='Pending' THEN 1 ELSE 0 END) AS pending,
             SUM(CASE WHEN status='Completed' THEN 1 ELSE 0 END) AS completed
@@ -42,12 +43,13 @@ if ($row = $result->fetch_assoc()) {
 
 // --- Daily Sales for Chart ---
 $sql = "SELECT 
-            DATE(created_at) AS order_date, 
-            SUM(total_amount) AS total_sales
-        FROM orders
-        WHERE status = 'Completed'
-        GROUP BY DATE(created_at)
-        ORDER BY order_date ASC";
+            DATE(payment_date) AS order_date, 
+            SUM(amount) AS total_sales
+        FROM payments
+        WHERE payment_date IS NOT NULL 
+        GROUP BY DATE(payment_date)
+        ORDER BY order_date DESC
+        LIMIT 30"; // Show last 30 days
 $resultSales = $conn->query($sql);
 
 $days = [];
@@ -57,6 +59,9 @@ if ($resultSales && $resultSales->num_rows > 0) {
         $days[] = $row['order_date'];
         $dailySales[] = (float)$row['total_sales'];
     }
+    // Reverse to show oldest to newest
+    $days = array_reverse($days);
+    $dailySales = array_reverse($dailySales);
 }
 
 // --- New Customers (today only) ---
@@ -67,8 +72,16 @@ $result = $conn->query($sql);
 if ($row = $result->fetch_assoc()) {
     $newCustomers = $row['newCustomers'] ?? 0;
 }
-?>
 
+// --- Debug: Check if we have any payment data ---
+$debugSql = "SELECT COUNT(*) as total_payments, 
+                    MIN(payment_date) as first_payment,
+                    MAX(payment_date) as last_payment
+             FROM payments 
+             WHERE payment_date IS NOT NULL";
+$debugResult = $conn->query($debugSql);
+$debugData = $debugResult->fetch_assoc();
+?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -123,30 +136,28 @@ if ($row = $result->fetch_assoc()) {
     }
 
     .sidebar {
-    position: fixed;
-    top: 0;
-    left: -260px;
-    width: 240px;
-    height: 100%;
-    background-color: rgba(255,255,255,0.98);
-    backdrop-filter: blur(10px);
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-    box-shadow: 2px 0 15px rgba(0,0,0,0.1);
-    border-right: 1px solid rgba(200,180,160,0.3);
-    z-index: 1500;
-    transition: all 0.3s ease;
-    font-family: 'Cormorant Garamond', serif;
-}
+      position: fixed;
+      top: 0;
+      left: -260px;
+      width: 240px;
+      height: 100%;
+      background-color: rgba(255,255,255,0.98);
+      backdrop-filter: blur(10px);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      box-shadow: 2px 0 15px rgba(0,0,0,0.1);
+      border-right: 1px solid rgba(200,180,160,0.3);
+      z-index: 1500;
+      transition: all 0.3s ease;
+      font-family: 'Cormorant Garamond', serif;
+    }
 
-.sidebar.show { 
-    left: 0; 
-    /* Add margin to not cover the toggle button */
-    padding-top: 80px; /* Push content down below the toggle button */
-}
-    .sidebar.show { left: 0; }
+    .sidebar.show { 
+      left: 0; 
+      padding-top: 80px;
+    }
 
     .sidebar a {
       display: block;
@@ -167,56 +178,34 @@ if ($row = $result->fetch_assoc()) {
       color: #fff;
       transform: translateY(-2px);
     }
-.toggle-btn {
-    position: fixed;
-    top: 90px;
-    left: 20px;
-    z-index: 2000;
-    background-color: rgba(255,255,255,0.95);
-    border: none;
-    padding: 10px 15px;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.2);
-    cursor: pointer;
-    transition: all 0.3s ease;
-    color: #5C4033;
-    font-weight: bold;
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 1.1rem;
-}
 
-/* Completely hide toggle button when sidebar is open */
-.sidebar.show ~ .toggle-btn {
-    display: none;
-}
-.sidebar-close-btn {
-    position: absolute;
-    top: 15px;
-    right: 15px;
-    background: none;
-    border: none;
-    font-size: 18px;
-    cursor: pointer;
-    color: #5C4033;
-    font-family: 'Cormorant Garamond', serif;
-    padding: 8px 12px;
-    border-radius: 5px;
-    transition: all 0.3s ease;
-}
+    .toggle-btn {
+      position: fixed;
+      top: 90px;
+      left: 20px;
+      z-index: 2000;
+      background-color: rgba(255,255,255,0.95);
+      border: none;
+      padding: 10px 15px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      color: #5C4033;
+      font-weight: bold;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.1rem;
+    }
 
-.sidebar-close-btn:hover {
-    background-color: #f0f0f0;
-}
-.toggle-btn:hover {
-    background-color: rgba(255,255,255,1);
-    transform: scale(1.05);
-}
+    .sidebar.show ~ .toggle-btn {
+      display: none;
+    }
+
     .toggle-btn:hover {
       background-color: rgba(255,255,255,1);
       transform: scale(1.05);
     }
 
-    /* Apply fonts to specific elements */
     .card-title, .card-text, .text-muted, .fw-bold, h6 {
       font-family: 'Cormorant Garamond', serif;
     }
@@ -230,17 +219,14 @@ if ($row = $result->fetch_assoc()) {
       font-weight: 300;
     }
 
-    /* Chart styling */
     .chart-container {
       font-family: 'Cormorant Garamond', serif;
     }
 
-    /* Progress bars and small text */
     .progress, small {
       font-family: 'Lora', serif;
     }
 
-    /* Bootstrap icons container */
     .rounded-circle {
       font-family: 'Lora', serif;
     }
@@ -251,9 +237,7 @@ if ($row = $result->fetch_assoc()) {
 
 <button class="toggle-btn" onclick="toggleSidebar()">☰ Menu</button>
 
- <!-- 🌸 Sidebar -->
 <div class="sidebar" id="sidebar">
-    <!-- NO CLOSE BUTTON HERE -->
     <a href="add_menu_staff.php">Add Menu</a>
     <a href="menu_list_staff.php">Edit Menu</a>
     <a href="menu_list_staff.php">Delete Menu</a>
@@ -269,61 +253,65 @@ if ($row = $result->fetch_assoc()) {
 
       <!-- Summary Cards -->
       <div class="row text-center mb-4">
-        <div class="col-md-4 mb-4">
+        <div class="col-md-3 mb-4">
           <div class="card shadow-sm border-0 rounded-4" style="background-color:#f5e9e0;">
             <div class="card-body">
               <div class="d-flex justify-content-between align-items-center">
                 <div>
-                  <h6 class="text-muted mb-1">Total Orders</h6>
+                  <h6 class="text-muted mb-1">Total Payments</h6>
                   <h3 class="fw-bold"><?= $totalOrders ?></h3>
-                  <small class="text-danger">-2.33%</small>
                 </div>
                 <div class="rounded-circle p-3" style="background-color:#d6b8a1;">
-                  <i class="bi bi-bag-fill fs-4 text-white"></i>
+                  <i class="bi bi-credit-card fs-4 text-white"></i>
                 </div>
-              </div>
-              <div class="progress mt-3" style="height:5px;">
-                <div class="progress-bar" style="width:70%; background-color:#b97a56;"></div>
               </div>
             </div>
           </div>
         </div>
 
-        <div class="col-md-4 mb-4">
+        <div class="col-md-3 mb-4">
+          <div class="card shadow-sm border-0 rounded-4" style="background-color:#f5e9e0;">
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-center">
+                <div>
+                  <h6 class="text-muted mb-1">Pending Orders</h6>
+                  <h3 class="fw-bold"><?= $pendingOrders ?></h3>
+                </div>
+                <div class="rounded-circle p-3" style="background-color:#d6b8a1;">
+                  <i class="bi bi-clock-fill fs-4 text-white"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-3 mb-4">
           <div class="card shadow-sm border-0 rounded-4" style="background-color:#f5e9e0;">
             <div class="card-body">
               <div class="d-flex justify-content-between align-items-center">
                 <div>
                   <h6 class="text-muted mb-1">New Customers</h6>
                   <h3 class="fw-bold"><?= $newCustomers ?></h3>
-                  <small class="text-success">+32.4%</small>
                 </div>
                 <div class="rounded-circle p-3" style="background-color:#d6b8a1;">
                   <i class="bi bi-person-fill fs-4 text-white"></i>
                 </div>
               </div>
-              <div class="progress mt-3" style="height:5px;">
-                <div class="progress-bar" style="width:80%; background-color:#b97a56;"></div>
-              </div>
             </div>
           </div>
         </div>
 
-        <div class="col-md-4 mb-4">
+        <div class="col-md-3 mb-4">
           <div class="card shadow-sm border-0 rounded-4" style="background-color:#f5e9e0;">
             <div class="card-body">
               <div class="d-flex justify-content-between align-items-center">
                 <div>
-                  <h6 class="text-muted mb-1">Total Sales</h6>
+                  <h6 class="text-muted mb-1">Total Revenue</h6>
                   <h3 class="fw-bold">RM <?= number_format($totalSales, 2) ?></h3>
-                  <small class="text-success">+25%</small>
                 </div>
                 <div class="rounded-circle p-3" style="background-color:#d6b8a1;">
-                  <i class="bi bi-cart-fill fs-4 text-white"></i>
+                  <i class="bi bi-cash-coin fs-4 text-white"></i>
                 </div>
-              </div>
-              <div class="progress mt-3" style="height:5px;">
-                <div class="progress-bar" style="width:75%; background-color:#b97a56;"></div>
               </div>
             </div>
           </div>
@@ -332,26 +320,68 @@ if ($row = $result->fetch_assoc()) {
 
       <!-- Chart -->
       <div class="card p-4 shadow-sm chart-container">
-        <h5 class="text-center mb-3">Daily Sales Analytics</h5>
+        <h5 class="text-center mb-3">Daily Revenue Analytics (Last 30 Days)</h5>
         <canvas id="salesChart"></canvas>
+      </div>
+
+      <!-- Database Debug Info -->
+      <div class="mt-4 p-3 bg-light rounded">
+        <h6 class="text-muted">Database Information</h6>
+        <div class="row">
+          <div class="col-md-4">
+            <small><strong>Total Payments:</strong> <?= $debugData['total_payments'] ?? 0 ?></small>
+          </div>
+          <div class="col-md-4">
+            <small><strong>First Payment:</strong> <?= $debugData['first_payment'] ?? 'No data' ?></small>
+          </div>
+          <div class="col-md-4">
+            <small><strong>Latest Payment:</strong> <?= $debugData['last_payment'] ?? 'No data' ?></small>
+          </div>
+        </div>
+        <div class="mt-2">
+          <small><strong>Chart Data Points:</strong> <?= count($days) ?></small><br>
+          <small><strong>Data Range:</strong> <?= reset($days) ?: 'No start' ?> to <?= end($days) ?: 'No end' ?></small>
+        </div>
       </div>
     </div>
   </div>
 
-  <script>
-    function toggleSidebar() {
-      document.getElementById('sidebar').classList.toggle('show');
+<script>
+  const sidebar = document.getElementById('sidebar');
+  const toggleBtn = document.querySelector('.toggle-btn');
+
+  function toggleSidebar() {
+    sidebar.classList.toggle('show');
+    if (sidebar.classList.contains('show')) {
+      toggleBtn.style.display = 'none';
+    } else {
+      toggleBtn.style.display = 'block';
     }
+  }
 
-    const days = <?= json_encode($days) ?>;
-    const sales = <?= json_encode($dailySales) ?>;
+  // Close sidebar when clicking outside
+  document.addEventListener('click', function(event) {
+    if (sidebar.classList.contains('show') &&
+        !sidebar.contains(event.target) &&
+        event.target !== toggleBtn) {
+      sidebar.classList.remove('show');
+      toggleBtn.style.display = 'block';
+    }
+  });
 
+  // Chart setup
+  const days = <?= json_encode($days) ?>;
+  const sales = <?= json_encode($dailySales) ?>;
+
+  console.log('Chart Data:', { days, sales });
+
+  if (days.length > 0 && sales.length > 0) {
     new Chart(document.getElementById('salesChart'), {
       type: 'line',
       data: {
         labels: days,
         datasets: [{
-          label: 'Daily Sales',
+          label: 'Daily Revenue',
           data: sales,
           fill: true,
           borderColor: '#C49E6C',
@@ -368,15 +398,7 @@ if ($row = $result->fetch_assoc()) {
       options: {
         responsive: true,
         plugins: {
-          legend: { 
-            display: false,
-            labels: {
-              font: {
-                family: 'Cormorant Garamond',
-                size: 14
-              }
-            }
-          },
+          legend: { display: false },
           tooltip: {
             backgroundColor: '#fff',
             titleColor: '#000',
@@ -384,11 +406,10 @@ if ($row = $result->fetch_assoc()) {
             borderColor: '#C49E6C',
             borderWidth: 1,
             padding: 10,
-            titleFont: {
-              family: 'Cormorant Garamond'
-            },
-            bodyFont: {
-              family: 'Cormorant Garamond'
+            callbacks: {
+              label: function(context) {
+                return 'RM ' + context.parsed.y.toFixed(2);
+              }
             }
           }
         },
@@ -396,64 +417,25 @@ if ($row = $result->fetch_assoc()) {
           y: {
             beginAtZero: true,
             grid: { color: 'rgba(0,0,0,0.05)' },
-            title: { 
-              display: true, 
-              text: 'RM (Sales Amount)',
-              font: {
-                family: 'Cormorant Garamond'
-              }
-            },
+            title: { display: true, text: 'RM (Revenue)' },
             ticks: {
-              font: {
-                family: 'Cormorant Garamond'
+              callback: function(value) {
+                return 'RM ' + value;
               }
             }
           },
           x: {
             grid: { display: false },
-            title: { 
-              display: true, 
-              text: 'Date',
-              font: {
-                family: 'Cormorant Garamond'
-              }
-            },
-            ticks: {
-              font: {
-                family: 'Cormorant Garamond'
-              }
-            }
+            title: { display: true, text: 'Date' }
           }
         }
       }
     });
-   function toggleSidebar() {
-  const sidebar = document.getElementById('sidebar');
-const toggleBtn = document.querySelector('.toggle-btn');
-
-  sidebar.classList.toggle('show');
-
-  if (sidebar.classList.contains('show')) {
-    // Sidebar open → show button
-    toggleBtn.style.display = 'block';
-    toggleBtn.style.backgroundColor = '#D2B48C';
-    toggleBtn.style.color = 'white';
   } else {
-    // Sidebar closed → hide button
-    toggleBtn.style.display = 'none';
+    document.getElementById('salesChart').innerHTML = 
+      '<div class="text-center p-4 text-muted">No payment data available for the chart.</div>';
   }
-}
+</script>
 
-// Close sidebar when clicking outside
-document.addEventListener('click', function(event) {
-  if (sidebar.classList.contains('show') &&
-      !sidebar.contains(event.target) &&
-      event.target !== toggleBtn) {
-    sidebar.classList.remove('show');
-    toggleBtn.style.display = 'none'; // Hide button when closing sidebar
-  }
-});
-
-  </script>
 </body>
 </html>
