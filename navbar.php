@@ -45,7 +45,7 @@ echo "<!-- Session role: " . ($_SESSION['role'] ?? 'none') . " -->";
                 <a href="admin_dashboard.php">Admin Panel</a>
             <?php endif; ?>
         <?php endif; ?>
-    </nav>
+            </nav>
 
     <div class="icon-section">
         <a href="login.php" title="Login"><i class="fa-regular fa-user"></i></a>
