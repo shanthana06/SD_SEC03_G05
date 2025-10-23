@@ -55,7 +55,7 @@ echo "<!-- Session role: " . ($_SESSION['role'] ?? 'none') . " -->";
 </header>
 
 <style>
-/* Header Styles */
+
 header {
     position: fixed;
     width: 100%;
