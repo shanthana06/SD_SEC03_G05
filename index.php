@@ -166,13 +166,13 @@ include 'navbar.php';
       color: #5a4c43;
     }
 
-    footer {
-      background: #f2ece6;
-      text-align: center;
-      padding: 40px;
-      font-size: 0.9rem;
-      color: #7b6d5b;
-    }
+footer {
+  background: #f2ece6;
+  text-align: center;
+  padding: 20px 40px 40px 40px; /* top, right, bottom, left */
+  font-size: 0.9rem;
+  color: #7b6d5b;
+}
 
     .image-stack {
       position: relative;
@@ -284,7 +284,7 @@ include 'navbar.php';
     .dreamy-image {
       flex: 1;
       min-width: 300px;
-      background-image: url('images/dualipa.jpg');
+      background-image: url('images/kendall.jpg');
       background-size: cover;
       background-position: center;
       height: 700px;
@@ -336,20 +336,21 @@ include 'navbar.php';
     }
 
     .coffee-btn {
-      display: inline-block;
-      margin: 0 10px;
-      padding: 12px 30px;
-      border: 1px solid #1e2235;
-      border-radius: 30px;
-      text-decoration: none;
-      color: #1e2235;
-      font-family: 'Poppins', sans-serif;
-      transition: 0.3s;
+        display: inline-block;
+            padding: 12px 30px;
+            border: 1px solid var(--color-text-dark);
+            text-decoration: none;
+            font-family: var(--font-sans);
+            font-size: 0.8em;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--color-text-dark);
+            transition: background-color 0.3s, color 0.3s;
     }
 
     .coffee-btn:hover {
-      background-color: #1e2235;
-      color: #fff;
+     background-color: var(--color-text-dark);
+            color: var(--color-background);
     }
 
     /* Right text content */
@@ -466,28 +467,26 @@ include 'navbar.php';
       margin-top: 3rem;
     }
 
-    .coffee-btn {
-      display: inline-block;
-      padding: 0.75rem 2.5rem;
-      margin: 0 0.8rem;
-      border: 1.5px solid #555;
-      border-radius: 9999px;
-      color: #333;
-      font-family: 'Poppins', sans-serif;
-      font-weight: 600;
-      text-transform: uppercase;
-      font-size: 0.9rem;
-      letter-spacing: 1px;
-      background: transparent;
-      transition: all 0.3s ease;
-    }
+   .coffee-btn {
+  display: inline-block;
+  padding: 12px 30px;
+  border: 2px solid #c5c0c0ff !important; /* Direct color instead of variable */
+  text-decoration: none;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 0.9em;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #2d2d2d;
+  transition: all 0.3s ease;
+  background: transparent;
+  border-radius: 2px;
+  margin: 0 10px;
+}
 
-    .coffee-btn:hover {
-      background-color: rgba(255, 255, 255, 0.6);
-      border-color: #222;
-      transform: translateY(-3px);
-    }
-
+.coffee-btn:hover {
+  background-color: #2d2d2d;
+  color: #fcfbf9;
+}
     .dreamy-button a:hover {
       background-color: #4b5b77;
     }
@@ -503,7 +502,7 @@ include 'navbar.php';
     /* --- SANCTUARY SECTION STYLING --- */
     .sanctuary-hero {
       height: 100vh;
-      background: url('images/girl.jpg') center/cover no-repeat;
+      background: url('images/g1.jpg') center/cover no-repeat;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -583,7 +582,7 @@ include 'navbar.php';
 
     .sanctuary-text {
       position: relative;
-      background: url('images/bg.jpg') center/cover no-repeat;
+      background: url('images/.jpg') center/cover no-repeat;
       color: white;
       text-align: center;
       padding: 120px 20px;
@@ -609,7 +608,7 @@ include 'navbar.php';
     }
 
     .services-section {
-      padding: 120px 10% 80px; /* Top padding to clear fixed header */
+      padding: 45px 10% 80px; /* Top padding to clear fixed header */
       text-align: center;
     }
 
@@ -618,7 +617,8 @@ include 'navbar.php';
       font-size: 3.5rem;
       color: #3b2f2f;
       margin-bottom: 5px;
-      height: 50px;
+      height: 30px;
+      padding: -100px
     }
 
     .services-title h2 {
@@ -627,6 +627,9 @@ include 'navbar.php';
       color: #536480; /* A soft blue/grey for contrast */
       margin-top: 0px;
       margin-bottom: 60px;
+       height: 20px;
+       padding: -10px;
+    
     }
 
     .services-grid {
@@ -650,7 +653,7 @@ include 'navbar.php';
       flex: 0 0 auto;
       width: 350px;
       height: 500px;
-      background: url('images/newcoffee.jpg') center/cover no-repeat; /* Placeholder Image */
+      background: url('images/kh.png') center/cover no-repeat; /* Placeholder Image */
       border-radius: 10px;
       box-shadow: 0 10px 30px rgba(0,0,0,0.1);
       margin-top: 40px; /* Align slightly lower than text columns */
@@ -691,14 +694,14 @@ include 'navbar.php';
     }
 
     /* Footer styling (copied from your index.php) */
-    footer { 
-      background: #f2ece6; 
-      text-align: center; 
-      padding: 40px; 
-      font-size: 0.9rem; 
-      color: #7b6d5b; 
-      margin-top: 50px; 
-    }
+   footer {
+  background: #f2ece6;
+  text-align: center;
+  padding: 20px 40px; /* Reduced from 40px all around */
+  font-size: 0.9rem;
+  color: #7b6d5b;
+  margin-top: px; /* Slight pull upwards */
+}
 
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(20px); }
@@ -789,8 +792,7 @@ window.addEventListener('load', () => {
     <div class="overlay">
       <h2>A Space to Unwind</h2>
       <p>
-        Step away from the rush. Our Sanctuary is designed as an extension of the calm you seek in every cup.
-        A moment of clarity, a breath of fresh air, and a gentle reminder that some things are meant to be savored slowly.
+        Step away from the rush and into our little corner of calm. Created by two sisters who believe in slow mornings and heartfelt moments, our space is where every cup feels like home — a gentle pause, a deep breath, and a reminder that life’s sweetest things are best enjoyed slowly.
       </p>
     </div>
   </section>
@@ -847,14 +849,14 @@ window.addEventListener('load', () => {
 
     <!-- Center image -->
     <div class="coffee-content">
-      <img src="images/coffeemodel.jpg" alt="Coffee Time" class="coffee-img">
+      <img src="images/hailey.jpg" alt="Coffee Time" class="coffee-img">
     </div>
 
     <!-- Buttons -->
     <div class="coffee-buttons">
       <a href="contact_us.php" class="coffee-btn">Give Feedback</a>
       <a href="menu.php" class="coffee-btn">View Menu</a>
-      <a href="index.php" class="coffee-btn">About Us</a>
+      <a href="about.php" class="coffee-btn">About Us</a>
     </div>
   </section>
 

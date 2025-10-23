@@ -1,8 +1,13 @@
 <?php
 // receipt.php
 session_start();
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
 include 'db.php';
-include 'navbar.php';
+//include 'navbar.php';
+// Debugging aid
+mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 
 if (!isset($_SESSION['user_id'])) {
     echo "User not logged in.";
@@ -11,43 +16,73 @@ if (!isset($_SESSION['user_id'])) {
 
 $user_id = $_SESSION['user_id'];
 
-// Get the order ID either from URL or session
-$order_id = $_GET['order_id'] ?? ($_SESSION['last_order_id'] ?? null);
+// Get order ID from URL or session
+$order_id = $_GET['order_id'] ?? ($_SESSION['last_order_id'] ?? '');
 
-if (!$order_id) {
+// Remove 'ORDER_' prefix (ToyyibPay sends "ORDER_96")
+$numeric_id = str_replace('ORDER_', '', $order_id);
+
+// Check if this is a ToyyibPay response
+$is_toyyibpay_response = isset($_GET['status_id']);
+$toyyibpay_status = '';
+
+if ($is_toyyibpay_response) {
+    $status_id = $_GET['status_id'] ?? '';
+    $transaction_id = $_GET['transaction_id'] ?? '';
+    
+    // Set status based on ToyyibPay response
+    switch ($status_id) {
+        case '1':
+            $toyyibpay_status = 'success';
+            break;
+        case '2':
+            $toyyibpay_status = 'pending';
+            break;
+        case '3':
+            $toyyibpay_status = 'failed';
+            break;
+        default:
+            $toyyibpay_status = 'unknown';
+            break;
+    }
+}
+
+if (!$numeric_id) {
     echo "No receipt found.";
     exit;
 }
 
-// Fetch specific order data
-$sql = "SELECT p.order_id, p.amount AS total_amount, p.payment_date AS created_at,
-               p.payment_type, p.payment_details
-        FROM payments p
-        WHERE p.user_id = ? AND p.order_id = ?
-        LIMIT 1";
-
-$stmt = $conn->prepare($sql);
-$stmt->bind_param("ii", $user_id, $order_id);
+// FIXED: Use the simple query approach as specified in the instructions
+$stmt = $conn->prepare("
+    SELECT o.id, o.customer_name, o.total_amount, o.created_at, o.order_type, 
+           o.payment_method, o.status, p.transaction_id, o.user_id
+    FROM orders o
+    LEFT JOIN payments p ON o.id = p.order_id
+    WHERE o.id = ?
+");
+$stmt->bind_param("i", $numeric_id);
 $stmt->execute();
 $result = $stmt->get_result();
 
 if ($result->num_rows === 0) {
-    echo "No orders found.";
+    echo "<div class='text-center mt-5'>⚠ No orders found for this order ID ($numeric_id).</div>";
     exit;
 }
 
 $order_data = $result->fetch_assoc();
 
-
-
-
+// Security check: ensure the order belongs to the logged-in user
+if ($order_data['user_id'] != $user_id) {
+    echo "Access denied. This order doesn't belong to you.";
+    exit;
+}
 
 // Get order items
 $sql_items = "SELECT oi.product_name, oi.quantity, oi.price 
               FROM order_items oi 
               WHERE oi.order_id = ?";
 $stmt_items = $conn->prepare($sql_items);
-$stmt_items->bind_param("i", $order_data['order_id']);
+$stmt_items->bind_param("i", $numeric_id);
 $stmt_items->execute();
 $result_items = $stmt_items->get_result();
 
@@ -60,35 +95,29 @@ while ($item = $result_items->fetch_assoc()) {
     ];
 }
 
-// If no items found in order_items table, try to get from session as fallback
-if (empty($items) && isset($_SESSION['cart']) && !empty($_SESSION['cart'])) {
-    foreach ($_SESSION['cart'] as $cartItem) {
-        $items[] = [
-            'description' => $cartItem['name'],
-            'qty' => $cartItem['quantity'],
-            'price' => $cartItem['price']
-        ];
-    }
-}
-
 // Get user info
-$sql_user = "SELECT name, email FROM users WHERE user_id = ?";
+$sql_user = "SELECT name, email, phone FROM users WHERE user_id = ?";
+
 $stmt_user = $conn->prepare($sql_user);
 $stmt_user->bind_param("i", $user_id);
 $stmt_user->execute();
 $result_user = $stmt_user->get_result();
 $user = $result_user->fetch_assoc();
 
-// Set up order array
+// Set up order array using data from the fixed query
 $order = [
-    'id' => $order_data['order_id'],
-    'customer_name' => $user['name'],
+    'id' => $order_data['id'],
+    'customer_name' => $order_data['customer_name'], // Use from orders table instead of user table
     'email' => $user['email'],
+    'phone' => $user['phone'],
     'items' => $items,
     'tax_percent' => 6,
-    'payment_method' => $order_data['payment_type'],
-    'payment_details' => $order_data['payment_details'],
-    'order_date' => $order_data['created_at']
+    'payment_method' => $order_data['payment_method'],
+    'order_type' => $order_data['order_type'],
+    'order_date' => $order_data['created_at'],
+    'order_status' => $order_data['status'],
+    'transaction_id' => $order_data['transaction_id'] ?? ($_GET['transaction_id'] ?? ''),
+    'total_amount' => $order_data['total_amount']
 ];
 
 // Calculate totals
@@ -106,6 +135,45 @@ if ($order_data['total_amount'] > 0) {
     $subtotal = round($amount_due / (1 + $order['tax_percent'] / 100), 2);
     $tax = $amount_due - $subtotal;
 }
+
+// Determine status display
+$status_display = $order['order_status'];
+$status_class = '';
+
+if ($is_toyyibpay_response) {
+    switch ($toyyibpay_status) {
+        case 'success':
+            $status_display = 'Payment Successful';
+            $status_class = 'status-success';
+            break;
+        case 'pending':
+            $status_display = 'Payment Pending';
+            $status_class = 'status-pending';
+            break;
+        case 'failed':
+            $status_display = 'Payment Failed';
+            $status_class = 'status-failed';
+            break;
+    }
+} else {
+    switch ($order['order_status']) {
+        case 'Paid':
+        case 'Completed':
+            $status_class = 'status-success';
+            break;
+        case 'Pending Payment':
+        case 'Pending':
+            $status_class = 'status-pending';
+            break;
+        case 'Payment Failed':
+        case 'Failed':
+            $status_class = 'status-failed';
+            break;
+        default:
+            $status_class = 'status-default';
+            break;
+    }
+}
 ?>
 
 <!doctype html>
@@ -113,9 +181,10 @@ if ($order_data['total_amount'] > 0) {
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Receipt #<?=htmlspecialchars($order['id'])?></title>
+  <title>Receipt #ORDER_<?=htmlspecialchars($order['id'])?></title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Parisienne&family=Cormorant+Garamond:wght@300;400;700&display=swap" rel="stylesheet">
   <style>
+    /* Your existing CSS styles remain the same */
     * {
       margin: 0;
       padding: 0;
@@ -186,6 +255,39 @@ if ($order_data['total_amount'] > 0) {
       font-weight: 400;
       margin-top: 20px;
       letter-spacing: 1px;
+    }
+
+    /* Status Banner */
+    .status-banner {
+      padding: 15px 20px;
+      text-align: center;
+      font-weight: 600;
+      font-size: 1.1rem;
+      margin-bottom: 0;
+    }
+
+    .status-success {
+      background: #d4edda;
+      color: #155724;
+      border-bottom: 3px solid #28a745;
+    }
+
+    .status-pending {
+      background: #fff3cd;
+      color: #856404;
+      border-bottom: 3px solid #ffc107;
+    }
+
+    .status-failed {
+      background: #f8d7da;
+      color: #721c24;
+      border-bottom: 3px solid #dc3545;
+    }
+
+    .status-default {
+      background: #e2e3e5;
+      color: #383d41;
+      border-bottom: 3px solid #6c757d;
     }
 
     /* Content area */
@@ -335,6 +437,7 @@ if ($order_data['total_amount'] > 0) {
       justify-content: center;
       gap: 15px;
       margin-top: 25px;
+      flex-wrap: wrap;
     }
 
     .btn {
@@ -347,6 +450,7 @@ if ($order_data['total_amount'] > 0) {
       transition: all 0.3s ease;
       cursor: pointer;
       border: none;
+      display: inline-block;
     }
 
     .btn-primary {
@@ -367,6 +471,24 @@ if ($order_data['total_amount'] > 0) {
 
     .btn-secondary:hover {
       background: #f8f6f3;
+    }
+
+    .btn-success {
+      background: #28a745;
+      color: white;
+    }
+
+    .btn-success:hover {
+      background: #218838;
+    }
+
+    .btn-danger {
+      background: #dc3545;
+      color: white;
+    }
+
+    .btn-danger:hover {
+      background: #c82333;
     }
 
     /* Print styles */
@@ -504,22 +626,37 @@ if ($order_data['total_amount'] > 0) {
     <div class="receipt-title">ORDER RECEIPT</div>
   </div>
   
+  <?php if ($is_toyyibpay_response || $order['order_status']): ?>
+  <div class="status-banner <?= $status_class ?>">
+    <?= htmlspecialchars($status_display) ?>
+    <?php if ($order['transaction_id']): ?>
+      <br><small>Transaction ID: <?= htmlspecialchars($order['transaction_id']) ?></small>
+    <?php endif; ?>
+  </div>
+  <?php endif; ?>
+  
   <div class="receipt-content">
     <div class="customer-section">
       <div class="customer-info">
-        <h3><?=htmlspecialchars($order['customer_name'])?></h3>
+       <h3><?= htmlspecialchars($order['customer_name'] ?? '') ?></h3>
+
         <p><?=htmlspecialchars($order['email'])?></p>
+        <?php if ($order['phone']): ?>
+          <p><?=htmlspecialchars($order['phone'])?></p>
+        <?php endif; ?>
       </div>
       <div class="order-info">
-        <div class="order-id">Order #<?=htmlspecialchars($order['id'])?></div>
-        <div class="order-date"><?=date('F j, Y', strtotime($order['order_date']))?></div>
+        <div class="order-id">Order #ORDER_<?=htmlspecialchars($order['id'])?></div>
+        <div class="order-date"><?=date('F j, Y g:i A', strtotime($order['order_date']))?></div>
+        <?php if ($order['order_type']): ?>
+          <div class="order-type">Type: <?=htmlspecialchars($order['order_type'])?></div>
+        <?php endif; ?>
       </div>
     </div>
     
     <?php if (!empty($order['payment_method'])): ?>
     <div class="payment-info">
       <h4>Payment Method: <?=htmlspecialchars(ucfirst($order['payment_method']))?></h4>
-      <p><?=htmlspecialchars($order['payment_details'])?></p>
     </div>
     <?php endif; ?>
     
@@ -576,11 +713,35 @@ if ($order_data['total_amount'] > 0) {
       
       <div class="action-buttons">
         <button class="btn btn-primary" onclick="window.print()">Print Receipt</button>
+        
+        <?php if ($is_toyyibpay_response && $toyyibpay_status === 'failed'): ?>
+          <a href="payment.php" class="btn btn-danger">Try Payment Again</a>
+        <?php endif; ?>
+        
+        <?php if ($is_toyyibpay_response && $toyyibpay_status === 'success'): ?>
+          <a href="menu.php" class="btn btn-success">Continue Shopping</a>
+        <?php else: ?>
+          <a href="menu.php" class="btn btn-secondary">Continue Shopping</a>
+        <?php endif; ?>
+        
         <a href="index.php" class="btn btn-secondary">Back to Home</a>
       </div>
     </div>
   </div>
 </div>
+
+<script>
+// Auto-redirect on success after 8 seconds (only for ToyyibPay success responses)
+<?php if ($is_toyyibpay_response && $toyyibpay_status === 'success'): ?>
+setTimeout(function() {
+    // Remove ToyyibPay parameters to show clean receipt on refresh
+    if (window.history.replaceState) {
+        const cleanUrl = window.location.pathname + '?order_id=ORDER_<?= $order['id'] ?>';
+        window.history.replaceState(null, '', cleanUrl);
+    }
+}, 8000);
+<?php endif; ?>
+</script>
 
 </body>
 </html>

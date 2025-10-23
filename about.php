@@ -190,15 +190,15 @@ include 'navbar.php';
 
         /* Smooth fading between images */
         @keyframes walk-fade {
-            0% { background-image: url('images/boss2.jpg'); opacity: 1; }
+            0% { background-image: url('images/gb.jpg'); opacity: 1; }
             20% { opacity: 1; }
-            25% { opacity: 0; background-image: url('images/boss.jpg'); }
+            25% { opacity: 0; background-image: url('images/gbkids.jpg'); }
             45% { opacity: 1; }
-            50% { opacity: 0; background-image: url('images/boss3.jpg'); }
+            50% { opacity: 0; background-image: url('images/gb3.jpg'); }
             70% { opacity: 1; }
-            75% { opacity: 0; background-image: url('images/boss4.jpg'); }
+            75% { opacity: 0; background-image: url('images/gb4.jpg'); }
             95% { opacity: 1; }
-            100% { opacity: 0; background-image: url('images/boss1.jpg'); }
+            100% { opacity: 0; background-image: url('images/gb5.jpg'); }
         }
 
 
@@ -273,7 +273,7 @@ include 'navbar.php';
 
     <div class="image-section">
         <div class="image-main-container">
-            <img src="images/boss2.jpg" alt="Founder looking thoughtfully" class="image-main">
+            <img src="images/gb1.jpg" alt="Founder looking thoughtfully" class="image-main">
         </div>
         
         <div class="image-walking-container">
@@ -285,8 +285,7 @@ include 'navbar.php';
         <h2 class="heading-medium">Brewing Connections
 <br>That Inspire <br> Every Sip</h2>
         <p class="body-text">
-            At Arjuna n Co-ffee, we believe a cup of coffee is more than a drink — it’s a story of passion, craft, and connection.
-            Behind every blend is Arjuna, our founder, whose vision is to create moments that comfort, energize, and bring people together — one intentional brew at a time.
+            At Arjuna n Co-ffee, we’re two sisters with one dream — to share our love for coffee with the world. Every cup we brew carries our story of passion, warmth, and togetherness. From sourcing beans to crafting each blend, we pour our hearts into creating coffee that comforts, energizes, and connects people — one meaningful sip at a time.
         </p>
         <a href="contact_us.php" class="button-primary">CONTACT US</a>
     </div>

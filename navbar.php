@@ -49,7 +49,7 @@ echo "<!-- Session role: " . ($_SESSION['role'] ?? 'none') . " -->";
 
     <div class="icon-section">
         <a href="login.php" title="Login"><i class="fa-regular fa-user"></i></a>
-        <a href="search.php" title="Search"><i class="fa-solid fa-magnifying-glass"></i></a>
+       
         <a href="javascript:void(0)" onclick="openCartSidebar()" title="Cart"><i class="fa-solid fa-cart-shopping"></i></a>
     </div>
 </header>

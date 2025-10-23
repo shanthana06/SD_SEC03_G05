@@ -43,6 +43,14 @@ if (isset($_POST['add'])) {
 // Handle delete request
 if (isset($_GET['delete'])) {
     $delete_id = intval($_GET['delete']);
+    
+    // Get image name before deleting to remove file
+    $result = mysqli_query($conn, "SELECT image FROM menu_items WHERE id = $delete_id");
+    $row = mysqli_fetch_assoc($result);
+    if ($row['image'] && file_exists("uploads/" . $row['image'])) {
+        unlink("uploads/" . $row['image']);
+    }
+    
     mysqli_query($conn, "DELETE FROM menu_items WHERE id = $delete_id");
     header("Location: menu_list_staff.php?msg=deleted");
     exit;
@@ -58,13 +66,54 @@ if (isset($_POST['update'])) {
     $description = mysqli_real_escape_string($conn, $_POST['description']);
     $category = mysqli_real_escape_string($conn, $_POST['category']);
 
-    mysqli_query($conn, "UPDATE menu_items SET name='$name', price='$price', description='$description', category='$category' WHERE id=$id");
-    header("Location: menu_list_staff.php?msg=updated");
-    exit;
+    // Handle image upload for update
+    $imageUpdate = "";
+    if (!empty($_FILES['image']['name'])) {
+        $imageName = time() . "_" . basename($_FILES['image']['name']);
+        $target = "uploads/" . $imageName;
+
+        if (!is_dir("uploads")) {
+            mkdir("uploads", 0777, true);
+        }
+
+        // Delete old image if exists
+        $oldImageResult = mysqli_query($conn, "SELECT image FROM menu_items WHERE id = $id");
+        $oldImageRow = mysqli_fetch_assoc($oldImageResult);
+        if ($oldImageRow['image'] && file_exists("uploads/" . $oldImageRow['image'])) {
+            unlink("uploads/" . $oldImageRow['image']);
+        }
+
+        // Upload new image
+        if (move_uploaded_file($_FILES['image']['tmp_name'], $target)) {
+            $imageUpdate = ", image = '$imageName'";
+        }
+    }
+
+    $sql = "UPDATE menu_items SET 
+            name = '$name', 
+            price = '$price', 
+            description = '$description', 
+            category = '$category'
+            $imageUpdate 
+            WHERE id = $id";
+
+    if (mysqli_query($conn, $sql)) {
+        header("Location: menu_list_staff.php?msg=updated");
+        exit;
+    } else {
+        echo "Error: " . mysqli_error($conn);
+    }
 }
 
 // Fetch menu items
 $result = mysqli_query($conn, "SELECT * FROM menu_items ORDER BY id ASC");
+
+// Fetch current edit item data if in edit mode
+$edit_item = null;
+if ($edit_id > 0) {
+    $edit_result = mysqli_query($conn, "SELECT * FROM menu_items WHERE id = $edit_id");
+    $edit_item = mysqli_fetch_assoc($edit_result);
+}
 ?>
 
 <!DOCTYPE html>
@@ -79,6 +128,7 @@ $result = mysqli_query($conn, "SELECT * FROM menu_items ORDER BY id ASC");
   <!-- Elegant Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,500&family=Cormorant+Garamond:wght@300;400;700&family=Parisienne&family=Lora&display=swap" rel="stylesheet">
   <style>
+    /* Your existing CSS styles remain the same */
     :root {
       --primary-color: #1a1a1a;
       --secondary-color: #4a4a4a;
@@ -376,6 +426,19 @@ $result = mysqli_query($conn, "SELECT * FROM menu_items ORDER BY id ASC");
       border: 1px solid var(--border-color);
     }
     
+    .current-image {
+      max-width: 100px;
+      margin-bottom: 10px;
+      border-radius: 4px;
+    }
+    
+    .image-preview {
+      max-width: 100px;
+      margin-top: 10px;
+      border-radius: 4px;
+      display: none;
+    }
+    
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(-10px); }
       to { opacity: 1; transform: translateY(0); }
@@ -437,20 +500,21 @@ $result = mysqli_query($conn, "SELECT * FROM menu_items ORDER BY id ASC");
           <textarea class="form-control" id="description" name="description" rows="3" required></textarea>
         </div>
         
-        <!-- Category Selection Buttons - Simple addition -->
+        <!-- Category Selection Buttons - Changed Coffee to Drinks -->
         <div class="mb-3">
           <label class="form-label">Category</label>
           <div class="category-btn-group">
-            <button type="button" class="category-btn active" data-category="coffee">Coffee</button>
+            <button type="button" class="category-btn active" data-category="drinks">Drinks</button>
             <button type="button" class="category-btn" data-category="food">Food</button>
             <button type="button" class="category-btn" data-category="dessert">Dessert</button>
           </div>
-          <input type="hidden" id="category" name="category" value="coffee" required>
+          <input type="hidden" id="category" name="category" value="drinks" required>
         </div>
         
         <div class="mb-4">
           <label for="image" class="form-label">Item Image</label>
           <input type="file" class="form-control" id="image" name="image" accept="image/*">
+          <img id="addImagePreview" class="image-preview" src="" alt="Preview">
         </div>
         
         <div class="d-flex gap-2">
@@ -498,7 +562,9 @@ $result = mysqli_query($conn, "SELECT * FROM menu_items ORDER BY id ASC");
         // Reset result pointer to start
         mysqli_data_seek($result, 0);
         while ($row = mysqli_fetch_assoc($result)) { 
-          $category = isset($row['category']) ? $row['category'] : 'coffee';
+          $category = isset($row['category']) ? $row['category'] : 'drinks';
+          // Handle legacy 'coffee' category by displaying as 'drinks'
+          $display_category = ($category == 'coffee') ? 'drinks' : $category;
         ?>
           <tr>
             <td><?= $row['id']; ?></td>
@@ -512,16 +578,30 @@ $result = mysqli_query($conn, "SELECT * FROM menu_items ORDER BY id ASC");
 
             <?php if ($row['id'] == $edit_id) { ?>
               <!-- Edit Mode -->
-              <form method="POST">
+              <form method="POST" enctype="multipart/form-data">
                 <td><input type="text" name="name" value="<?= $row['name']; ?>" class="form-control" required></td>
                 <td><input type="number" step="0.01" name="price" value="<?= $row['price']; ?>" class="form-control" required></td>
                 <td><input type="text" name="description" value="<?= $row['description']; ?>" class="form-control" required></td>
                 <td>
                   <select name="category" class="form-control" required>
-                    <option value="coffee" <?= $category == 'coffee' ? 'selected' : '' ?>>Coffee</option>
+                    <option value="drinks" <?= ($category == 'coffee' || $category == 'drinks') ? 'selected' : '' ?>>Drinks</option>
                     <option value="food" <?= $category == 'food' ? 'selected' : '' ?>>Food</option>
                     <option value="dessert" <?= $category == 'dessert' ? 'selected' : '' ?>>Dessert</option>
                   </select>
+                </td>
+                <td>
+                  <!-- Image Upload in Edit Mode -->
+                  <div class="mb-2">
+                    <?php if ($row['image']) { ?>
+                      <div>Current Image:</div>
+                      <img src="uploads/<?= $row['image']; ?>" class="current-image">
+                    <?php } ?>
+                  </div>
+                  <div>
+                    <label class="form-label small">Change Image:</label>
+                    <input type="file" name="image" class="form-control form-control-sm" accept="image/*">
+                    <img id="editImagePreview" class="image-preview" src="" alt="Preview">
+                  </div>
                 </td>
                 <td>
                   <div class="action-buttons">
@@ -537,7 +617,7 @@ $result = mysqli_query($conn, "SELECT * FROM menu_items ORDER BY id ASC");
               <td><?= number_format($row['price'], 2); ?></td>
               <td><?= htmlspecialchars($row['description']); ?></td>
               <td>
-                <span class="category-badge"><?= ucfirst($category) ?></span>
+                <span class="category-badge"><?= ucfirst($display_category) ?></span>
               </td>
               <td>
                 <div class="action-buttons">
@@ -572,7 +652,7 @@ $result = mysqli_query($conn, "SELECT * FROM menu_items ORDER BY id ASC");
     document.getElementById('toggleFormBtn').textContent = '+ Add New Menu Item';
   });
 
-  // Category button selection - Simple addition
+  // Category button selection
   document.querySelectorAll('.category-btn').forEach(btn => {
     btn.addEventListener('click', function() {
       // Remove active class from all buttons
@@ -584,6 +664,34 @@ $result = mysqli_query($conn, "SELECT * FROM menu_items ORDER BY id ASC");
       // Update hidden input value
       document.getElementById('category').value = this.dataset.category;
     });
+  });
+
+  // Image preview for add form
+  document.getElementById('image').addEventListener('change', function(e) {
+    const preview = document.getElementById('addImagePreview');
+    if (this.files && this.files[0]) {
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        preview.src = e.target.result;
+        preview.style.display = 'block';
+      }
+      reader.readAsDataURL(this.files[0]);
+    }
+  });
+
+  // Image preview for edit form
+  document.addEventListener('change', function(e) {
+    if (e.target && e.target.name === 'image' && e.target.form && e.target.form.method === 'post') {
+      const preview = e.target.form.querySelector('.image-preview');
+      if (e.target.files && e.target.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          preview.src = e.target.result;
+          preview.style.display = 'block';
+        }
+        reader.readAsDataURL(e.target.files[0]);
+      }
+    }
   });
 </script>
 

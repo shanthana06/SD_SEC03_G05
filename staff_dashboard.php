@@ -238,8 +238,8 @@ $debugData = $debugResult->fetch_assoc();
 
 <!-- 🌸 Sidebar (Staff-specific menu) -->
 <div class="sidebar" id="sidebar">
-    <a href="add_menu_staff.php">Add Menu</a>
-    <a href="menu_list_staff.php">Edit Menu</a>
+    
+    <a href="menu_list_staff.php">Add & Edit Menu</a>
     <a href="menu_list_staff.php">Delete Menu</a>
     <a href="customer_list.php">Edit Customer</a>
     <a href="view_feedback.php">View Feedback</a>
