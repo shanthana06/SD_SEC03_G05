@@ -228,7 +228,7 @@ function closeCartSidebar() {
     cartOverlay.style.display = 'none';
 }
 
-// FIX: Listen for cart updates from menu page
+
 window.addEventListener("message", function(event) {
     if (event.data === "close-cart") {
         closeCartSidebar();
