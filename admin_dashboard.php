@@ -1,36 +1,36 @@
 <?php
-// dashboard.php
+
 session_start();
 
 include 'db.php';
 include 'navbar.php';
 
-// --- Access control ---
+
 if (!isset($_SESSION['role']) || !in_array($_SESSION['role'], ['staff', 'admin'])) {
     echo '<div class="text-center mt-5">⚠ Access denied. Staff/Admin only.</div>';
     exit;
 }
 
-// --- Initialize variables ---
+
 $totalSales = 0;
 $totalOrders = 0;
 $pendingOrders = 0;
 $completedOrders = 0;
 $newCustomers = 0;
 
-// --- Total Sales & Total Payment Count ---
+
 $sql = "SELECT 
             SUM(amount) AS totalSales, 
             COUNT(*) AS totalOrders 
         FROM payments 
-        WHERE payment_date IS NOT NULL"; // REMOVED STATUS FILTER
+        WHERE payment_date IS NOT NULL";
 $result = $conn->query($sql);
 if ($row = $result->fetch_assoc()) {
     $totalSales = $row['totalSales'] ?? 0;
     $totalOrders = $row['totalOrders'] ?? 0;
 }
 
-// --- Pending & Completed Order Counts (from orders table) ---
+
 $sql = "SELECT 
             SUM(CASE WHEN status='Pending' THEN 1 ELSE 0 END) AS pending,
             SUM(CASE WHEN status='Completed' THEN 1 ELSE 0 END) AS completed
@@ -41,7 +41,7 @@ if ($row = $result->fetch_assoc()) {
     $completedOrders = $row['completed'] ?? 0;
 }
 
-// --- Daily Sales for Chart ---
+
 $sql = "SELECT 
             DATE(payment_date) AS order_date, 
             SUM(amount) AS total_sales
@@ -49,7 +49,7 @@ $sql = "SELECT
         WHERE payment_date IS NOT NULL 
         GROUP BY DATE(payment_date)
         ORDER BY order_date DESC
-        LIMIT 30"; // Show last 30 days
+        LIMIT 30";
 $resultSales = $conn->query($sql);
 
 $days = [];
@@ -59,12 +59,12 @@ if ($resultSales && $resultSales->num_rows > 0) {
         $days[] = $row['order_date'];
         $dailySales[] = (float)$row['total_sales'];
     }
-    // Reverse to show oldest to newest
+    
     $days = array_reverse($days);
     $dailySales = array_reverse($dailySales);
 }
 
-// --- New Customers (today only) ---
+
 $sql = "SELECT COUNT(*) AS newCustomers 
         FROM users 
         WHERE DATE(created_at) = CURDATE()";
@@ -73,7 +73,6 @@ if ($row = $result->fetch_assoc()) {
     $newCustomers = $row['newCustomers'] ?? 0;
 }
 
-// --- Debug: Check if we have any payment data ---
 $debugSql = "SELECT COUNT(*) as total_payments, 
                     MIN(payment_date) as first_payment,
                     MAX(payment_date) as last_payment
@@ -92,11 +91,11 @@ $debugData = $debugResult->fetch_assoc();
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <!-- Elegant Fonts -->
+  
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,500&family=Cormorant+Garamond:wght@300;400;700&family=Parisienne&family=Lora&display=swap" rel="stylesheet">
   
   <style>
-    /* Apply elegant fonts to entire page */
+   
     body {
       background-color: #f8f5f2;
       font-family: 'Cormorant Garamond', serif;
@@ -104,12 +103,12 @@ $debugData = $debugResult->fetch_assoc();
       font-weight: 400;
     }
 
-    /* Remove blur background */
+   
     .cart-bg-blur {
       display: none;
     }
 
-    /* Apply fonts to all elements */
+   
     h1, h2, h3, h4, h5, h6 {
       font-family: 'Playfair Display', serif;
       font-weight: 500;
@@ -359,7 +358,7 @@ $debugData = $debugResult->fetch_assoc();
     }
   }
 
-  // Close sidebar when clicking outside
+
   document.addEventListener('click', function(event) {
     if (sidebar.classList.contains('show') &&
         !sidebar.contains(event.target) &&
@@ -369,7 +368,6 @@ $debugData = $debugResult->fetch_assoc();
     }
   });
 
-  // Chart setup
   const days = <?= json_encode($days) ?>;
   const sales = <?= json_encode($dailySales) ?>;
 

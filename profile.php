@@ -115,7 +115,7 @@ $months = $interval->y * 12 + $interval->m;
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title><?php echo $edit_mode ? 'Edit Profile' : 'Profile'; ?> | Arjuna n Co-ffee</title>
+<title>Profile | Arjuna n Co-ffee</title>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Parisienne&family=Cormorant+Garamond:wght@300;400;700&display=swap" rel="stylesheet">
@@ -361,13 +361,19 @@ body, html {
     color: #333;
 }
 
-/* Alert styling */
+/* Alert styling - POSITIONED BELOW UPDATE BUTTON */
+.notification-container {
+    margin-top: 20px;
+    width: 100%;
+}
+
 .alert {
     padding: 15px 20px;
-    margin-bottom: 30px;
     border-radius: 0;
     font-family: 'Cormorant Garamond', serif;
     font-size: 1.1rem;
+    margin-bottom: 10px;
+    width: 100%;
 }
 
 .alert-danger {
@@ -429,18 +435,6 @@ body, html {
 
 
 <div class="profile-content">
-    <?php if(!empty($errors)): ?>
-        <div class="alert alert-danger">
-            <?php foreach($errors as $err) echo htmlspecialchars($err)."<br>"; ?>
-        </div>
-    <?php endif; ?>
-
-    <?php if(!empty($successMessages)): ?>
-        <div class="alert alert-success">
-            <?php foreach($successMessages as $msg) echo htmlspecialchars($msg)."<br>"; ?>
-        </div>
-    <?php endif; ?>
-
     <div class="profile-card">
         <?php if($edit_mode): ?>
             <!-- Edit Profile Form -->
@@ -469,6 +463,21 @@ body, html {
                 <div class="profile-actions">
                     <button type="submit" class="btn btn-primary">Update Profile</button>
                     <a href="profile.php" class="btn btn-outline">Cancel</a>
+                </div>
+
+                <!-- Notifications positioned below the Update Profile button -->
+                <div class="notification-container">
+                    <?php if(!empty($errors)): ?>
+                        <div class="alert alert-danger">
+                            <?php foreach($errors as $err) echo htmlspecialchars($err)."<br>"; ?>
+                        </div>
+                    <?php endif; ?>
+
+                    <?php if(!empty($successMessages)): ?>
+                        <div class="alert alert-success">
+                            <?php foreach($successMessages as $msg) echo htmlspecialchars($msg)."<br>"; ?>
+                        </div>
+                    <?php endif; ?>
                 </div>
             </form>
         <?php else: ?>

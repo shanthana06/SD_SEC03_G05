@@ -20,7 +20,7 @@ include 'navbar.php';
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Parisienne&family=Cormorant+Garamond:wght@300;400;700&display=swap" rel="stylesheet">
     <style>
-        /* --- General Reset & Variables (From About.php) --- */
+     
         :root {
             --color-background: #f5f3f0;
             --color-text-dark: #3a3a3a;
@@ -34,12 +34,12 @@ include 'navbar.php';
             font-family: var(--font-sans);
             margin: 0;
             padding: 0;
-            /* Flex layout for centering content, adjusted to allow header to be fixed */
+           
             display: flex;
             flex-direction: column; 
             align-items: center;
-            /* Ensure content starts below the fixed header */
-            padding-top: 80px; /* Adjust based on your header's actual height + padding */
+           
+            padding-top: 80px; 
             min-height: 100vh;
         }
         
@@ -48,7 +48,7 @@ include 'navbar.php';
             color: #caa472;
         }
         
-        /* Three-dot menu styles */
+       
         .menu-list {
             position: absolute;
             right: 0;
@@ -72,14 +72,14 @@ include 'navbar.php';
             color: #333;
             transition: background 0.3s;
             font-family: 'Cormorant Garamond', serif;
-            margin: 0; /* Resetting the nav a margin */
+            margin: 0; 
         }
 
         .menu-list a:hover {
             background: #f9f4ef;
         }
         
-        /* Inline styles moved to CSS */
+       
         .menu-btn {
             background: none; 
             border: none; 
@@ -93,9 +93,7 @@ include 'navbar.php';
             gap: 15px;
         }
         
-        /* --- About Page Content Styles (From about.php) --- */
-        
-        /* --- Main Layout: Grid System --- */
+  
         .marketing-hero {
             display: grid;
             grid-template-columns: 1.5fr 2fr 2fr; 
@@ -126,7 +124,6 @@ include 'navbar.php';
             justify-content: flex-start;
         }
 
-        /* --- Typography (Fonts & Sizes) --- */
         .heading-large {
             font-family: var(--font-serif);
             font-weight: 300;
@@ -154,7 +151,7 @@ include 'navbar.php';
             margin-bottom: 40px;
         }
 
-        /* --- Image Styling & Overlap --- */
+      
         .image-section {
             position: relative;
         }
@@ -166,7 +163,7 @@ include 'navbar.php';
             object-fit: cover;
         }
 
-        /* --- Animated Image Container --- */
+   
         .image-walking-container {
             position: absolute;
             top: 25%; 
@@ -188,7 +185,7 @@ include 'navbar.php';
             animation: walk-fade 16s infinite ease-in-out;
         }
 
-        /* Smooth fading between images */
+        
         @keyframes walk-fade {
             0% { background-image: url('images/gb.jpg'); opacity: 1; }
             20% { opacity: 1; }
@@ -202,7 +199,7 @@ include 'navbar.php';
         }
 
 
-        /* --- Button Style --- */
+       
         .button-primary {
             display: inline-block;
             padding: 12px 30px;
@@ -221,7 +218,7 @@ include 'navbar.php';
             color: var(--color-background);
         }
 
-        /* --- Responsiveness (Combined) --- */
+       
         @media (max-width: 1024px) {
             .marketing-hero {
                 grid-template-columns: 1fr;
@@ -287,22 +284,22 @@ include 'navbar.php';
         <p class="body-text">
             At Arjuna n Co-ffee, we’re two sisters with one dream — to share our love for coffee with the world. Every cup we brew carries our story of passion, warmth, and togetherness. From sourcing beans to crafting each blend, we pour our hearts into creating coffee that comforts, energizes, and connects people — one meaningful sip at a time.
         </p>
-        <a href="contact_us.php" class="button-primary">CONTACT US</a>
+        <a href="contact_us.php" class="button-primary">GIVE FEEDBACK</a>
     </div>
 
 </div>
 <script>
-// Navbar Script for the three-dot menu
+
 function toggleMenu() {
     const menu = document.getElementById("menuList");
     menu.classList.toggle("show");
 }
 
 window.addEventListener('click', function(e) {
-    // Check if the click is outside the .menu container
+   
     if (!e.target.closest('.menu')) {
         const menu = document.getElementById("menuList");
-        // Only try to remove 'show' if the menu exists
+      
         if (menu && menu.classList.contains("show")) {
             menu.classList.remove("show");
         }

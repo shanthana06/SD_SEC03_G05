@@ -83,7 +83,7 @@ try {
 
 // Get your actual domain - FIXED: Use receipt.php as return URL
 $base_url = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]";
-$return_url = "http://localhost/arjunababy/receipt.php";
+$return_url = "https://arjunacoffee.infinityfreeapp.com/receipt.php";
 
 $callback_url = $base_url . '/toyyibpay-callback.php';
 

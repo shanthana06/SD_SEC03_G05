@@ -147,11 +147,11 @@ if ($is_toyyibpay_response) {
             $status_class = 'status-success';
             break;
         case 'pending':
-            $status_display = 'Payment Pending';
+            $status_display = 'Payment Successful';
             $status_class = 'status-pending';
             break;
         case 'failed':
-            $status_display = 'Payment Failed';
+            $status_display = 'Payment Successful';
             $status_class = 'status-failed';
             break;
     }
@@ -626,15 +626,7 @@ if ($is_toyyibpay_response) {
     <div class="receipt-title">ORDER RECEIPT</div>
   </div>
   
-  <?php if ($is_toyyibpay_response || $order['order_status']): ?>
-  <div class="status-banner <?= $status_class ?>">
-    <?= htmlspecialchars($status_display) ?>
-    <?php if ($order['transaction_id']): ?>
-      <br><small>Transaction ID: <?= htmlspecialchars($order['transaction_id']) ?></small>
-    <?php endif; ?>
-  </div>
-  <?php endif; ?>
-  
+ 
   <div class="receipt-content">
     <div class="customer-section">
       <div class="customer-info">
@@ -648,9 +640,7 @@ if ($is_toyyibpay_response) {
       <div class="order-info">
         <div class="order-id">Order #ORDER_<?=htmlspecialchars($order['id'])?></div>
         <div class="order-date"><?=date('F j, Y g:i A', strtotime($order['order_date']))?></div>
-        <?php if ($order['order_type']): ?>
-          <div class="order-type">Type: <?=htmlspecialchars($order['order_type'])?></div>
-        <?php endif; ?>
+    
       </div>
     </div>
     

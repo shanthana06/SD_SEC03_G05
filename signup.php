@@ -80,7 +80,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                             $mail->isHTML(true);
                             $mail->Subject = 'Verify Your Arjuna n Co-ffee Account';
-                            $verification_link = "http://localhost/arjunababy/verify.php?token=" . $token;
+                           $verification_link = "https://arjunacoffee.infinityfreeapp.com/verify.php?token=" . $token;
+
 
                             $mail->Body    = "Hi $name,<br><br>
                                 Thank you for signing up! Please verify your account by clicking the link below:<br>

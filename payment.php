@@ -1,5 +1,5 @@
 <?php
-// payment.php - COMPLETELY FIXED VERSION
+// payment.php - UPDATED WITH TNG EWALLET INTEGRATION
 session_start();
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
@@ -25,6 +25,9 @@ $success = false;
 define('TOYYIBPAY_USER_SECRET_KEY', '5ym2mcoj-yc0r-6dx4-7984-h6yrha3f21pn');
 define('TOYYIBPAY_CATEGORY_CODE', 'ijmycgdi');
 define('TOYYIBPAY_BASE_URL', 'https://toyyibpay.com/');
+
+// TNG eWallet Configuration
+define('TNG_EWALLET_URL', 'https://payment.tngdigital.com.my/sc/bDLokHK3Pz');
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $method = $_POST['payment_type'] ?? '';
@@ -99,21 +102,35 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         case 'ewallet':
             $wallet = $_POST['ewallet'] ?? '';
             $ewallet_phone = $_POST['ewallet_phone'] ?? '';
+            $tng_phone = $_POST['tng_phone'] ?? '';
             
             if (empty($wallet)) {
                 $errors[] = "Please select an e-wallet.";
             }
             
-            if (empty($ewallet_phone)) {
-                $errors[] = "E-wallet phone number is required.";
-            } else {
-                $cleanedEwalletPhone = preg_replace('/[^0-9]/', '', $ewallet_phone);
-                if (strlen($cleanedEwalletPhone) < 10 || strlen($cleanedEwalletPhone) > 11) {
-                    $errors[] = "Invalid e-wallet phone number. Must be 10-11 digits starting with 01.";
+            if ($wallet === 'tng') {
+                // TNG eWallet validation
+                if (empty($tng_phone)) {
+                    $errors[] = "TNG eWallet phone number is required.";
+                } else {
+                    $cleanedTngPhone = preg_replace('/[^0-9]/', '', $tng_phone);
+                    if (strlen($cleanedTngPhone) < 10 || strlen($cleanedTngPhone) > 11) {
+                        $errors[] = "Invalid TNG phone number. Must be 10-11 digits starting with 01.";
+                    }
                 }
+                $details = "TNG eWallet, Phone: $tng_phone, Payment Link: " . TNG_EWALLET_URL;
+            } else {
+                // Other e-wallets validation
+                if (empty($ewallet_phone)) {
+                    $errors[] = "E-wallet phone number is required.";
+                } else {
+                    $cleanedEwalletPhone = preg_replace('/[^0-9]/', '', $ewallet_phone);
+                    if (strlen($cleanedEwalletPhone) < 10 || strlen($cleanedEwalletPhone) > 11) {
+                        $errors[] = "Invalid e-wallet phone number. Must be 10-11 digits starting with 01.";
+                    }
+                }
+                $details = "Wallet: $wallet, Phone: $ewallet_phone";
             }
-            
-            $details = "Wallet: $wallet, Phone: $ewallet_phone";
             break;
             
         case 'toyyibpay':
@@ -139,8 +156,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         }
 
-        // Handle ToyyibPay separately
-        if ($method === 'toyyibpay') {
+        // Handle e-wallet payments (including TNG)
+        if ($method === 'ewallet') {
             if ($conn instanceof mysqli) {
                 $conn->begin_transaction();
             }
@@ -204,7 +221,118 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $payment_id = $conn->insert_id;
                 $stmt_payment->close();
                 
-                // FIXED: Update user phone using correct column name (user_id)
+                // Update user phone
+                if (!empty($phone)) {
+                    $stmt_update_phone = $conn->prepare("UPDATE users SET phone = ? WHERE user_id = ?");
+                    $stmt_update_phone->bind_param("si", $phone, $user_id);
+                    $stmt_update_phone->execute();
+                    $stmt_update_phone->close();
+                }
+                
+                // Commit transaction
+                if ($conn instanceof mysqli) {
+                    $conn->commit();
+                }
+                
+                // Store order ID in session
+                $_SESSION['last_order_id'] = $order_id;
+                $_SESSION['payment_id'] = $payment_id;
+                $_SESSION['email'] = $email;
+                $_SESSION['phone'] = $phone;
+                
+                // For TNG eWallet, store additional info
+                if ($wallet === 'tng') {
+                    $_SESSION['tng_order_id'] = $order_id;
+                    $_SESSION['tng_phone'] = $tng_phone;
+                    $_SESSION['tng_amount'] = $total_amount;
+                }
+                
+                // Clear cart
+                $_SESSION['cart'] = [];
+                
+                // Redirect based on e-wallet type
+                if ($wallet === 'tng') {
+                    header("Location: tng-payment.php?order_id=" . $order_id);
+                } else {
+                    header("Location: receipt.php?order_id=" . $order_id);
+                }
+                exit;
+                
+            } catch (Exception $e) {
+                if ($conn instanceof mysqli) {
+                    $conn->rollback();
+                }
+                $errors[] = "Database error: " . $e->getMessage();
+                error_log("E-Wallet Order Error: " . $e->getMessage());
+            }
+        }
+        // Handle ToyyibPay separately
+        elseif ($method === 'toyyibpay') {
+            // ... (keep your existing toyyibpay code) ...
+            if ($conn instanceof mysqli) {
+                $conn->begin_transaction();
+            }
+            
+            try {
+                // Insert into orders with pending status
+                $stmt_order = $conn->prepare("
+                    INSERT INTO orders (user_id, order_type, order_note, status, total_amount, created_at)
+                    VALUES (?, ?, ?, 'Pending Payment', ?, NOW())
+                ");
+                
+                if (!$stmt_order) {
+                    throw new Exception("Order preparation failed: " . $conn->error);
+                }
+                
+                $stmt_order->bind_param("issd", $user_id, $order_type, $order_note, $total_amount);
+                
+                if (!$stmt_order->execute()) {
+                    throw new Exception("Order execution failed: " . $stmt_order->error);
+                }
+                
+                $order_id = $conn->insert_id;
+                $stmt_order->close();
+
+                // Insert order items
+                if (isset($_SESSION['cart']) && !empty($_SESSION['cart'])) {
+                    $stmt_items = $conn->prepare("
+                        INSERT INTO order_items (order_id, product_name, quantity, price)
+                        VALUES (?, ?, ?, ?)
+                    ");
+                    
+                    if (!$stmt_items) {
+                        throw new Exception("Order items preparation failed: " . $conn->error);
+                    }
+                    
+                    foreach ($_SESSION['cart'] as $item) {
+                        $stmt_items->bind_param("isid", $order_id, $item['name'], $item['quantity'], $item['price']);
+                        if (!$stmt_items->execute()) {
+                            throw new Exception("Order items execution failed: " . $stmt_items->error);
+                        }
+                    }
+                    $stmt_items->close();
+                }
+
+                // Insert into payments with pending status
+                $stmt_payment = $conn->prepare("
+                    INSERT INTO payments (order_id, user_id, payment_type, payment_details, amount, status, payment_date)
+                    VALUES (?, ?, ?, ?, ?, 'pending', NOW())
+                ");
+                
+                if (!$stmt_payment) {
+                    throw new Exception("Payment preparation failed: " . $conn->error);
+                }
+                
+                $stmt_payment->bind_param("isssd", $order_id, $user_id, $method, $details, $total_amount);
+
+                if (!$stmt_payment->execute()) {
+                    throw new Exception("Payment execution failed: " . $stmt_payment->error);
+                }
+                
+                $payment_id = $conn->insert_id;
+                $stmt_payment->close();
+                
+                // Update user phone
                 if (!empty($phone)) {
                     $stmt_update_phone = $conn->prepare("UPDATE users SET phone = ? WHERE user_id = ?");
                     $stmt_update_phone->bind_param("si", $phone, $user_id);
@@ -235,7 +363,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 error_log("ToyyibPay Order Error: " . $e->getMessage());
             }
         } else {
-            // Process other payment methods
+            // Process other payment methods (card, online, cash)
+            // ... (keep your existing code for other methods) ...
             $payment_successful = true;
             
             if (!$payment_successful) {
@@ -285,7 +414,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         $stmt_items->close();
                     }
 
-                    // FIXED: Update user phone using correct column name (user_id)
+                    // Update user phone
                     if (!empty($phone)) {
                         $stmt_update_phone = $conn->prepare("UPDATE users SET phone = ? WHERE user_id = ?");
                         $stmt_update_phone->bind_param("si", $phone, $user_id);
@@ -372,6 +501,9 @@ include 'navbar.php';
     @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     .d-none { display: none; }
     .toyyibpay-info { background: #f8f9fa; border-left: 4px solid #2a9d8f; padding: 15px; margin: 15px 0; }
+    .tng-section { background: #fff3cd; border-left: 4px solid #ffc107; padding: 15px; margin: 15px 0; border-radius: 4px; }
+    .btn-tng { background: #ffc107; border: none; color: #000; font-weight: bold; }
+    .btn-tng:hover { background: #e0a800; color: #000; }
   </style>
 </head>
 <body>
@@ -426,8 +558,7 @@ include 'navbar.php';
           <div class="custom-select-wrapper">
             <select class="form-select" name="payment_type" id="payment-type" required>
               <option value="">-- Choose Payment Method --</option>
-              <option value="card" <?= ($_POST['payment_type'] ?? '') === 'card' ? 'selected' : '' ?>>Credit / Debit Card</option>
-              <option value="online" <?= ($_POST['payment_type'] ?? '') === 'online' ? 'selected' : '' ?>>Online Banking</option>
+              
               <option value="ewallet" <?= ($_POST['payment_type'] ?? '') === 'ewallet' ? 'selected' : '' ?>>E-Wallet</option>
               <option value="toyyibpay" <?= ($_POST['payment_type'] ?? '') === 'toyyibpay' ? 'selected' : '' ?>>ToyyibPay (FPX & E-Wallet)</option>
               <option value="cash" <?= ($_POST['payment_type'] ?? '') === 'cash' ? 'selected' : '' ?>>Cash</option>
@@ -482,17 +613,36 @@ include 'navbar.php';
         <div id="ewallet-section" class="d-none">
           <div class="mb-3">
             <label class="form-label">Select E-Wallet *</label>
-            <select class="form-select" name="ewallet">
+            <select class="form-select" name="ewallet" id="ewallet-select">
               <option value="">-- Choose E-Wallet --</option>
-              <option value="touchngo" <?= ($_POST['ewallet'] ?? '') === 'touchngo' ? 'selected' : '' ?>>Touch 'n Go</option>
-              <option value="grabpay" <?= ($_POST['ewallet'] ?? '') === 'grabpay' ? 'selected' : '' ?>>GrabPay</option>
-              <option value="boost" <?= ($_POST['ewallet'] ?? '') === 'boost' ? 'selected' : '' ?>>Boost</option>
+              <option value="tng" <?= ($_POST['ewallet'] ?? '') === 'tng' ? 'selected' : '' ?>>Touch 'n Go eWallet</option>
+            
             </select>
           </div>
-          <div class="mb-3">
-            <label class="form-label">E-Wallet Phone Number *</label>
-            <input type="tel" name="ewallet_phone" class="form-control" placeholder="01X-XXXX XXXX" 
-                   value="<?= htmlspecialchars($_POST['ewallet_phone'] ?? '') ?>">
+
+          <!-- TNG eWallet Specific Section -->
+          <div id="tng-specific" class="tng-section d-none">
+            <h6>Touch 'n Go eWallet</h6>
+            <div class="mb-3">
+              <label class="form-label">TNG Phone Number *</label>
+              <input type="tel" name="tng_phone" class="form-control" placeholder="01X-XXXX XXXX" 
+                     value="<?= htmlspecialchars($_POST['tng_phone'] ?? '') ?>">
+            </div>
+            <div class="alert alert-info">
+              <strong>Note:</strong> After submitting, you will be redirected to Touch 'n Go eWallet to complete your payment.
+            </div>
+          </div>
+
+          <!-- Other E-Wallets Section -->
+          <div id="other-ewallet" class="d-none">
+            <div class="mb-3">
+              <label class="form-label">E-Wallet Phone Number *</label>
+              <input type="tel" name="ewallet_phone" class="form-control" placeholder="01X-XXXX XXXX" 
+                     value="<?= htmlspecialchars($_POST['ewallet_phone'] ?? '') ?>">
+            </div>
+            <div class="alert alert-warning">
+              For GrabPay and Boost payments, we will contact you with payment instructions after order submission.
+            </div>
           </div>
         </div>
 
@@ -554,20 +704,43 @@ include 'navbar.php';
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const paymentType = document.getElementById('payment-type');
+    const ewalletSelect = document.getElementById('ewallet-select');
+    const tngSection = document.getElementById('tng-specific');
+    const otherEwalletSection = document.getElementById('other-ewallet');
     const paymentForm = document.getElementById('payment-form');
     const payButton = document.getElementById('pay-button');
     const loadingOverlay = document.getElementById('loadingOverlay');
 
     function updatePaymentSections() {
+        // Hide all payment method sections
         document.querySelectorAll('[id$="-section"]').forEach(section => {
             section.classList.add('d-none');
         });
         
+        // Show selected payment method section
         if (paymentType.value) {
             const selectedSection = document.getElementById(paymentType.value + '-section');
             if (selectedSection) {
                 selectedSection.classList.remove('d-none');
             }
+        }
+        
+        // Handle e-wallet sub-sections
+        if (paymentType.value === 'ewallet') {
+            updateEwalletSections();
+        }
+    }
+
+    function updateEwalletSections() {
+        // Hide all e-wallet sub-sections
+        tngSection.classList.add('d-none');
+        otherEwalletSection.classList.add('d-none');
+        
+        // Show relevant e-wallet sub-section
+        if (ewalletSelect.value === 'tng') {
+            tngSection.classList.remove('d-none');
+        } else if (ewalletSelect.value && ewalletSelect.value !== 'tng') {
+            otherEwalletSection.classList.remove('d-none');
         }
     }
 
@@ -576,6 +749,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Update when user changes payment method
     paymentType.addEventListener('change', updatePaymentSections);
+
+    // Update when user changes e-wallet type
+    ewalletSelect.addEventListener('change', updateEwalletSections);
 
     // Show loading overlay on submit
     paymentForm.addEventListener('submit', function() {

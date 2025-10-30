@@ -80,7 +80,7 @@ body, html {
     line-height: 1.6;
 }
 
-/* Header styling */
+
 .contact-header {
     padding: 40px 20px 20px;
     text-align: center;
@@ -95,14 +95,14 @@ body, html {
     color: #333;
 }
 
-/* Main content area */
+
 .contact-content {
     max-width: 700px;
     margin: 0 auto;
     padding: 40px 20px;
 }
 
-/* Contact card */
+
 .contact-card {
     background: white;
     padding: 40px 30px;
@@ -110,7 +110,7 @@ body, html {
     position: relative;
 }
 
-/* Section headers */
+
 .section-header {
     font-family: 'Playfair Display', serif;
     font-size: 1.8rem;
@@ -128,7 +128,7 @@ body, html {
     font-size: 1.1rem;
 }
 
-/* Form styling */
+
 .form-group {
     margin-bottom: 25px;
 }
@@ -163,7 +163,6 @@ textarea.form-control {
     min-height: 150px;
 }
 
-/* Action buttons */
 .contact-actions {
     display: flex;
     gap: 15px;
@@ -203,7 +202,7 @@ textarea.form-control {
     transform: translateY(-2px);
 }
 
-/* Footer */
+
 .contact-footer {
     text-align: center;
     margin-top: 60px;
@@ -222,7 +221,7 @@ textarea.form-control {
     text-decoration: underline;
 }
 
-/* Alert styling - Moved to bottom */
+
 .alert {
     padding: 15px 20px;
     margin: 30px 0;
@@ -245,7 +244,7 @@ textarea.form-control {
     margin-bottom: 20px;
 }
 
-/* Contact info */
+
 .contact-info {
     display: flex;
     justify-content: center;
@@ -271,13 +270,11 @@ textarea.form-control {
     font-size: 0.95rem;
 }
 
-/* Success message container */
 .success-container {
     margin-top: 40px;
     margin-bottom: 20px;
 }
 
-/* Responsive adjustments */
 @media (max-width: 768px) {
     .contact-actions {
         flex-direction: column;
@@ -303,7 +300,7 @@ textarea.form-control {
     }
 }
 
-/* Decorative elements */
+
 .decorative-line {
     height: 1px;
     background: linear-gradient(to right, transparent, rgba(0,0,0,0.1), transparent);
@@ -318,7 +315,7 @@ textarea.form-control {
 
 <div class="contact-content">
     <div class="contact-card">
-        <h2 class="section-header">Get In Touch</h2>
+        <h2 class="section-header">Get Your Feedback </h2>
         <p class="section-description">Have questions, suggestions, or feedback? We'd love to hear from you.</p>
 
         <?php if(!empty($errors)): ?>
@@ -368,7 +365,7 @@ textarea.form-control {
             </div>
             <div class="contact-item">
                 <i class="fas fa-clock"></i>
-                <span>Mon - Fri: 9AM - 6PM</span>
+                <span>Mon - Fri:11AM - 8PM</span>
             </div>
             <div class="contact-item">
                 <i class="fas fa-coffee"></i>

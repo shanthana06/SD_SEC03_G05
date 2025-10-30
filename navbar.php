@@ -35,7 +35,7 @@ echo "<!-- Session role: " . ($_SESSION['role'] ?? 'none') . " -->";
         <a href="index.php">Home</a>
         <a href="menu.php">Menu</a>
         <a href="about.php">About</a>
-        <a href="contact_us.php">Contact</a>
+        <a href="contact.php">Contact</a>
         <?php if (isset($_SESSION['role'])): ?>
             <?php if ($_SESSION['role'] === 'Customer'): ?>
                 <a href="customer_orders.php">My Orders</a>

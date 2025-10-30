@@ -346,7 +346,7 @@ $result = mysqli_query($conn, "SELECT user_id, name, email FROM users WHERE role
       margin-top: 5px;
     }
     
-    /* Password toggle styles */
+   
     .password-input-group {
       position: relative;
     }

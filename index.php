@@ -23,8 +23,8 @@ include 'navbar.php';
       background-color: #fcfbf9;
       color: #2d2d2d;
       overflow-x: hidden;
-      /* Add padding to account for fixed navbar */
       padding-top: 80px;
+      opacity: 1;
     }
 
     body[unresolved] {
@@ -130,8 +130,9 @@ include 'navbar.php';
       }
     }
 
+    /* Reduced section padding */
     section {
-      padding: 100px 10%;
+      padding: 60px 10%;
     }
 
     .about {
@@ -169,7 +170,7 @@ include 'navbar.php';
 footer {
   background: #f2ece6;
   text-align: center;
-  padding: 20px 40px 40px 40px; /* top, right, bottom, left */
+  padding: 20px 40px 40px 40px;
   font-size: 0.9rem;
   color: #7b6d5b;
 }
@@ -181,34 +182,38 @@ footer {
       background: url('images/coffee1.jpg') center/cover no-repeat;
     }
 
-    /* --- Center the text beautifully --- */
-    .text-overlay {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      text-align: center;
-      z-index: 10;
-      animation: fadeInText 1.5s ease-in-out;
-    }
+ .text-overlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  z-index: 10;
+  animation: fadeInText 1.5s ease-in-out;
+}
 
-    .text-overlay h2 {
-      font-family: 'Parisienne', cursive;
-      font-size: 3rem;
-      color: #f5f0c9;
-      letter-spacing: 2px;
-      margin: 0;
-    }
+.text-overlay h2 {
+  font-family: 'Parisienne', cursive;
+  font-size: 5rem;
+  color: #f5f0c9;
+  letter-spacing: 2px;
+  margin: 0 0 2rem 0;
+  padding: 0;
+  line-height: 1;
+  display: block;
+}
 
-    .text-overlay h1 {
-      font-family: 'Playfair Display', serif;
-      font-size: 6rem;
-      color: #f5f0c9;
-      letter-spacing: 3px;
-      margin: 0;
-    }
+.text-overlay h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: 10rem;
+  color: #f5f0c9;
+  letter-spacing: 3px;
+  margin: 0;
+  padding: 30px;
+  line-height: 1;
+  display: block;
+}
 
-    /* --- Fade animation --- */
     @keyframes fadeInText {
       from { opacity: 0; transform: translate(-50%, -55%); }
       to { opacity: 1; transform: translate(-50%, -50%); }
@@ -222,19 +227,9 @@ footer {
       background: url('images/scenery.jpg') center/cover no-repeat;
     }
 
-    .image-stack h2 {
-      position: absolute;
-      top: 12%;
-      left: 6%;
-      font-family: 'Parisienne', cursive;
-      font-size: 2.5rem;
-      color: #f5f0c9;
-      letter-spacing: 2px;
-    }
-
     .image-stack h1 {
       position: absolute;
-      top: 8%;
+      top: 10%;
       left: 15%;
       font-family: 'Playfair Display', serif;
       font-size: 5rem;
@@ -243,7 +238,7 @@ footer {
     }
 
     .text-overlay {
-      top: 40%; /* was 50% */
+      top: 40%;
     }
 
     .image-stack img {
@@ -258,18 +253,23 @@ footer {
       transform: scale(1);
     }
 
+    .img1 { top: 60%; left: 5%; width: 200px; }
+    .img2 { top: 45%; left: 30%; width: 300px; }
+    .img3 { top: 50%; right: 5%; width: 250px; }
+    .img4 { top: 20%; left: 10%; width: 220px; }
+    .img5 { top: 65%; left: 60%; width: 280px; }
+    .img6 { top: 25%; right: 15%; width: 240px; }
+
     .dreamy-section {
       width: 100%;
       background-color: #f9f7f3;
       display: flex;
       justify-content: center;
       align-items: center;
-      padding: 100px 0;
-      /* Reduced margin since we have navbar padding */
-      margin-top: 20px;
+      padding: 60px 0;
+      margin-top: 0;
     }
 
-    /* remove container limits, make it stretch fully */
     .dreamy-container {
       display: flex;
       flex-wrap: wrap;
@@ -280,7 +280,6 @@ footer {
       box-shadow: 0 10px 30px rgba(0,0,0,0.1);
     }
 
-    /* Left image */
     .dreamy-image {
       flex: 1;
       min-width: 300px;
@@ -294,7 +293,7 @@ footer {
       position: relative;
       text-align: center;
       background-color: #e8e8ef;
-      padding: 100px 20px;
+      padding: 60px 20px;
       overflow: hidden;
     }
 
@@ -353,11 +352,10 @@ footer {
             color: var(--color-background);
     }
 
-    /* Right text content */
     .dreamy-content {
       flex: 1.2;
       background-color: #f9f7f3;
-      padding: 80px 60px;
+      padding: 60px 60px;
       text-align: center;
     }
 
@@ -409,12 +407,11 @@ footer {
       transition: all 0.3s ease;
     }
 
-    /* --- Arjuna Coffee Showcase Section --- */
     .coffee-showcase {
       position: relative;
       background-color: #e8e8ef;
       text-align: center;
-      padding: 8rem 2rem;
+      padding: 5rem 2rem;
       overflow: hidden;
     }
 
@@ -427,7 +424,6 @@ footer {
       margin-bottom: 2rem;
     }
 
-    /* animated background text */
     .coffee-bg-text {
       position: absolute;
       top: 50%;
@@ -446,7 +442,7 @@ footer {
       z-index: 10;
       display: flex;
       justify-content: center;
-      margin-top: 4rem;
+      margin-top: 3rem;
     }
 
     .coffee-img {
@@ -464,13 +460,13 @@ footer {
     .coffee-buttons {
       position: relative;
       z-index: 10;
-      margin-top: 3rem;
+      margin-top: 2rem;
     }
 
    .coffee-btn {
   display: inline-block;
   padding: 12px 30px;
-  border: 2px solid #c5c0c0ff !important; /* Direct color instead of variable */
+  border: 2px solid #c5c0c0ff !important;
   text-decoration: none;
   font-family: 'Cormorant Garamond', serif;
   font-size: 0.9em;
@@ -491,15 +487,6 @@ footer {
       background-color: #4b5b77;
     }
 
-    .img1 { top: 60%; left: 5%; width: 200px; }
-    .img2 { 
-      top: 45%; /* <-- Change this: Moved UP to prevent it from being cut off */
-      left: 30%; /* <-- Adjusted slightly to the left for balance */
-      width: 300px; /* <-- Slightly increased width to make it a focal point */
-    } 
-    .img3 { top: 50%; right: 5%; width: 250px; }
-
-    /* --- SANCTUARY SECTION STYLING --- */
     .sanctuary-hero {
       height: 100vh;
       background: url('images/g1.jpg') center/cover no-repeat;
@@ -555,7 +542,7 @@ footer {
     .coffee-title {
       text-align: center;
       font-size: 2.5rem;
-      margin-bottom: 10px; /* smaller spacing */
+      margin-bottom: 10px;
     }
 
     .italic-word {
@@ -563,7 +550,6 @@ footer {
       font-weight: 500;
     }
 
-    /* keep layout together */
     .coffee-showcase {
       margin-bottom: 0;
       padding-bottom: 0;
@@ -585,10 +571,9 @@ footer {
       background: url('images/.jpg') center/cover no-repeat;
       color: white;
       text-align: center;
-      padding: 120px 20px;
+      padding: 80px 20px;
     }
 
-    /* make sure text stays above the overlay */
     .sanctuary-text .overlay {
       position: relative;
       z-index: 1;
@@ -608,7 +593,7 @@ footer {
     }
 
     .services-section {
-      padding: 45px 10% 80px; /* Top padding to clear fixed header */
+      padding: 30px 10% 60px;
       text-align: center;
     }
 
@@ -624,9 +609,9 @@ footer {
     .services-title h2 {
       font-family: 'Parisienne', cursive;
       font-size: 2.5rem;
-      color: #536480; /* A soft blue/grey for contrast */
+      color: #536480;
       margin-top: 0px;
-      margin-bottom: 60px;
+      margin-bottom: 40px;
        height: 20px;
        padding: -10px;
     
@@ -642,10 +627,10 @@ footer {
     }
 
     .service-column {
-      flex: 1 1 30%; /* Allows columns to grow/shrink but not too much */
+      flex: 1 1 30%;
       display: flex;
       flex-direction: column;
-      gap: 60px;
+      gap: 40px;
       text-align: left;
     }
 
@@ -653,10 +638,10 @@ footer {
       flex: 0 0 auto;
       width: 350px;
       height: 500px;
-      background: url('images/kh.png') center/cover no-repeat; /* Placeholder Image */
+      background: url('images/kh.png') center/cover no-repeat;
       border-radius: 10px;
       box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-      margin-top: 40px; /* Align slightly lower than text columns */
+      margin-top: 20px;
     }
 
     .service-item {
@@ -678,13 +663,13 @@ footer {
       line-height: 1.6;
       color: #5a4c43;
       padding-bottom: 20px;
-      border-bottom: 1px solid #e0d7c4; /* Light separator line */
+      border-bottom: 1px solid #e0d7c4;
     }
 
     .service-number {
       font-family: 'Playfair Display', serif;
       font-size: 5rem;
-      color: #e0d7c4; /* Soft, subtle background number */
+      color: #e0d7c4;
       position: absolute;
       top: -25px;
       left: 0;
@@ -693,14 +678,13 @@ footer {
       line-height: 1;
     }
 
-    /* Footer styling (copied from your index.php) */
    footer {
   background: #f2ece6;
   text-align: center;
-  padding: 20px 40px; /* Reduced from 40px all around */
+  padding: 20px 40px;
   font-size: 0.9rem;
   color: #7b6d5b;
-  margin-top: px; /* Slight pull upwards */
+  margin-top: 0;
 }
 
     @keyframes fadeIn {
@@ -718,32 +702,24 @@ footer {
 
 <body unresolved>
 
+
+
 <div class="image-stack">
   <div class="text-overlay">
-    <h2>coffee</h2>
+    <h2>coffee </h2>
     <h1>LIFE</h1>
   </div>
 
-  <img src="images/coffee5.jpg" class="img1" alt="Shell">
-  <img src="images/cheesecake.jpg" class="img2" alt="Woman">
-  <img src="images/croissant.jpg" class="img3" alt="Sailboat">
+  <!-- Original images -->
+  <img src="images/cheesecake - Copy.png" class="img1" alt="Cheesecake">
+  <img src="images/strawberry_frappe - Copy.png" class="img2" alt="Strawberry Frappe">
+  <img src="images/matcha_roll - Copy.png" class="img3" alt="Matcha Roll">
+  
+  <!-- Additional images -->
+  <img src="images/tiramisu - Copy.png" class="img4" alt="Tiramisu">
+  <img src="images/lemontea.png" class="img5" alt="Lemon Tea">
+  <img src="images/lemongrass.png" class="img6" alt="Lemon Grass">
 </div>
-
-<script>
-window.addEventListener('load', () => {
-  const images = document.querySelectorAll('.image-stack img');
-  let index = 0;
-
-  function showNextImage() {
-    images.forEach(img => img.classList.remove('visible')); // hide all
-    images[index].classList.add('visible'); // show one
-    index = (index + 1) % images.length; // next image
-  }
-
-  showNextImage(); // show first
-  setInterval(showNextImage, 2500); // repeat every 2.5s
-});
-</script>
 
   <section class="dreamy-section">
     <div class="dreamy-container">
@@ -792,7 +768,7 @@ window.addEventListener('load', () => {
     <div class="overlay">
       <h2>A Space to Unwind</h2>
       <p>
-        Step away from the rush and into our little corner of calm. Created by two sisters who believe in slow mornings and heartfelt moments, our space is where every cup feels like home — a gentle pause, a deep breath, and a reminder that life’s sweetest things are best enjoyed slowly.
+        Step away from the rush and into our little corner of calm. Created by two sisters who believe in slow mornings and heartfelt moments, our space is where every cup feels like home — a gentle pause, a deep breath, and a reminder that life's sweetest things are best enjoyed slowly.
       </p>
     </div>
   </section>
@@ -865,7 +841,34 @@ window.addEventListener('load', () => {
   </footer>
 
   <script>
-    // fade in on load
+    // Page fade animation (same as loveloveweddingphotography)
+    document.addEventListener('DOMContentLoaded', function() {
+      // Set initial state
+      document.body.style.opacity = '0';
+      document.body.style.transition = 'opacity 0.6s ease-in';
+      
+      // Trigger fade in after a tiny delay
+      setTimeout(function() {
+        document.body.style.opacity = '1';
+      }, 50);
+    });
+
+    // Your existing image stack animation
+    window.addEventListener('load', () => {
+      const images = document.querySelectorAll('.image-stack img');
+      let index = 0;
+
+      function showNextImage() {
+        images.forEach(img => img.classList.remove('visible'));
+        images[index].classList.add('visible');
+        index = (index + 1) % images.length;
+      }
+
+      showNextImage();
+      setInterval(showNextImage, 2500);
+    });
+
+    // Your existing fade in on load
     window.addEventListener('DOMContentLoaded', () => {
       document.body.removeAttribute('unresolved');
     });
